@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
+const users = [
+  { fullName: 'John Doe', email: 'john.doe@example.com', phoneNumber: '+1 555-1234' },
+  { fullName: 'Jane Smith', email: 'jane.smith@example.com', phoneNumber: '+1 555-5678' },
+  { fullName: 'Alice Johnson', email: 'alice.johnson@example.com', phoneNumber: '+1 555-8765' },
+  { fullName: 'Bob Brown', email: 'bob.brown@example.com', phoneNumber: '+1 555-4321' },
+  { fullName: 'Charlie Davis', email: 'charlie.davis@example.com', phoneNumber: '+1 555-6543' },
+
+];
+
+
 const Users = () => {
 
-    const [usersData, setUsersData] = useState([]);
+    const [usersData, setUsersData] = useState(users);
 
     function fetchUsers (){
       const requestOptions = {
@@ -22,13 +32,14 @@ const Users = () => {
     }
   
     // Fetch users and companies data
-    useEffect(() => {
-      fetchUsers();
-    }, []);
+    // useEffect(() => {
+    //   fetchUsers();
+    // }, []);
   return (
-    <div>
+    <div style={{}}>
       <h2 className="text-2xl font-bold text-gray-800 mb-6">User List</h2>
       <ul className="space-y-4">
+
         {
           usersData.map((item,index)=>(
             <li className="p-4 bg-white rounded shadow-md">
