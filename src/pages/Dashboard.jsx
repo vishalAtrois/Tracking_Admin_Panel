@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import UserGrowthGraph from '../pages/UserGrowthGraph';
+import Sidebar from '../components/Sidebar';
 
 const Dashboard = () => {
+
   const [usersData, setUsersData] = useState([]);
   const [userCount, setUserCount] = useState(0);
   const [companies, setCompanies] = useState([]);
@@ -11,6 +13,9 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   function fetchUsers (){
+
+    
+
     const requestOptions = {
       method: "GET",
       redirect: "follow"
@@ -28,12 +33,33 @@ const Dashboard = () => {
       .catch((error) => console.error(error));
   }
 
-  // Fetch users and companies data
+  function fetchCompany(){
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    };
+    
+    fetch("http://16.171.60.57:3001/v1/admin/fetchCompanyList?page=1&limit=10", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if(result.success == true){
+          console.log(result);
+          setCompanyCount(result.UserList.totalResults)
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
   useEffect(() => {
     fetchUsers();
+    fetchCompany()
   }, []);
 
   return (
+    <div className="flex h-screen overflow-auto">
+    <Sidebar />
+    <div className="flex-1 p-6 bg-gray-900 ml-64">
     <div className="bg-gray-900 p-6 rounded-lg shadow-lg min-h-screen">
       <h2 className="text-white text-3xl mb-6">Dashboard</h2>
 
@@ -94,6 +120,8 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };

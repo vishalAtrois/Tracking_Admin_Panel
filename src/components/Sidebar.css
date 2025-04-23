@@ -12,8 +12,14 @@
   .logo {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
+  
+  .logo img {
+    width: 150px; /* Adjust the width as needed */
+    height: 40px; /* Maintain aspect ratio */
+  }
+  
   
   .profile-section {
     display: flex;

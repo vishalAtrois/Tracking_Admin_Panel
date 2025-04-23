@@ -1,4 +1,5 @@
 import React from 'react';
+import Sidebar from '../components/Sidebar';
 
 // Dummy data for About Us
 const aboutUsData = {
@@ -8,9 +9,14 @@ const aboutUsData = {
 
 const AboutUs = () => {
   return (
+    <div className="flex h-screen overflow-auto">
+        <Sidebar />
+        <div className="flex-1 p-6 bg-gray-900 ml-64">
     <div className="p-6 bg-gray-100 rounded-lg shadow-md">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">{aboutUsData.title}</h2>
       <p className="text-lg text-gray-700">{aboutUsData.description}</p>
+    </div>
+    </div>
     </div>
   );
 };
