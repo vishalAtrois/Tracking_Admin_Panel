@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 
-
 const Users = () => {
   const [usersData, setUsersData] = useState([]);
   const [userCount, setUserCount] = useState(0);
@@ -12,10 +11,14 @@ const Users = () => {
     fetchUsers();
   }, [currentpage]);
 
-
   function fetchUsers() {
+    const token = localStorage.getItem('token')
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
     const requestOptions = {
       method: "GET",
+      headers: myHeaders,
       redirect: "follow"
     };
 

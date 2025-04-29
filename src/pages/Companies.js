@@ -9,8 +9,13 @@ const Companies = () => {
   const limit = 11
 
   function fetchCompany() {
+    const token = localStorage.getItem('token')
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
     const requestOptions = {
       method: "GET",
+      headers:myHeaders,
       redirect: "follow"
     };
 
