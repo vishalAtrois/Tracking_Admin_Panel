@@ -27,7 +27,7 @@ const Users = () => {
       redirect: "follow"
     };
 
-    fetch(`http://16.171.60.57:3001/v1/admin/fetchUserList?page=${currentpage}&limit=${limit}&sortBy=createdAt:desc`, requestOptions)
+    fetch(`https://tracking-backend-admin.vercel.app/v1/admin/fetchUserList?page=${currentpage}&limit=${limit}&sortBy=createdAt:desc`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         if (result.success == true) {

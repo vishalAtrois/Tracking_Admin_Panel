@@ -25,7 +25,7 @@ function Login() {
             redirect: "follow"
         };
 
-        fetch("http://16.171.60.57:3001/v1/admin/loginAdmin", requestOptions)
+        fetch("https://tracking-backend-admin.vercel.app/v1/admin/loginAdmin", requestOptions)
             .then((response) => response.json())
             .then((result) => {
                 if (result.success == true) {
