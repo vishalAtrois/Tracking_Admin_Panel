@@ -14,14 +14,17 @@ const Dashboard = () => {
 
   function fetchUsers (){
 
-    
+    const token = localStorage.getItem('token')
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
 
     const requestOptions = {
       method: "GET",
+      headers: myHeaders,
       redirect: "follow"
     };
     
-    fetch("http://16.171.60.57:3001/v1/admin/fetchUserList?page=1&limit=10&userType=user", requestOptions)
+    fetch("http://16.171.60.57:3001/v1/admin/fetchUserList?page=1&limit=10&sortBy=createdAt:desc", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         if(result.success == true){
@@ -34,12 +37,17 @@ const Dashboard = () => {
   }
 
   function fetchCompany(){
+    const token = localStorage.getItem('token')
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
     const requestOptions = {
       method: "GET",
+      headers:myHeaders,
       redirect: "follow"
     };
     
-    fetch("http://16.171.60.57:3001/v1/admin/fetchCompanyList?page=1&limit=10", requestOptions)
+    fetch("http://16.171.60.57:3001/v1/admin/fetchCompanyList?page=1&limit=10&sortBy=createdAt:desc", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);

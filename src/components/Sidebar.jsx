@@ -11,12 +11,37 @@ const Sidebar = () => {
     Get()
   }, [])
 
-    const [myData,setMyData] = useState(null)
+  const [myData, setMyData] = useState(null)
+  const [token, setToken] = useState('')
 
   function Get() {
     const data = localStorage.getItem('user')
+    const token = localStorage.getItem('token')
     const ud = JSON.parse(data)
     setMyData(ud)
+    setToken(token)
+  }
+
+  function Logout() {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      refreshToken: token,
+      email: myData?.email
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch("http://16.171.60.57:3001/v1/admin/logoutAdmin", requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
   }
   return (
     <div className="sidebar">
@@ -43,9 +68,16 @@ const Sidebar = () => {
 
       {/* Logout Button */}
       <div className="logout-section">
+        <NavLink to="/" >
         <button className="logout-button">
           <i className="fa fa-sign-out"></i> Logout
-        </button>
+          </button>
+        </NavLink>
+        {/* <button className="logout-button" onClick={()=>{
+          Logout()
+        }}>
+          <i className="fa fa-sign-out"></i> Logout
+        </button> */}
       </div>
     </div>
   );

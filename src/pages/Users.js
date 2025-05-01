@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 
+
 const Users = () => {
   const [usersData, setUsersData] = useState([]);
   const [userCount, setUserCount] = useState(0);
+  const [token, setToken] = useState('');
+  const [si, setSi] = useState('');
+  const [loading, setLoading] = useState(false);
   const [currentpage, setCurrentpage] = useState(1);
   const limit = 11
 
@@ -13,6 +17,7 @@ const Users = () => {
 
   function fetchUsers() {
     const token = localStorage.getItem('token')
+    setToken(token)
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${token}`);
 
@@ -22,7 +27,7 @@ const Users = () => {
       redirect: "follow"
     };
 
-    fetch(`http://16.171.60.57:3001/v1/admin/fetchUserList?page=${currentpage}&limit=${limit}&userType=user`, requestOptions)
+    fetch(`http://16.171.60.57:3001/v1/admin/fetchUserList?page=${currentpage}&limit=${limit}&sortBy=createdAt:desc`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         if (result.success == true) {
@@ -34,7 +39,32 @@ const Users = () => {
       .catch((error) => console.error(error));
   }
 
-  // Fetch users and companies data
+  function DeleteUser() {
+    setLoading(true)
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`)
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
+    fetch(`http://16.171.60.57:3001/v1/admin/deleteUser?userId=${si}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setLoading(false)
+        if (result.success == true) {
+          fetchUsers()
+        }
+      })
+      .catch((error) => {
+        setLoading(false)
+        console.error(error)
+      });
+  }
+
+
 
 
 
@@ -51,10 +81,10 @@ const Users = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-auto">
+    <div className="flex h-screen overflow-auto  bg-gray-900">
       <Sidebar />
-      <div className="flex-1 p-6 bg-gray-900 ml-64">
-        <div style={{}}>
+      <div className="flex-1  p-6 bg-gray-900 ml-64">
+      <div className="h-full overflow-y-auto pr-2">
           <div className="flex items-center space-x-4bg-gray-100 rounded-lg shadow-lg mb-3">
             <input
               className="form-control p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 m-2"
@@ -69,34 +99,48 @@ const Users = () => {
               Search
             </button>
           </div>
-          <div className=" bg-white rounded-lg shadow-md overflow-x-auto">
+          <div className=" rounded-lg shadow-md overflow-x-auto w-full">
             <table className="min-w-full table-auto border border-gray-200">
-              <thead className="bg-gray-200 text-gray-700">
-                <tr>
-                  <th className="px-4 py-2 text-left border-b">Name</th>
-                  <th className="px-4 py-2 text-left border-b">Email</th>
-                  <th className="px-4 py-2 text-left border-b">Mobile Number</th>
-                  <th className="px-4 py-2 text-left border-b">Company Name</th>
-                  <th className="px-4 py-2 text-center border-b">Action</th>
-                </tr>
-              </thead>
+            <thead className="bg-gray-200 text-gray-700">
+      <tr className="transition-all duration-300 ease-in bg-gray-500 hover:bg-gray-700 text-white">
+        <th className="px-2 py-2 text-center border-b border-r border-black   text-sm md:text-lg lg:text-xl font-serif">Name</th>
+        <th className="px-2 py-2 text-center border-b border-r border-black   text-sm md:text-lg lg:text-xl font-serif">Email</th>
+        <th className="px-2 py-2 text-center border-b border-r border-black   text-sm md:text-lg lg:text-xl font-serif">Mobile Number</th>
+        <th className="px-2 py-2 text-center border-b border-r border-black    text-sm md:text-lg lg:text-xl font-serif hidden sm:table-cell">Company Name</th>
+        <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Actions</th>
+      </tr>
+    </thead>
               <tbody>
                 {
                   usersData.map((item, index) => (
-                    <tr key={index} className="hover:bg-gray-50 transition">
-                      <td className="px-4 py-2 border-b">{item.fullName}</td>
-                      <td className="px-4 py-2 border-b">{item.email}</td>
-                      <td className="px-4 py-2 border-b">{item.phoneNumber}</td>
-                      <td className="px-4 py-2 border-b">{item.companyName}</td>
-                      <td className="px-4 py-2 border-b text-center">
-                        <button
-                          data-bs-toggle="modal" data-bs-target="#exampleModal"
-                          onClick={() => { }}
-                          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
-                        >
-                          Delete
-                        </button>
+                    <tr key={index} className="bg-white ">
+                      <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.fullName}</td>
+                      <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.email}</td>
+                      <td className="px-4 py-2 border-b border-r border-black  text-center text-lg font-serif">{item.phoneNumber}</td>
+                      <td className="px-4 py-2 border-b border-r border-black text-center  text-lg font-serif">{item.companyName}</td>
+                      <td className="px-4 py-2 border-b border-r border-black   text-center">
+                        <div className="flex justify-center gap-4">
+                          {/* Edit Button */}
+                          <button
+                            className="p-2 rounded-full hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition"
+                            title="Edit"
+                          >
+                            <i className="bi bi-pencil-fill text-lg"></i>
+                          </button>
+
+                          {/* Delete Button */}
+                          <button
+                            onClick={() => { setSi(item.id) }}
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                            className="p-2 rounded-full hover:bg-red-100 text-red-600 hover:text-red-800 transition"
+                            title="Delete"
+                          >
+                            <i className="bi bi-trash-fill text-lg"></i>
+                          </button>
+                        </div>
                       </td>
+
                     </tr>
                   ))
                 }
@@ -132,7 +176,15 @@ const Users = () => {
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Delete</button>
+                  <button
+                    className="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    onClick={() => {
+                      DeleteUser();
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
