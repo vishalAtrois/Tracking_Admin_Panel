@@ -9,10 +9,27 @@ const Users = () => {
   const [loading, setLoading] = useState(false);
   const [currentpage, setCurrentpage] = useState(1);
   const limit = 9;
+   
+ 
+
+  
+  
+
+
+
+
+
+
+
 
   useEffect(() => {
     fetchUsers();
   }, [currentpage]);
+ // State
+
+  
+  
+  
 
   function fetchUsers() {
     const token = localStorage.getItem('token');
@@ -48,7 +65,7 @@ const Users = () => {
       redirect: "follow"
     };
 
-    fetch(`http://16.171.60.57:3001/v1/admin/deleteUser?userId=${si}`, requestOptions)
+    fetch(`https://tracking-backend-admin.vercel.app/v1/admin/deleteUser?userId=${si}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setLoading(false);
@@ -97,6 +114,7 @@ const Users = () => {
             <table className="min-w-full table-auto border border-gray-200">
               <thead className="bg-gray-200 text-gray-700">
                 <tr className="transition-all duration-300 ease-in bg-gray-500 hover:bg-gray-700 text-white">
+                <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Sr.no</th>
                   <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Name</th>
                   <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Email</th>
                   <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Mobile Number</th>
@@ -105,8 +123,9 @@ const Users = () => {
                 </tr>
               </thead>
               <tbody>
-                {usersData.map((item) => (
+                {usersData.map((item,index) => (
                   <tr key={item.id} className="bg-white">
+                    <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{(currentpage - 1) * limit + index + 1}</td>
                     <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.fullName}</td>
                     <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.email}</td>
                     <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.phoneNumber}</td>
@@ -115,7 +134,9 @@ const Users = () => {
                       <div className="flex justify-center gap-4">
                         {/* Edit Button */}
                         <button
-                          onClick={() =>""}
+                            onClick={""}
+                            data-bs-toggle="modalfade"
+                            data-bs-target="#editUserModal"
                           className="p-2 rounded-full hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition"
                           title="Edit"
                         >
@@ -124,7 +145,7 @@ const Users = () => {
 
                         {/* Delete Button */}
                         <button
-                          onClick={() => { setSi(item.id); }}
+                          onClick={() => { setSi(item.id) }}
                           data-bs-toggle="modal"
                           data-bs-target="#exampleModal"
                           className="p-2 rounded-full hover:bg-red-100 text-red-600 hover:text-red-800 transition"
@@ -162,7 +183,14 @@ const Users = () => {
                 </li>
               </ul>
             </nav>
-          </div>
+          </div> 
+
+
+       
+
+
+
+
 
           <div className="modal" id="exampleModal" tabIndex="-1">
             <div className="modal-dialog">

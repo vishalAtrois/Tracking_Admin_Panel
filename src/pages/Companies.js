@@ -51,7 +51,7 @@ const Companies = () => {
       redirect: "follow"
     };
 
-    fetch(`http://16.171.60.57:3001/v1/admin/deleteCompany?companyId=${si}`, requestOptions)
+    fetch(`https://tracking-backend-admin.vercel.app/v1/admin/deleteCompany?companyId=${si}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         
