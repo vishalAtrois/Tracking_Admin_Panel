@@ -9,7 +9,7 @@ const Companies = () => {
     const [token, setToken] = useState('');
     const [si, setSi] = useState('');
     const [loading, setLoading] = useState(false);
-  const limit = 11
+  const limit = 9
 
   function fetchCompany() {
     const token = localStorage.getItem('token')
@@ -85,7 +85,7 @@ const Companies = () => {
       <div className="flex-1 p-6 bg-gray-900 ml-64">
         <div className="h-full overflow-y-auto pr-2">
           {/* <h2 className="text-2xl font-bold text-white mb-6">Company List</h2> */}
-          <div className="flex items-center space-x-4bg-gray-100 rounded-lg shadow-lg mb-3">
+          <div className="flex items-center space-x-4 bg-gray-900 rounded-lg shadow-lg mb-3 sticky -top-1">
             <input
               className="form-control p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 m-2"
               id="exampleData"
@@ -148,7 +148,7 @@ const Companies = () => {
 
 
           {/* Pagination */}
-          <div className="s-cus-pagintion custompaginationtoprightbox" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <div className="s-cus-pagintion custompaginationtoprightbox" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', position:"sticky", bottom:"0px" }}>
             <nav aria-label="Page navigation example">
               <ul className="pagination">
                 <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}><a onClick={goToPrevPage} className="page-link" aria-label="Previous"><span aria-hidden="true">«</span></a>
