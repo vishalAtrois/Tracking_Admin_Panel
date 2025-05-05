@@ -1,93 +1,70 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
 
-    const navigate = useNavigate()
-    const [email, setEmail] = useState('')
-    const [pass, setPass] = useState('')
+  function DoLogin() {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
+    const raw = JSON.stringify({
+      email: email,
+      password: pass,
+      userType: "admin"
+    });
 
-    function DoLogin() {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
 
-        const raw = JSON.stringify({
-            email: email,
-            password: pass,
-            userType: "admin"
-        });
+    fetch("https://tracking-backend-admin.vercel.app/v1/admin/loginAdmin", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success === true) {
+          localStorage.setItem("token", result.token.access.token);
+          localStorage.setItem("user", JSON.stringify(result.user));
+          navigate("/dashboard");
+        }
+      })
+      .catch((error) => console.error(error));
+  }
 
-        const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow"
-        };
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-400 p-4">
+      <div className="bg-gray-100 w-full max-w-lg rounded-xl shadow-lg p-8 ">
+        <h2 className="text-3xl font-bold text-center mb-8">Login</h2>
 
-        fetch("https://tracking-backend-admin.vercel.app/v1/admin/loginAdmin", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                if (result.success == true) {
-                    console.warn(result);
-                    localStorage.setItem('token', result.token.access.token)
-                    localStorage.setItem('user', JSON.stringify(result.user))
-                    navigate('/dashboard')
-                }
-            })
-            .catch((error) => console.error(error));
-    }
-    return (
-        <section className="vh-100" style={{ backgroundColor: "#9A616D" }}>
-            <div className="container h-100">
-                <div className="row justify-content-center align-items-center h-100">
-                    <div className="col-md-8 col-lg-6 col-xl-5">
-                        <div className="card" style={{ borderRadius: "1rem" }}>
-                            <div className="card-body p-4 p-md-5 text-black w-100">
-                                <form>
-                                    <h5
-                                        className="h1 fw-bold mb-3 pb-1 text-center"
-                                        style={{ letterSpacing: 1, color: "black" }}
-                                    >
-                                        Sign into your account
-                                    </h5>
+        <div className="space-y-10">
+          <input
+            type="email"
+            placeholder="Type your username"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
+          <input
+            type="password"
+            placeholder="Type your password"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+          />
 
-                                    <div className="form-outline mb-3">
-                                        <input
-                                            type="email"
-                                            name="email-login"
-                                            autoComplete="off"
-                                            className="form-control form-control-lg"
-                                            placeholder="Enter Email here ...."
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                        />
-                                    </div>
+          <button
+            onClick={DoLogin}
+            className="w-full py-2 rounded-full bg-gray-900 text-white font-semibold transition duration-300 hover:opacity-90"
+          >
+            LOGIN
+          </button>
 
-                                    <div className="form-outline mb-3">
-                                        <input
-                                            type="password"
-                                            name="new-password"
-                                            autoComplete="new-password"
-                                            className="form-control form-control-lg"
-                                            placeholder="Enter Password here ...."
-                                            value={pass}
-                                            onChange={(e) => setPass(e.target.value)}
-                                        />
-                                    </div>
-
-                                    <div className="pt-1 mb-4">
-                                        <button
-                                            className="btn btn-dark btn-lg btn-block w-100"
-                                            type="button"
-                                            onClick={DoLogin}
-                                        >
-                                            Login
-                                        </button>
-                                    </div>
-
-                                    <div className="text-center">
+          <div className="text-center">
                                         <a href="#!" className="small text-muted me-2">
                                             Terms of use
                                         </a>
@@ -95,24 +72,13 @@ function Login() {
                                             Privacy policy
                                         </a>
                                     </div>
+           
 
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-    )
+           
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default Login
-
-
-
-
-
-
-
+export default Login;
