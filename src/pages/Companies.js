@@ -11,6 +11,70 @@ const Companies = () => {
     const [loading, setLoading] = useState(false);
   const limit = 9
 
+
+  // State
+const [editedCompany, setEditedCompany] = useState({
+  id: '',
+  name: '',
+  address: '',
+  totalEmployees: '',
+});
+const [showEditModal, setShowEditModal] = useState(false);
+
+// Trigger edit
+const handleEditClick = (company) => {
+  setEditedCompany({
+    id: company.id,
+    name: company.name,
+    address: company.address,
+    totalEmployees: company.totalEmployees,
+  });
+  setShowEditModal(true);
+};
+
+// Handle input change
+const handleEditChange = (e) => {
+  const { name, value } = e.target;
+  setEditedCompany((prev) => ({
+    ...prev,
+    [name]: value
+  }));
+};
+
+// Save updated user
+const saveEditedCompany = async () => {
+  const token = localStorage.getItem('token');
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${token}`);
+  myHeaders.append("Content-Type", "application/json");
+
+  const { id, ...data } = editedCompany;
+
+  try {
+    const response = await fetch(`https://tracking-backend-admin.vercel.app/v1/admin/updateCompany?companyId=${id}`, {
+      method: 'PUT', 
+      headers: myHeaders,
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert("company updated successfully");
+      setShowEditModal(false);
+      fetchCompany();
+    } else {
+      alert("Update failed: " + result.message);
+    }
+  } catch (error) {
+    console.error(error);
+    alert("An error occurred.");
+  }
+};
+
+
+
+
+
   function fetchCompany() {
     const token = localStorage.getItem('token')
     const myHeaders = new Headers();
@@ -28,7 +92,7 @@ const Companies = () => {
       .then((result) => {
         console.log(result);
         if (result.success == true) {
-          console.log(result);
+          console.log(result,"companydata");
           setData(result.UserList.results)
           setCompanyCount(result.UserList.totalResults)
         }
@@ -104,6 +168,7 @@ const Companies = () => {
             <table className="min-w-full table-auto border border-gray-200">
               <thead className="bg-gray-200 text-gray-700">
                 <tr className='transition-all duration-300 ease-in bg-gray-500 hover:bg-gray-700 border-none  text-white'>
+                <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Sr.no</th>
                   <th className="px-2 py-2 text-center border-b border-r border-black   text-sm md:text-lg lg:text-xl font-serif">Name</th>
                   <th className="px-2 py-2 text-center border-b border-r border-black   text-sm md:text-lg lg:text-xl font-serif">Address</th>
                   <th className="px-2 py-2 text-center border-b border-r border-black   text-sm md:text-lg lg:text-xl font-serif">Total Employees</th>
@@ -114,6 +179,7 @@ const Companies = () => {
                 {
                   data.map((item, index) => (
                     <tr key={index} className="bg-white">
+                        <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{(currentpage - 1) * limit + index + 1}</td>
                       <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.name}</td>
                       <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.address}</td>
                       <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.totalEmployees}</td>
@@ -123,6 +189,7 @@ const Companies = () => {
                           <button
                             className="p-2 rounded-full hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition"
                             title="Edit"
+                            onClick={()=>{handleEditClick(item)}}
                           >
                             <i className="bi bi-pencil-fill text-lg"></i>
                           </button>
@@ -159,6 +226,48 @@ const Companies = () => {
               </ul>
             </nav>
           </div>
+
+{/* edit company  */}
+
+          {showEditModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg w-96">
+      <h2 className="text-xl font-bold mb-4">Edit Company</h2>
+      <input
+        name="name"
+        value={editedCompany.name}
+        onChange={handleEditChange}
+        placeholder="name"
+        className="w-full mb-2 p-2 border rounded"
+      />
+      <input
+        name="address"
+        value={editedCompany.address}
+        onChange={handleEditChange}
+        placeholder="address"
+        className="w-full mb-2 p-2 border rounded"
+      />
+      <input
+        name="totalEmployees"
+        value={editedCompany.totalEmployees}
+        onChange={handleEditChange}
+        placeholder="total employees"
+        className="w-full mb-2 p-2 border rounded"
+      />
+      <div className="flex justify-end gap-4">
+        <button onClick={saveEditedCompany} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
+        <button onClick={() => setShowEditModal(false)} className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Cancel</button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
+
+
+
 
           {/* confirm Modal */}
 

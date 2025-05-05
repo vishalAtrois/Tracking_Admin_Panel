@@ -9,27 +9,73 @@ const Users = () => {
   const [loading, setLoading] = useState(false);
   const [currentpage, setCurrentpage] = useState(1);
   const limit = 9;
-   
  
 
-  
-  
 
+  // State
+const [editedUser, setEditedUser] = useState({
+  id: '',
+  fullName: '',
+  email: '',
+  phoneNumber: '',
+  companyName: ''
+});
+const [showEditModal, setShowEditModal] = useState(false);
 
+// Trigger edit
+const handleEditClick = (user) => {
+  setEditedUser({
+    id: user.id,
+    fullName: user.fullName,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+    companyName: user.companyName
+  });
+  setShowEditModal(true);
+};
 
+// Handle input change
+const handleEditChange = (e) => {
+  const { name, value } = e.target;
+  setEditedUser((prev) => ({
+    ...prev,
+    [name]: value
+  }));
+};
 
+// Save updated user
+const saveEditedUser = async () => {
+  const token = localStorage.getItem('token');
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${token}`);
+  myHeaders.append("Content-Type", "application/json");
 
+  const { id, ...userData } = editedUser;
 
+  try {
+    const response = await fetch(`https://tracking-backend-admin.vercel.app/v1/admin/updateUser?userId=${id}`, {
+      method: 'PUT', 
+      headers: myHeaders,
+      body: JSON.stringify(userData)
+    });
 
-
+    const result = await response.json();
+    if (result.success) {
+      alert("User updated successfully");
+      setShowEditModal(false);
+      fetchUsers();
+    } else {
+      alert("Update failed: " + result.message);
+    }
+  } catch (error) {
+    console.error(error);
+    alert("An error occurred.");
+  }
+};
+    //  fetching data 
   useEffect(() => {
     fetchUsers();
   }, [currentpage]);
- // State
-
-  
-  
-  
 
   function fetchUsers() {
     const token = localStorage.getItem('token');
@@ -50,6 +96,7 @@ const Users = () => {
           setUsersData(result.UserList.results);
           setUserCount(result.UserList.totalResults);
         }
+        console.log(result)
       })
       .catch((error) => console.error(error));
   }
@@ -72,6 +119,7 @@ const Users = () => {
         if (result.success === true) {
           fetchUsers();
         }
+        console.log(result)
       })
       .catch((error) => {
         setLoading(false);
@@ -134,7 +182,7 @@ const Users = () => {
                       <div className="flex justify-center gap-4">
                         {/* Edit Button */}
                         <button
-                            onClick={""}
+                            onClick={()=>{handleEditClick(item)}}
                             data-bs-toggle="modalfade"
                             data-bs-target="#editUserModal"
                           className="p-2 rounded-full hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition"
@@ -160,7 +208,7 @@ const Users = () => {
               </tbody>
             </table>
           </div>
-
+      {/* pagination */}
           <div className="s-cus-pagintion custompaginationtoprightbox" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', position:'sticky', bottom:"0px" }}>
             <nav aria-label="Page navigation example">
               <ul className="pagination">
@@ -185,13 +233,47 @@ const Users = () => {
             </nav>
           </div> 
 
-
-       
-
-
-
-
-
+ {/* edit propmt  */}
+          {showEditModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg w-96">
+      <h2 className="text-xl font-bold mb-4">Edit User</h2>
+      <input
+        name="fullName"
+        value={editedUser.fullName}
+        onChange={handleEditChange}
+        placeholder="Full Name"
+        className="w-full mb-2 p-2 border rounded"
+      />
+      <input
+        name="email"
+        value={editedUser.email}
+        onChange={handleEditChange}
+        placeholder="Email"
+        className="w-full mb-2 p-2 border rounded"
+      />
+      <input
+        name="phoneNumber"
+        value={editedUser.phoneNumber}
+        onChange={handleEditChange}
+        placeholder="Phone Number"
+        className="w-full mb-2 p-2 border rounded"
+      />
+      <input
+        name="companyName"
+        value={editedUser.companyName}
+        onChange={handleEditChange}
+        placeholder="Company Name"
+        className="w-full mb-4 p-2 border rounded"
+      />
+      <div className="flex justify-end gap-4">
+        <button onClick={saveEditedUser} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
+        <button onClick={() => setShowEditModal(false)} className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Cancel</button>
+      </div>
+    </div>
+  </div>
+)}
+      {/* delete prompt  */}
           <div className="modal" id="exampleModal" tabIndex="-1">
             <div className="modal-dialog">
               <div className="modal-content">

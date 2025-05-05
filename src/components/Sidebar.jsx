@@ -23,26 +23,36 @@ const Sidebar = () => {
   }
 
   function Logout() {
+    const token = localStorage.getItem('token'); // Make sure you get the token
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
+  
     const raw = JSON.stringify({
       refreshToken: token,
       email: myData?.email
     });
-
+  
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: raw,
       redirect: "follow"
     };
-
-    fetch("http://16.171.60.57:3001/v1/admin/logoutAdmin", requestOptions)
+  
+    fetch("https://tracking-backend-admin.vercel.app/v1/admin/logoutAdmin", requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
-      .catch((error) => console.error(error));
+      .then((result) => {
+        console.log(result);
+        // Remove token and redirect on successful logout
+        localStorage.removeItem('token');
+        window.location.href = "/"; // or wherever your login page is
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Logout failed.");
+      });
   }
+  
   return (
     <div className="sidebar">
       <div className="logo">
@@ -69,7 +79,7 @@ const Sidebar = () => {
       {/* Logout Button */}
       <div className="logout-section">
         <NavLink to="/" >
-        <button className="logout-button">
+        <button className="logout-button" onClick={()=>Logout()}  >
           <i className="fa fa-sign-out"></i> Logout
           </button>
         </NavLink>

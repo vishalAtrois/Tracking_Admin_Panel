@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import UserGrowthGraph from '../pages/UserGrowthGraph';
 import Sidebar from '../components/Sidebar';
+ 
 
 const Dashboard = () => {
 
@@ -95,37 +94,6 @@ const Dashboard = () => {
             <span className="text-2xl font-bold">{companyCount}</span>
             <i className="fa fa-building text-4xl"></i>
           </div>
-        </div>
-      </div>
-
-      {/* Graph and Other Content */}
-      <div className="flex space-x-6 mt-6">
-        <div className="w-1/2">
-          <UserGrowthGraph />
-        </div>
-      </div>
-
-      {/* Company List */}
-      <div className="mt-10">
-        <h3 className="text-xl text-white font-semibold mb-4">Companies List</h3>
-        <div className="space-y-4">
-          {companies.map((company) => (
-            <div
-              key={company._id}
-              className="bg-gray-800 p-4 rounded-lg border border-gray-600 text-white"
-            >
-              <h4 className="text-lg font-bold">{company.name}</h4>
-              <p className="text-sm mb-1">
-                <span className="font-semibold">Description:</span> {company.description}
-              </p>
-              <p className="text-sm mb-1">
-                <span className="font-semibold">Address:</span> {company.address}
-              </p>
-              <p className="text-sm">
-                <span className="font-semibold">Total Employees:</span> {company.totalEmployees}
-              </p>
-            </div>
-          ))}
         </div>
       </div>
     </div>
