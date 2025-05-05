@@ -9,7 +9,7 @@ const aboutUsData = {
 
 const AboutUs = () => {
   return (
-    <div className="flex h-screen overflow-auto">
+    <div className="flex h-screen overflow-auto  bg-gray-900">
         <Sidebar />
         <div className="flex-1 p-6 bg-gray-900 ml-64">
     <div className="p-6 bg-gray-100 rounded-lg shadow-md">

@@ -14,7 +14,7 @@ function Login() {
       email: email,
       password: pass,
       userType: "admin"
-    });
+    }); 
 
     const requestOptions = {
       method: "POST",
@@ -72,9 +72,6 @@ function Login() {
                                             Privacy policy
                                         </a>
                                     </div>
-           
-
-           
         </div>
       </div>
     </div>
