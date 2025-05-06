@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom'; // Use NavLink instead of Link
 import './Sidebar.css';
 import profilePhoto from '../assets/images/profilephoto.jpg';
-import DirectAdmin from '../assets/images/2892064.png';
+import Logo from '../assets/images/logo4.avif';
 
 const Sidebar = () => {
 
@@ -54,7 +54,7 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
     <div className="logo">
-      <img className="logo" src={DirectAdmin} alt="Profile" />
+      <img className="logo" src={Logo} alt="Profile" />
     </div>
 
     {/* User Profile Section */}
