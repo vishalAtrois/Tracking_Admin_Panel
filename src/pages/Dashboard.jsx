@@ -5,9 +5,8 @@ import Sidebar from '../components/Sidebar';
 
 const Dashboard = () => {
 
-  const [usersData, setUsersData] = useState([]);
+  
   const [userCount, setUserCount] = useState(0);
-  const [companies, setCompanies] = useState([]);
   const [companyCount, setCompanyCount] = useState(0);
   const navigate = useNavigate();
 
@@ -26,9 +25,8 @@ const Dashboard = () => {
     fetch("https://tracking-backend-admin.vercel.app/v1/admin/fetchUserList?page=1&limit=10&sortBy=createdAt:desc", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        if(result.success == true){
+        if(result.success === true){
           console.log(result.UserList);
-          setUsersData(result.UserList.results)
           setUserCount(result.UserList.totalResults)
         }
       })
@@ -50,7 +48,7 @@ const Dashboard = () => {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        if(result.success == true){
+        if(result.success === true){
           console.log(result);
           setCompanyCount(result.UserList.totalResults)
         }

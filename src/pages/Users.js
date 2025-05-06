@@ -8,7 +8,7 @@ const Users = () => {
   const [si, setSi] = useState('');
   const [loading, setLoading] = useState(false);
   const [currentpage, setCurrentpage] = useState(1);
-  const limit = 9;
+  const limit = 8;
  
 
 
@@ -75,7 +75,7 @@ const saveEditedUser = async () => {
     //  fetching data 
   useEffect(() => {
     fetchUsers();
-  }, [currentpage]);
+  },[currentpage]);
 
   function fetchUsers() {
     const token = localStorage.getItem('token');
@@ -92,6 +92,7 @@ const saveEditedUser = async () => {
     fetch(`https://tracking-backend-admin.vercel.app/v1/admin/fetchUserList?page=${currentpage}&limit=${limit}&sortBy=createdAt:desc`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
+
         if (result.success === true) {
           setUsersData(result.UserList.results);
           setUserCount(result.UserList.totalResults);
@@ -139,7 +140,8 @@ const saveEditedUser = async () => {
   };
 
   return (
-    <div className="flex h-screen overflow-auto bg-gray-900">
+    <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
+
       <Sidebar />
       <div className="flex-1 p-6 bg-gray-900 ml-64">
         <div className="h-full overflow-y-auto pr-2">
