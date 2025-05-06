@@ -64,6 +64,7 @@ const saveEditedUser = async () => {
       alert("User updated successfully");
       setShowEditModal(false);
       fetchUsers();
+      console.log(result, "editing user ")
     } else {
       alert("Update failed: " + result.message);
     }
@@ -97,7 +98,7 @@ const saveEditedUser = async () => {
           setUsersData(result.UserList.results);
           setUserCount(result.UserList.totalResults);
         }
-        console.log(result)
+        console.log(result,"fetching user")
       })
       .catch((error) => console.error(error));
   }
@@ -120,7 +121,7 @@ const saveEditedUser = async () => {
         if (result.success === true) {
           fetchUsers();
         }
-        console.log(result)
+        console.log(result, "delete user")
       })
       .catch((error) => {
         setLoading(false);
@@ -215,7 +216,7 @@ const saveEditedUser = async () => {
             <nav aria-label="Page navigation example">
               <ul className="pagination">
                 <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
-                  <a onClick={goToPrevPage} className="page-link" aria-label="Previous">
+                  <a onClick={goToPrevPage} className="page-link" aria-label="Previous" >
                     <span aria-hidden="true">«</span>
                   </a>
                 </li>

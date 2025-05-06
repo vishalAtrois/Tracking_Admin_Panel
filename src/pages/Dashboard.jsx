@@ -67,7 +67,7 @@ const Dashboard = () => {
     <Sidebar />
     <div className="flex-1 p-6 bg-gray-900 ml-64">
     <div className="bg-gray-900 p-6 rounded-lg shadow-lg min-h-screen">
-      <h2 className="text-white text-3xl mb-6">Dashboard</h2>
+      <h2 className="text-white text-3xl mb-6 -mt-4">Dashboard</h2>
 
       {/* User and Company Cards */}
       <div className="flex space-x-6 overflow-auto">

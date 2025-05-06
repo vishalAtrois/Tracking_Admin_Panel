@@ -8,7 +8,7 @@ function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   
-  const passreg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
+  const passReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
   const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 
@@ -50,7 +50,7 @@ function Login() {
 
     validationSchema: yup.object({
       email: yup.string().required("Email is required").email("Invalid email").matches(emailReg, "email is invalid"),
-      password: yup.string().required("Password is required").matches(passreg, 'password is invalid'),
+      password: yup.string().required("Password is required").matches(passReg, 'password is invalid'),
     })
   });
 
@@ -69,13 +69,11 @@ function Login() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
                 value={formik.values.email}
                 onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
               />
               {formik.errors.email && formik.touched.email && (
                 <div className="text-red-500 text-sm">{formik.errors.email}</div>
               )}
             </div>
-
             <div className="relative">
   <label className="block mb-1">Password:</label>
   <input
@@ -85,10 +83,9 @@ function Login() {
     className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
     value={formik.values.password}
     onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
   />
   <div
-    className="absolute top-9 right-3 text-gray-600 cursor-pointer"
+    className="absolute top-10 right-3 text-gray-600 cursor-pointer"
     onClick={() => setShowPassword((prev) => !prev)}
   >
     {showPassword ? <FaEyeSlash /> : <FaEye />}

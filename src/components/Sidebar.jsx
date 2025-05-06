@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom'; // Use NavLink instead of Link
+import { NavLink } from 'react-router-dom';  
 import './Sidebar.css';
 import profilePhoto from '../assets/images/profilephoto.jpg';
 import Logo from '../assets/images/logo4.avif';
@@ -41,9 +41,9 @@ const Sidebar = () => {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        // Remove token and redirect on successful logout
         localStorage.removeItem('token');
-        window.location.href = "/"; // or wherever your login page is
+        alert("Logout successful")
+        window.location.href = "/";  
       })
       .catch((error) => {
         console.error(error);

@@ -62,6 +62,7 @@ const saveEditedCompany = async () => {
       alert("company updated successfully");
       setShowEditModal(false);
       fetchCompany();
+      console.log(result, "company edit")
     } else {
       alert("Update failed: " + result.message);
     }
@@ -91,8 +92,8 @@ const saveEditedCompany = async () => {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        if (result.success == true) {
-          console.log(result,"companydata");
+        if (result.success === true) {
+          console.log(result,"fetching companydata");
           setData(result.UserList.results)
           setCompanyCount(result.UserList.totalResults)
         }
@@ -120,8 +121,9 @@ const saveEditedCompany = async () => {
       .then((result) => {
         
         setLoading(false)
-        if (result.success == true) {
+        if (result.success === true) {
           fetchCompany()
+          console.log(result, "deleting company ")
         }
       })
       .catch((error) => {
@@ -219,7 +221,8 @@ const saveEditedCompany = async () => {
             <nav aria-label="Page navigation example">
               <ul className="pagination">
                 <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}><a onClick={goToPrevPage} className="page-link" aria-label="Previous"><span aria-hidden="true">«</span></a>
-                </li>{numbers.map((num) => (<li className={`page-item `}><span style={{ backgroundColor: currentpage === num ? '#00b6f0' : 'white', color: currentpage === num ? 'white' : 'black' }} className="page-link" onClick={() => setCurrentpage(num)}> {num} </span> </li>))}
+                </li>{numbers.map((num) => (<li className={`page-item `}>
+                  <span style={{ backgroundColor: currentpage === num ? '#00b6f0' : 'white', color: currentpage === num ? 'white' : 'black' }} className="page-link" onClick={() => setCurrentpage(num)}> {num} </span> </li>))}
                 <li className={`page-item ${currentpage === npage ? 'disabled' : ''}`}><a onClick={goToNextPage} className="page-link" aria-label="Next"> <span aria-hidden="true">»</span>
                 </a>
                 </li>
