@@ -76,27 +76,27 @@ function Login() {
               )}
             </div>
 
-            <div>
-              <label className="block">Password:</label>
-              <input
-                name="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Type your password"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-               <div
-        className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-600"
-        onClick={() => setShowPassword((prev) => !prev)}
-      >
-        {showPassword ? <FaEyeSlash /> : <FaEye />}
-      </div>
-              {formik.errors.password && formik.touched.password && (
-                <div className="text-red-500 text-sm">{formik.errors.password}</div>
-              )}
-            </div>
+            <div className="relative">
+  <label className="block mb-1">Password:</label>
+  <input
+    name="password"
+    type={showPassword ? "text" : "password"}
+    placeholder="Type your password"
+    className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+    value={formik.values.password}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+  />
+  <div
+    className="absolute top-9 right-3 text-gray-600 cursor-pointer"
+    onClick={() => setShowPassword((prev) => !prev)}
+  >
+    {showPassword ? <FaEyeSlash /> : <FaEye />}
+  </div>
+  {formik.errors.password && formik.touched.password && (
+    <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
+  )}
+</div>
 
             <button
               type="submit"
