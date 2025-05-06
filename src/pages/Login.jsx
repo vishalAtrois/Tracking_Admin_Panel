@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Login() {
   const navigate = useNavigate();
-
+  const [showPassword, setShowPassword] = useState(false);
   
   const passreg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
   const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -79,13 +80,19 @@ function Login() {
               <label className="block">Password:</label>
               <input
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Type your password"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
+               <div
+        className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-600"
+        onClick={() => setShowPassword((prev) => !prev)}
+      >
+        {showPassword ? <FaEyeSlash /> : <FaEye />}
+      </div>
               {formik.errors.password && formik.touched.password && (
                 <div className="text-red-500 text-sm">{formik.errors.password}</div>
               )}
