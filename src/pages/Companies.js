@@ -9,7 +9,7 @@ const Companies = () => {
     const [token, setToken] = useState('');
     const [si, setSi] = useState('');
     const [loading, setLoading] = useState(false);
-  const limit = 9
+  const limit = 8
 
 
   // State
