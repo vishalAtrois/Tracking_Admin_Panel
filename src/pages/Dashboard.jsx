@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
+import UserGrowthGraph from './UserGrowthGraph';
  
 
 const Dashboard = () => {
@@ -62,7 +63,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="flex h-screen overflow-auto  bg-gray-900">
+    <div className="flex flex-row h-screen overflow-auto  bg-gray-900">
     <Sidebar />
     <div className="flex-1 p-6 bg-gray-900 ml-64">
     <div className="bg-gray-900 p-6 rounded-lg shadow-lg min-h-screen">
@@ -93,7 +94,14 @@ const Dashboard = () => {
             <i className="fa fa-building text-4xl"></i>
           </div>
         </div>
+
+        
       </div>
+        <div
+          className="bg-gray-800 text-white p-6 rounded-lg flex-1 border border-gray-500 shadow-md cursor-pointer hover:bg-gray-700 transition mt-3 w-128">
+          <h3 className="text-3xl font-semibold mb-4">Graph</h3>
+           <UserGrowthGraph />
+        </div>
     </div>
     </div>
     </div>
