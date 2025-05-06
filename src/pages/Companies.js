@@ -144,7 +144,7 @@ const saveEditedCompany = async () => {
   };
 
   return (
-    <div className="flex h-screen overflow-auto bg-gray-900">
+    <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
       <Sidebar />
       <div className="flex-1 p-6 bg-gray-900 ml-64">
         <div className="h-full overflow-y-auto pr-2">
