@@ -7,6 +7,7 @@ const Users = () => {
   const [token, setToken] = useState('');
   const [si, setSi] = useState('');
   const [loading, setLoading] = useState(false);
+   const [searchQuery, setSearchQuery] = useState('');
   const [currentpage, setCurrentpage] = useState(1);
   const limit = 8;
  
@@ -76,7 +77,7 @@ const saveEditedUser = async () => {
     //  fetching data 
   useEffect(() => {
     fetchUsers();
-  },[currentpage]);
+  },[currentpage,searchQuery]);
 
   function fetchUsers() {
     const token = localStorage.getItem('token');
@@ -89,16 +90,23 @@ const saveEditedUser = async () => {
       headers: myHeaders,
       redirect: "follow"
     };
-
-    fetch(`https://tracking-backend-admin.vercel.app/v1/admin/fetchUserList?page=${currentpage}&limit=${limit}&sortBy=createdAt:desc`, requestOptions)
-      .then((response) => response.json())
+const url = searchQuery
+    ?`https://tracking-backend-admin.vercel.app/v1/admin/searchUser?query=${searchQuery}`
+    :`https://tracking-backend-admin.vercel.app/v1/admin/fetchUserList?page=${currentpage}&limit=${limit}&sortBy=createdAt:desc`
+    fetch(url,requestOptions)
+    .then((response) => response.json())
       .then((result) => {
-
         if (result.success === true) {
-          setUsersData(result.UserList.results);
-          setUserCount(result.UserList.totalResults);
+          if (searchQuery) {
+            console.log("Search API response:", result);
+            setUsersData(result.searchedUSer); // <-- correct field for search
+            setUserCount(result.searchedUSer.length);
+          } else {
+            console.log("Fetch Company List response:", result);
+            setUsersData(result.UserList.results); // <-- correct field for paginated list
+            setUserCount(result.UserList.totalResults);
+          }
         }
-        console.log(result,"fetching user")
       })
       .catch((error) => console.error(error));
   }
@@ -140,6 +148,11 @@ const saveEditedUser = async () => {
     if (currentpage < npage) setCurrentpage(currentpage + 1);
   };
 
+ const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
 
@@ -151,11 +164,13 @@ const saveEditedUser = async () => {
               className="form-control p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 m-2"
               id="exampleData"
               placeholder="Search User ...."
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
             <button
               title="Search"
               className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out"
-              onClick={() => console.log("Search button clicked")}
+              onClick={fetchUsers}
             >
               Search
             </button>
