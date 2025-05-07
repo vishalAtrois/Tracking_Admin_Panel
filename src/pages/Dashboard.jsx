@@ -5,8 +5,8 @@ import UserGrowthGraph from './UserGrowthGraph';
  
 
 const Dashboard = () => {
-
-  
+ 
+ const [loading,setLoading]=useState(true) 
   const [userCount, setUserCount] = useState(0);
   const [companyCount, setCompanyCount] = useState(0);
   const navigate = useNavigate();
@@ -29,6 +29,8 @@ const Dashboard = () => {
         if(result.success === true){
           console.log(result.UserList);
           setUserCount(result.UserList.totalResults)
+          setLoading(false)
+          
         }
       })
       .catch((error) => console.error(error));
@@ -52,6 +54,7 @@ const Dashboard = () => {
         if(result.success === true){
           console.log(result);
           setCompanyCount(result.UserList.totalResults)
+          setLoading(false)
         }
       })
       .catch((error) => console.error(error));
@@ -77,11 +80,20 @@ const Dashboard = () => {
           onClick={() => navigate('/users')}
         >
           <h3 className="text-3xl font-semibold mb-4">Users</h3>
+          {loading?(<div className="flex flex-col items-center justify-center mt-6">
+  <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+  <p className="mt-2 text-sm text-blue-600 font-medium">Loading User...</p>
+</div>):(
           <div className="flex items-center justify-between mb-2">
+
+     
+
             <span className="text-2xl font-bold">{userCount}</span>
             <i className="fa fa-user text-4xl"></i>
           </div>
+      )}
         </div>
+ 
 
         {/* Company Section */}
         <div
@@ -89,10 +101,15 @@ const Dashboard = () => {
           onClick={() => navigate('/companies')}
         >
           <h3 className="text-3xl font-semibold mb-4">Companies</h3>
+          {loading?(<div className="flex flex-col items-center justify-center mt-6">
+  <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+  <p className="mt-2 text-sm text-blue-600 font-medium">Loading companies...</p>
+</div>):(
           <div className="flex items-center justify-between mb-2">
             <span className="text-2xl font-bold">{companyCount}</span>
             <i className="fa fa-building text-4xl"></i>
           </div>
+)}
         </div>
 
         
