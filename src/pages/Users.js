@@ -6,7 +6,7 @@ const Users = () => {
   const [userCount, setUserCount] = useState(0);
   const [token, setToken] = useState('');
   const [si, setSi] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
    const [searchQuery, setSearchQuery] = useState('');
   const [currentpage, setCurrentpage] = useState(1);
   const limit = 8;
@@ -101,10 +101,12 @@ const url = searchQuery
             console.log("Search API response:", result);
             setUsersData(result.searchedUSer.data); // <-- correct field for search
             setUserCount(result.searchedUSer.totalResults);
+            setLoading(false)
           } else {
             console.log("Fetch  user List response:", result);
             setUsersData(result.UserList.results); // <-- correct field for paginated list
             setUserCount(result.UserList.totalResults);
+            setLoading(false)
           }
         }
       })
@@ -177,6 +179,15 @@ const url = searchQuery
           </div>
 
           <div className="rounded-lg shadow-md overflow-x-auto w-full">
+          {loading ? (
+    <div className="flex flex-col justify-center items-center py-20 text-white">
+    <div className="relative">
+      <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      <div className="absolute top-0 left-0 w-16 h-16 border-4 border-blue-300 border-t-transparent rounded-full animate-spin-slow opacity-30"></div>
+    </div>
+    <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading user...</p>
+  </div>
+) : (
             <table className="min-w-full table-auto border border-gray-200">
               <thead className="bg-gray-200 text-gray-700">
                 <tr className="transition-all duration-300 ease-in bg-gray-500 hover:bg-gray-700 text-white">
@@ -225,6 +236,7 @@ const url = searchQuery
                 ))}
               </tbody>
             </table>
+)}
           </div>
       {/* pagination */}
           <div className="s-cus-pagintion custompaginationtoprightbox" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', position:'sticky', bottom:"0px" }}>
