@@ -91,7 +91,7 @@ const saveEditedUser = async () => {
       redirect: "follow"
     };
 const url = searchQuery
-    ?`https://tracking-backend-admin.vercel.app/v1/admin/searchUser?query=${searchQuery}`
+    ?`https://tracking-backend-admin.vercel.app/v1/admin/searchUser?query=${searchQuery}&page=${currentpage}&limit=${limit}`
     :`https://tracking-backend-admin.vercel.app/v1/admin/fetchUserList?page=${currentpage}&limit=${limit}&sortBy=createdAt:desc`
     fetch(url,requestOptions)
     .then((response) => response.json())
@@ -99,10 +99,10 @@ const url = searchQuery
         if (result.success === true) {
           if (searchQuery) {
             console.log("Search API response:", result);
-            setUsersData(result.searchedUSer); // <-- correct field for search
-            setUserCount(result.searchedUSer.length);
+            setUsersData(result.searchedUSer.data); // <-- correct field for search
+            setUserCount(result.searchedUSer.totalResults);
           } else {
-            console.log("Fetch Company List response:", result);
+            console.log("Fetch  user List response:", result);
             setUsersData(result.UserList.results); // <-- correct field for paginated list
             setUserCount(result.UserList.totalResults);
           }

@@ -86,7 +86,7 @@ const Companies = () => {
 
     // If there's a search query, search for companies, else fetch all companies
     const url = searchQuery
-      ? `https://tracking-backend-admin.vercel.app/v1/admin/searchCompany?query=${searchQuery}`
+      ? `https://tracking-backend-admin.vercel.app/v1/admin/searchCompany?query=${searchQuery}&page=${currentpage}&limit=${limit}`
       : `https://tracking-backend-admin.vercel.app/v1/admin/fetchCompanyList?page=${currentpage}&limit=${limit}&sortBy=createdAt:desc`;
       fetch(url, requestOptions)
       .then((response) => response.json())
@@ -94,8 +94,8 @@ const Companies = () => {
         if (result.success === true) {
           if (searchQuery) {
             console.log("Search API response:", result);
-            setData(result.searchedCompany); // <-- correct field for search
-            setCompanyCount(result.searchedCompany.length);
+            setData(result.searchedCompany.data); // <-- correct field for search
+            setCompanyCount(result.searchedCompany.totalResults);
           } else {
             console.log("Fetch Company List response:", result);
             setData(result.UserList.results); // <-- correct field for paginated list
