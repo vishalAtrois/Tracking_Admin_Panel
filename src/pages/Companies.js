@@ -198,7 +198,7 @@ const goToNextPage = () => {
         />
         <button
           title="Search"
-          className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out"
+          className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out mt-2"
           onClick={fetchCompany}
         >
           Search
