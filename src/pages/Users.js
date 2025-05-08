@@ -186,7 +186,7 @@ const goToNextPage = () => {
       <div className="h-full overflow-y-auto pr-2">
         <div className="flex items-center space-x-4 bg-gray-900 rounded-lg shadow-lg mb-3 sticky -top-1">
           <input
-            className="form-control p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 m-2"
+            className="form-control p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2"
             id="exampleData"
             placeholder="Search User ...."
             value={searchQuery}
@@ -214,12 +214,12 @@ const goToNextPage = () => {
             <table className="min-w-full table-auto border border-gray-200">
               <thead className="bg-gray-200 text-gray-700">
                 <tr className="transition-all duration-300 ease-in bg-gray-700 text-white">
-                  <th className=" text-center border-b border-r border-black text-sm md:text-lg   font-serif">Sr.no</th>
-                  <th className=" text-center border-b border-r border-black   md:text-lg   font-serif">Name</th>
-                  <th className=" text-center border-b border-r border-black   md:text-lg   font-serif">Email</th>
-                  <th className=" text-center border-b border-r border-black  md:text-lg   font-serif">Mobile Number</th>
-                  <th className=" text-center border-b border-r border-black md:text-lg   font-serif hidden sm:table-cell">Company Name</th>
-                  <th className=" text-center border-b border-r border-black md:text-lg   font-serif">Actions</th>
+                  <th className=" text-center border-b border-r border-black   font-serif">Sr.no</th>
+                  <th className=" text-center border-b border-r border-black     font-serif">Name</th>
+                  <th className=" text-center border-b border-r border-black     font-serif">Email</th>
+                  <th className=" text-center border-b border-r border-black    font-serif">Mobile Number</th>
+                  <th className=" text-center border-b border-r border-black   font-serif hidden sm:table-cell">Company Name</th>
+                  <th className=" text-center border-b border-r border-black   font-serif">Actions</th>
                 </tr>
               </thead>
               <tbody>
