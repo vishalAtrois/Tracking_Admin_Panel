@@ -265,7 +265,7 @@ const Companies = () => {
           {/* Edit Company Modal */}
           {showEditModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-              <div className="bg-white p-6 rounded-lg w-">
+              <div className="bg-white p-6 rounded-lg w-128">
                 <h2 className="text-xl font-bold mb-4">Edit Company</h2>
                 <input
                   name="name"
