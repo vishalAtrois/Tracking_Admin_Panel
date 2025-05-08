@@ -9,7 +9,7 @@ const Users = () => {
   const [loading, setLoading] = useState(true);
    const [searchQuery, setSearchQuery] = useState('');
   const [currentpage, setCurrentpage] = useState(1);
-  const limit = 8;
+  const limit = 10;
  
 
 
@@ -214,12 +214,12 @@ const goToNextPage = () => {
             <table className="min-w-full table-auto border border-gray-200">
               <thead className="bg-gray-200 text-gray-700">
                 <tr className="transition-all duration-300 ease-in bg-gray-700 text-white">
-                  <th className=" text-center border-b border-r border-black   font-serif">Sr.no</th>
-                  <th className=" text-center border-b border-r border-black     font-serif">Name</th>
-                  <th className=" text-center border-b border-r border-black     font-serif">Email</th>
-                  <th className=" text-center border-b border-r border-black    font-serif">Mobile Number</th>
-                  <th className=" text-center border-b border-r border-black   font-serif hidden sm:table-cell">Company Name</th>
-                  <th className=" text-center border-b border-r border-black   font-serif">Actions</th>
+                  <th className="py-1 text-center border-b border-r border-black   font-serif">Sr.no</th>
+                  <th className="py-1 text-center border-b border-r border-black     font-serif">Name</th>
+                  <th className="py-1 text-center border-b border-r border-black     font-serif">Email</th>
+                  <th className="py-1 text-center border-b border-r border-black    font-serif">Mobile Number</th>
+                  <th className="py-1 text-center border-b border-r border-black   font-serif hidden sm:table-cell">Company Name</th>
+                  <th className="py-1 text-center border-b border-r border-black   font-serif">Actions</th>
                 </tr>
               </thead>
               <tbody>

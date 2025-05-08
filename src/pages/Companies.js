@@ -9,7 +9,7 @@ const Companies = () => {
   const [si, setSi] = useState('');
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');  
-  const limit = 8;
+  const limit = 10;
 
    
 
@@ -219,11 +219,11 @@ const goToNextPage = () => {
           <table className="min-w-full table-auto border border-gray-200">
             <thead className="bg-gray-200 text-gray-700">
               <tr className='transition-all duration-300 bg-gray-700 border-none text-white'>
-                <th className=" text-center border-b border-r border-black    font-serif">Sr.no</th>
-                <th className=" text-center border-b border-r border-black   font-serif">Name</th>
-                <th className=" text-center border-b border-r border-black    font-serif">Address</th>
-                <th className=" text-center border-b border-r border-black    font-serif">Total Employees</th>
-                <th className=" text-center border-b border-r border-black    font-serif">Actions</th>
+                <th className="py-1 text-center border-b border-r border-black    font-serif">Sr.no</th>
+                <th className="py-1 text-center border-b border-r border-black   font-serif">Name</th>
+                <th className="py-1 text-center border-b border-r border-black    font-serif">Address</th>
+                <th className="py-1 text-center border-b border-r border-black    font-serif">Total Employees</th>
+                <th className="py-1 text-center border-b border-r border-black    font-serif">Actions</th>
               </tr>
             </thead>
             <tbody>
