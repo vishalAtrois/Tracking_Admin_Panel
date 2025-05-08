@@ -227,7 +227,8 @@ const goToNextPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (         <tr key={index} className="bg-white">
+              {data.map((item, index) => (        
+                 <tr key={index} className="bg-white">
                   <td className=" border-b border-r border-black text-center font-serif">{(currentpage - 1) * limit + index + 1}</td>
                   <td className=" border-b border-r border-black text-center font-serif">{item.name}</td>
                   <td className=" border-b border-r border-black text-center font-serif">{item.address}</td>
