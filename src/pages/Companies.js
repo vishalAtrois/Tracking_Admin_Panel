@@ -218,21 +218,21 @@ const goToNextPage = () => {
         ) : (
           <table className="min-w-full table-auto border border-gray-200">
             <thead className="bg-gray-200 text-gray-700">
-              <tr className='transition-all duration-300 ease-in bg-gray-700 border-none text-white'>
-                <th className="px-2 py-2 text-center border-b border-r border-black  md:text-lg  font-serif">Sr.no</th>
-                <th className="px-2 py-2 text-center border-b border-r border-black md:text-lg  font-serif">Name</th>
-                <th className="px-2 py-2 text-center border-b border-r border-black  md:text-lg  font-serif">Address</th>
-                <th className="px-2 py-2 text-center border-b border-r border-black  md:text-lg  font-serif">Total Employees</th>
-                <th className="px-2 py-2 text-center border-b border-r border-black  md:text-lg  font-serif">Actions</th>
+              <tr className='transition-all duration-300 bg-gray-700 border-none text-white'>
+                <th className=" text-center border-b border-r border-black  md:text-lg  font-serif">Sr.no</th>
+                <th className=" text-center border-b border-r border-black md:text-lg  font-serif">Name</th>
+                <th className=" text-center border-b border-r border-black  md:text-lg  font-serif">Address</th>
+                <th className=" text-center border-b border-r border-black  md:text-lg  font-serif">Total Employees</th>
+                <th className=" text-center border-b border-r border-black  md:text-lg  font-serif">Actions</th>
               </tr>
             </thead>
             <tbody>
               {data.map((item, index) => (         <tr key={index} className="bg-white">
-                  <td className="px-4 py-2 border-b border-r border-black text-center font-serif">{(currentpage - 1) * limit + index + 1}</td>
-                  <td className="px-4 py-2 border-b border-r border-black text-center font-serif">{item.name}</td>
-                  <td className="px-4 py-2 border-b border-r border-black text-center font-serif">{item.address}</td>
-                  <td className="px-4 py-2 border-b border-r border-black text-center font-serif">{item.totalEmployees}</td>
-                  <td className="px-4 py-2 border-b border-r border-black text-center font-serif">
+                  <td className=" border-b border-r border-black text-center font-serif">{(currentpage - 1) * limit + index + 1}</td>
+                  <td className=" border-b border-r border-black text-center font-serif">{item.name}</td>
+                  <td className=" border-b border-r border-black text-center font-serif">{item.address}</td>
+                  <td className=" border-b border-r border-black text-center font-serif">{item.totalEmployees}</td>
+                  <td className=" border-b border-r border-black text-center font-serif">
                     <div className="flex justify-center gap-4">
                       <button
                         className="p-2 rounded-full hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition"

@@ -214,23 +214,23 @@ const goToNextPage = () => {
             <table className="min-w-full table-auto border border-gray-200">
               <thead className="bg-gray-200 text-gray-700">
                 <tr className="transition-all duration-300 ease-in bg-gray-700 text-white">
-                  <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg   font-serif">Sr.no</th>
-                  <th className="px-2 py-2 text-center border-b border-r border-black   md:text-lg   font-serif">Name</th>
-                  <th className="px-2 py-2 text-center border-b border-r border-black   md:text-lg   font-serif">Email</th>
-                  <th className="px-2 py-2 text-center border-b border-r border-black  md:text-lg   font-serif">Mobile Number</th>
-                  <th className="px-2 py-2 text-center border-b border-r border-black md:text-lg   font-serif hidden sm:table-cell">Company Name</th>
-                  <th className="px-2 py-2 text-center border-b border-r border-black md:text-lg   font-serif">Actions</th>
+                  <th className=" text-center border-b border-r border-black text-sm md:text-lg   font-serif">Sr.no</th>
+                  <th className=" text-center border-b border-r border-black   md:text-lg   font-serif">Name</th>
+                  <th className=" text-center border-b border-r border-black   md:text-lg   font-serif">Email</th>
+                  <th className=" text-center border-b border-r border-black  md:text-lg   font-serif">Mobile Number</th>
+                  <th className=" text-center border-b border-r border-black md:text-lg   font-serif hidden sm:table-cell">Company Name</th>
+                  <th className=" text-center border-b border-r border-black md:text-lg   font-serif">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {usersData.map((item, index) => (
                   <tr key={item.id} className="bg-white">
-                    <td className="px-4 py-2 border-b border-r border-black text-center  font-serif">{(currentpage - 1) * limit + index + 1}</td>
-                    <td className="px-4 py-2 border-b border-r border-black text-center   font-serif">{item.fullName}</td>
-                    <td className="px-4 py-2 border-b border-r border-black text-center   font-serif">{item.email}</td>
-                    <td className="px-4 py-2 border-b border-r border-black text-center   font-serif">{item.phoneNumber}</td>
-                    <td className="px-4 py-2 border-b border-r border-black text-center  font-serif">{item.companyName}</td>
-                    <td className="px-4 py-2 border-b border-r border-black text-center">
+                    <td className=" border-b border-r border-black text-center  font-serif">{(currentpage - 1) * limit + index + 1}</td>
+                    <td className=" border-b border-r border-black text-center   font-serif">{item.fullName}</td>
+                    <td className=" border-b border-r border-black text-center   font-serif">{item.email}</td>
+                    <td className=" border-b border-r border-black text-center   font-serif">{item.phoneNumber}</td>
+                    <td className=" border-b border-r border-black text-center  font-serif">{item.companyName}</td>
+                    <td className=" border-b border-r border-black text-center">
                       <div className="flex justify-center gap-4">
                         {/* Edit Button */}
                         <button
