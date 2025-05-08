@@ -22,7 +22,7 @@ const [editedUser, setEditedUser] = useState({
   companyName: ''
 });
 const [showEditModal, setShowEditModal] = useState(false);
-
+ const [showDeleteModal, setShowDeleteModal] = useState(false);
 // Trigger edit
 const handleEditClick = (user) => {
   setEditedUser({
@@ -154,6 +154,11 @@ const url = searchQuery
     setSearchQuery(e.target.value);
   };
 
+  function handleDeleteClick(item){
+    setShowDeleteModal(true)
+    setSi(item.id)
+}
+
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
@@ -222,9 +227,7 @@ const url = searchQuery
 
                         {/* Delete Button */}
                         <button
-                          onClick={() => { setSi(item.id) }}
-                          data-bs-toggle="modal"
-                          data-bs-target="#exampleModal"
+                          onClick={() => {handleDeleteClick(item)}}
                           className="p-2 rounded-full hover:bg-red-100 text-red-600 hover:text-red-800 transition"
                           title="Delete"
                         >
@@ -303,24 +306,29 @@ const url = searchQuery
     </div>
   </div>
 )}
-      {/* delete prompt  */}
-          <div className="modal" id="exampleModal" tabIndex="-1">
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Delete User</h5>
-                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div className="modal-body">
-                  <p>Are you sure you want to Delete this User?</p>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="button" className="btn btn-danger" onClick={DeleteUser} data-bs-dismiss="modal">Delete</button>
-                </div>
-              </div>
+     {/* Confirm Modal */}
+     {showDeleteModal && (
+        <div className="fixed inset-1 bg-black bg-opacity-75 flex items-start justify-center z-50 pt-20"> {/* Increased opacity and moved to top */}
+          <div className="bg-white rounded-lg p-6 w-128 shadow-lg">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800">Confirm Delete</h2>
+            <p className="text-gray-600 mb-6">Are you sure you want to Delete?</p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-600 transition text-white"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={()=>DeleteUser()}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+              >
+                Delete
+              </button>
             </div>
           </div>
+        </div>
+      )}
 
         </div>
       </div>

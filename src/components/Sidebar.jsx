@@ -97,7 +97,7 @@ const [showLogoutModal,setShowLogoutModal]=useState(false)
             <div className="flex justify-end space-x-4">
               <button
                 onClick={() => setShowLogoutModal(false)}
-                className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700 transition"
+                className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-600 transition"
               >
                 Cancel
               </button>
