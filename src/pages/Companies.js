@@ -268,13 +268,32 @@ const Companies = () => {
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
               <div className="bg-white p-6 rounded-lg w-128">
                 <h2 className="text-xl font-bold mb-4">Edit Company</h2>
-                <input
-                  name="name"
-                  value={editedCompany.name}
-                  onChange={handleEditChange}
-                  placeholder="name"
-                  className="w-full mb-2 p-2 border rounded"
-                />
+                <div className="relative w-full mb-2">
+  <input
+    name="phoneNumber"
+    value={editedCompany.name}
+    disabled
+    placeholder="Phone Number"
+    className="w-full p-2 pr-10 border rounded bg-gray-100 text-gray-700"
+  />
+  <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="red"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+      />
+    </svg>
+  </div>
+</div>
+
                 <input
                   name="address"
                   value={editedCompany.address}

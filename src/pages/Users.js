@@ -279,20 +279,60 @@ const url = searchQuery
         placeholder="Full Name"
         className="w-full mb-2 p-2 border rounded"
       />
-      <input
-        name="email"
-        value={editedUser.email}
-        onChange={handleEditChange}
-        placeholder="Email"
-        className="w-full mb-2 p-2 border rounded"
+      <div className="relative w-full mb-2">
+  <input
+    name="phoneNumber"
+    value={editedUser.email}
+    disabled
+    placeholder="Phone Number"
+    className="w-full p-2 pr-10 border rounded bg-gray-100 text-gray-700"
+  />
+  <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="red"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
       />
-      <input
-        name="phoneNumber"
-        value={editedUser.phoneNumber}
-        onChange={handleEditChange}
-        placeholder="Phone Number"
-        className="w-full mb-2 p-2 border rounded"
+    </svg>
+  </div>
+</div>
+
+  <div className="relative w-full mb-2">
+  <input
+    name="phoneNumber"
+    value={editedUser.phoneNumber}
+    disabled
+    placeholder="Phone Number"
+    className="w-full p-2 pr-10 border rounded bg-gray-100 text-gray-700"
+  />
+  <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="red"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
       />
+    </svg>
+  </div>
+</div>
+
+
+
       <input
         name="companyName"
         value={editedUser.companyName}
