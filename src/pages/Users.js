@@ -139,17 +139,34 @@ const url = searchQuery
         console.error(error);
       });
   }
+  
+  // Logic part
+const npage = Math.ceil(userCount / limit);
+const pageNumbers = [];
 
-  const npage = Math.ceil(userCount / limit);
-  const numbers = [...Array(npage + 1).keys()].slice(1);
+if (npage <= 4) {
+  for (let i = 1; i <= npage; i++) {
+    pageNumbers.push(i);
+  }
+} else {
+  if (currentpage <= 2) {
+    pageNumbers.push(1, 2, 3, '...', npage);
+  } else if (currentpage >= npage - 1) {
+    pageNumbers.push(1, '...', npage - 2, npage - 1, npage);
+  } else {
+    pageNumbers.push(currentpage - 1, currentpage, currentpage + 1, '...', npage);
+  }
+}
 
-  const goToPrevPage = () => {
-    if (currentpage > 1) setCurrentpage(currentpage - 1);
-  };
+const goToPrevPage = () => {
+  if (currentpage > 1) setCurrentpage(currentpage - 1);
+};
 
-  const goToNextPage = () => {
-    if (currentpage < npage) setCurrentpage(currentpage + 1);
-  };
+const goToNextPage = () => {
+  if (currentpage < npage) setCurrentpage(currentpage + 1);
+};
+
+  
 
  const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -242,30 +259,46 @@ const url = searchQuery
             </table>
 )}
           </div>
-      {/* pagination */}
-          <div className="s-cus-pagintion custompaginationtoprightbox" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', position:'sticky', bottom:"0px" }}>
-            <nav aria-label="Page navigation example">
-              <ul className="pagination">
-                <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
-                  <a onClick={goToPrevPage} className="page-link" aria-label="Previous" >
-                    <span aria-hidden="true">«</span>
-                  </a>
-                </li>
-                {numbers.map((num) => (
-                  <li className={`page-item `} key={num}>
-                    <span style={{ backgroundColor: currentpage === num ? '#00b6f0' : 'white', color: currentpage === num ? 'white' : 'black' }} className="page-link" onClick={() => setCurrentpage(num)}>
-                      {num}
-                    </span>
-                  </li>
-                ))}
-                <li className={`page-item ${currentpage === npage ? 'disabled' : ''}`}>
-                  <a onClick={goToNextPage} className="page-link" aria-label="Next">
-                    <span aria-hidden="true">»</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div> 
+      {/* Pagination UI */}
+<div className="s-cus-pagintion custompaginationtoprightbox" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', position: 'sticky', bottom: '0px' }}>
+  <nav aria-label="Page navigation example">
+    <ul className="pagination">
+      <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
+        <a onClick={goToPrevPage} className="page-link" style={{ cursor: 'pointer' }} aria-label="Previous">
+          <span aria-hidden="true">«</span>
+        </a>
+      </li>
+
+      {pageNumbers.map((num, index) => (
+        <li className={`page-item ${num === currentpage ? 'active' : ''}`} key={index}>
+          {num === '...' ? (
+            <span className="page-link">...</span>
+          ) : (
+            <span
+              onClick={() => setCurrentpage(num)}
+              className="page-link"
+              style={{
+                backgroundColor: currentpage === num ? '#00b6f0' : 'white',
+                color: currentpage === num ? 'white' : 'black',
+                cursor: 'pointer'
+              }}
+            >
+              {num}
+            </span>
+          )}
+        </li>
+      ))}
+
+      <li className={`page-item ${currentpage === npage ? 'disabled' : ''}`}>
+        <a onClick={goToNextPage} className="page-link" style={{ cursor: 'pointer' }} aria-label="Next">
+          <span aria-hidden="true">»</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+
 
  {/* edit propmt  */}
           {showEditModal && (
@@ -330,9 +363,6 @@ const url = searchQuery
     </svg>
   </div>
 </div>
-
-
-
       <input
         name="companyName"
         value={editedUser.companyName}
