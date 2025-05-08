@@ -213,7 +213,7 @@ const goToNextPage = () => {
           ) : (
             <table className="min-w-full table-auto border border-gray-200">
               <thead className="bg-gray-200 text-gray-700">
-                <tr className="transition-all duration-300 ease-in bg-gray-500 hover:bg-gray-700 text-white">
+                <tr className="transition-all duration-300 ease-in bg-gray-700 text-white">
                   <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg   font-serif">Sr.no</th>
                   <th className="px-2 py-2 text-center border-b border-r border-black   md:text-lg   font-serif">Name</th>
                   <th className="px-2 py-2 text-center border-b border-r border-black   md:text-lg   font-serif">Email</th>
