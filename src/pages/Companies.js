@@ -164,7 +164,7 @@ const Companies = () => {
       <div className="flex-1 p-6 bg-gray-900 ml-64">
         <div className="h-full overflow-y-auto pr-2">
           {/* Search Box */}
-          <div className="flex items-center space-x-4 bg-gray-900 rounded-lg shadow-lg mb-3 sticky -top-1">
+          <div className="flex items-center space-x-4 bg-gray-900 rounded-lg shadow-lg mb-3 sticky -top-1 ">
             <input
               className="form-control p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 m-2"
               id="exampleData"
@@ -291,7 +291,7 @@ const Companies = () => {
           )}
           
           {/* Confirm Modal */}
-          <div class="modal" id="exampleModal" tabindex="-1">
+          <div class="modal" id="exampleModal" tabIndex="-1">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">

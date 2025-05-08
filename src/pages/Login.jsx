@@ -38,6 +38,7 @@ function Login() {
         .then((response) => response.json())
         .then((result) => {
           if (result.success === true) {
+            console.log(result,"login")
             localStorage.setItem("token", result.token.access.token);
             localStorage.setItem("user", JSON.stringify(result.user));
             navigate("/dashboard");
