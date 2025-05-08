@@ -178,74 +178,74 @@ const goToNextPage = () => {
 }
 
 
-  return (
-    <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
+  return (<div className="flex flex-col md:flex-row min-h-screen w-full bg-gray-900">
 
-      <Sidebar />
-      <div className="flex-1 p-6 bg-gray-900 ml-64">
-        <div className="h-full overflow-y-auto pr-2">
-          <div className="flex items-center space-x-4 bg-gray-900 rounded-lg shadow-lg mb-3 sticky -top-1">
-            <input
-              className="form-control p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 m-2"
-              id="exampleData"
-              placeholder="Search User ...."
-              value={searchQuery}
-              onChange={handleSearchChange}
-            />
-            <button
-              title="Search"
-              className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out"
-              onClick={fetchUsers}
-            >
-              Search
-            </button>
-          </div>
-
-          <div className="rounded-lg shadow-md overflow-x-auto w-full">
+    <Sidebar />
+    <div className="flex-1 p-4 bg-gray-900 md:ml-64">
+  
+      <div className="h-full overflow-y-auto pr-2">
+        <div className="flex items-center space-x-4 bg-gray-900 rounded-lg shadow-lg mb-3 sticky -top-1">
+          <input
+            className="form-control p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 m-2"
+            id="exampleData"
+            placeholder="Search User ...."
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+          <button
+            title="Search"
+            className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out"
+            onClick={fetchUsers}
+          >
+            Search
+          </button>
+        </div>
+  
+        <div className="rounded-lg shadow-md overflow-x-auto w-full max-w-full">
           {loading ? (
-    <div className="flex flex-col justify-center items-center py-20 text-white">
-    <div className="relative">
-      <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      <div className="absolute top-0 left-0 w-16 h-16 border-4 border-blue-300 border-t-transparent rounded-full animate-spin-slow opacity-30"></div>
-    </div>
-    <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading user...</p>
-  </div>
-) : (
+            <div className="flex flex-col justify-center items-center py-20 text-white">
+              <div className="relative">
+                <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-16 h-16 border-4 border-blue-300 border-t-transparent rounded-full animate-spin-slow opacity-30"></div>
+              </div>
+              <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading user...</p>
+            </div>
+          ) : (
             <table className="min-w-full table-auto border border-gray-200">
               <thead className="bg-gray-200 text-gray-700">
                 <tr className="transition-all duration-300 ease-in bg-gray-500 hover:bg-gray-700 text-white">
-                <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Sr.no</th>
-                  <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Name</th>
-                  <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Email</th>
-                  <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Mobile Number</th>
-                  <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif hidden sm:table-cell">Company Name</th>
-                  <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg lg:text-xl font-serif">Actions</th>
+                  <th className="px-2 py-2 text-center border-b border-r border-black text-sm md:text-lg   font-serif">Sr.no</th>
+                  <th className="px-2 py-2 text-center border-b border-r border-black   md:text-lg   font-serif">Name</th>
+                  <th className="px-2 py-2 text-center border-b border-r border-black   md:text-lg   font-serif">Email</th>
+                  <th className="px-2 py-2 text-center border-b border-r border-black  md:text-lg   font-serif">Mobile Number</th>
+                  <th className="px-2 py-2 text-center border-b border-r border-black md:text-lg   font-serif hidden sm:table-cell">Company Name</th>
+                  <th className="px-2 py-2 text-center border-b border-r border-black md:text-lg   font-serif">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {usersData.map((item,index) => (
+                {usersData.map((item, index) => (
                   <tr key={item.id} className="bg-white">
-                    <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{(currentpage - 1) * limit + index + 1}</td>
-                    <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.fullName}</td>
-                    <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.email}</td>
-                    <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.phoneNumber}</td>
-                    <td className="px-4 py-2 border-b border-r border-black text-center text-lg font-serif">{item.companyName}</td>
+                    <td className="px-4 py-2 border-b border-r border-black text-center  font-serif">{(currentpage - 1) * limit + index + 1}</td>
+                    <td className="px-4 py-2 border-b border-r border-black text-center   font-serif">{item.fullName}</td>
+                    <td className="px-4 py-2 border-b border-r border-black text-center   font-serif">{item.email}</td>
+                    <td className="px-4 py-2 border-b border-r border-black text-center   font-serif">{item.phoneNumber}</td>
+                    <td className="px-4 py-2 border-b border-r border-black text-center  font-serif">{item.companyName}</td>
                     <td className="px-4 py-2 border-b border-r border-black text-center">
                       <div className="flex justify-center gap-4">
                         {/* Edit Button */}
                         <button
-                            onClick={()=>{handleEditClick(item)}}
-                            data-bs-toggle="modalfade"
-                            data-bs-target="#editUserModal"
+                          onClick={() => { handleEditClick(item) }}
+                          data-bs-toggle="modalfade"
+                          data-bs-target="#editUserModal"
                           className="p-2 rounded-full hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition"
                           title="Edit"
                         >
                           <i className="bi bi-pencil-fill text-lg"></i>
                         </button>
-
+  
                         {/* Delete Button */}
                         <button
-                          onClick={() => {handleDeleteClick(item)}}
+                          onClick={() => { handleDeleteClick(item) }}
                           className="p-2 rounded-full hover:bg-red-100 text-red-600 hover:text-red-800 transition"
                           title="Delete"
                         >
@@ -257,153 +257,153 @@ const goToNextPage = () => {
                 ))}
               </tbody>
             </table>
-)}
-          </div>
-      {/* Pagination UI */}
-<div className="s-cus-pagintion custompaginationtoprightbox" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', position: 'sticky', bottom: '0px' }}>
-  <nav aria-label="Page navigation example">
-    <ul className="pagination">
-      <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
-        <a onClick={goToPrevPage} className="page-link" style={{ cursor: 'pointer' }} aria-label="Previous">
-          <span aria-hidden="true">«</span>
-        </a>
-      </li>
-
-      {pageNumbers.map((num, index) => (
-        <li className={`page-item ${num === currentpage ? 'active' : ''}`} key={index}>
-          {num === '...' ? (
-            <span className="page-link">...</span>
-          ) : (
-            <span
-              onClick={() => setCurrentpage(num)}
-              className="page-link"
-              style={{
-                backgroundColor: currentpage === num ? '#00b6f0' : 'white',
-                color: currentpage === num ? 'white' : 'black',
-                cursor: 'pointer'
-              }}
-            >
-              {num}
-            </span>
           )}
-        </li>
-      ))}
-
-      <li className={`page-item ${currentpage === npage ? 'disabled' : ''}`}>
-        <a onClick={goToNextPage} className="page-link" style={{ cursor: 'pointer' }} aria-label="Next">
-          <span aria-hidden="true">»</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
-</div>
-
-
-
- {/* edit propmt  */}
-          {showEditModal && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-lg w-128">
-      <h2 className="text-xl font-bold mb-4">Edit User</h2>
-        <input
-        name="fullName"
-        value={editedUser.fullName}
-        onChange={handleEditChange}
-        placeholder="Full Name"
-        className="w-full mb-2 p-2 border rounded"
-      />
-      <div className="relative w-full mb-2">
-  <input
-    name="phoneNumber"
-    value={editedUser.email}
-    disabled
-    placeholder="Phone Number"
-    className="w-full p-2 pr-10 border rounded bg-gray-100 text-gray-700"
-  />
-  <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={2}
-      stroke="red"
-      className="w-5 h-5"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
-      />
-    </svg>
-  </div>
-</div>
-
-  <div className="relative w-full mb-2">
-  <input
-    name="phoneNumber"
-    value={editedUser.phoneNumber}
-    disabled
-    placeholder="Phone Number"
-    className="w-full p-2 pr-10 border rounded bg-gray-100 text-gray-700"
-  />
-  <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={2}
-      stroke="red"
-      className="w-5 h-5"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
-      />
-    </svg>
-  </div>
-</div>
-      <input
-        name="companyName"
-        value={editedUser.companyName}
-        onChange={handleEditChange}
-        placeholder="Company Name"
-        className="w-full mb-4 p-2 border rounded"
-      />
-      <div className="flex justify-end gap-4">
-        <button onClick={saveEditedUser} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
-        <button onClick={() => setShowEditModal(false)} className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Cancel</button>
-      </div>
-    </div>
-  </div>
-)}
-     {/* Confirm Modal */}
-     {showDeleteModal && (
-        <div className="fixed inset-1 bg-black bg-opacity-75 flex items-start justify-center z-50 pt-20"> {/* Increased opacity and moved to top */}
-          <div className="bg-white rounded-lg p-6 w-128 shadow-lg">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">Confirm Delete</h2>
-            <p className="text-gray-600 mb-6">Are you sure you want to Delete?</p>
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-600 transition text-white"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={()=>DeleteUser()}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-              >
-                Delete
-              </button>
+        </div>
+  
+        {/* Pagination UI */}
+        <div className="s-cus-pagintion custompaginationtoprightbox" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', position: 'sticky', bottom: '0px' }}>
+          <nav aria-label="Page navigation example">
+            <ul className="pagination">
+              <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
+                <a onClick={goToPrevPage} className="page-link" style={{ cursor: 'pointer' }} aria-label="Previous">
+                  <span aria-hidden="true">«</span>
+                </a>
+              </li>
+  
+              {pageNumbers.map((num, index) => (
+                <li className={`page-item ${num === currentpage ? 'active' : ''}`} key={index}>
+                  {num === '...' ? (
+                    <span className="page-link">...</span>
+                  ) : (
+                    <span
+                      onClick={() => setCurrentpage(num)}
+                      className="page-link"
+                      style={{
+                        backgroundColor: currentpage === num ? '#00b6f0' : 'white',
+                        color: currentpage === num ? 'white' : 'black',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {num}
+                    </span>
+                  )}
+                </li>
+              ))}
+  
+              <li className={`page-item ${currentpage === npage ? 'disabled' : ''}`}>
+                <a onClick={goToNextPage} className="page-link" style={{ cursor: 'pointer' }} aria-label="Next">
+                  <span aria-hidden="true">»</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+  
+        {/* Edit Prompt */}
+        {showEditModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-4 sm:p-6 rounded-lg w-full max-w-lg mx-4">
+              <h2 className="text-xl font-bold mb-4">Edit User</h2>
+              <input
+                name="fullName"
+                value={editedUser.fullName}
+                onChange={handleEditChange}
+                placeholder="Full Name"
+                className="w-full mb-2 p-2 border rounded text-sm sm:text-base"
+              />
+              <div className="relative w-full mb-2">
+                <input
+                  name="phoneNumber"
+                  value={editedUser.email}
+                  disabled
+                  placeholder="Phone Number"
+                  className="w-full p-2 pr-10 border rounded bg-gray-100 text-gray-700"
+                />
+                <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="red"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+                    />
+                  </svg>
+                </div>
+              </div>
+  
+              <div className="relative w-full mb-2">
+                <input
+                  name="phoneNumber"
+                  value={editedUser.phoneNumber}
+                  disabled
+                  placeholder="Phone Number"
+                  className="w-full p-2 pr-10 border rounded bg-gray-100 text-gray-700"
+                />
+                <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="red"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <input
+                name="companyName"
+                value={editedUser.companyName}
+                onChange={handleEditChange}
+                placeholder="Company Name"
+                className="w-full mb-4 p-2 border rounded text-sm sm:text-base"
+              />
+              <div className="flex justify-end gap-4">
+                <button onClick={saveEditedUser} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm sm:text-base">Save</button>
+                <button onClick={() => setShowEditModal(false)} className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 text-sm sm:text-base">Cancel</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-
-        </div>
+        )}
+  
+        {/* Confirm Delete Modal */}
+        {showDeleteModal && (
+          <div className="fixed inset-1 bg-black bg-opacity-75 flex items-start justify-center z-50 pt-20">
+            <div className="bg-white rounded-lg p-6 w-128 shadow-lg">
+              <h2 className="text-lg font-semibold mb-4 text-gray-800">Confirm Delete</h2>
+              <p className="text-gray-600 mb-6">Are you sure you want to Delete?</p>
+              <div className="flex justify-end space-x-4">
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-600 transition text-white text-sm sm:text-base"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => DeleteUser()}
+                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm sm:text-base"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
+  </div>
+  
   );
 };
 
