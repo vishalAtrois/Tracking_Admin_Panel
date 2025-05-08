@@ -17,7 +17,7 @@ const [showLogoutModal,setShowLogoutModal]=useState(false)
 
   function Get() {
     const data = localStorage.getItem('user')
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('rtoken')
     const ud = JSON.parse(data)
     setMyData(ud)
     setToken(token)
@@ -43,9 +43,15 @@ const [showLogoutModal,setShowLogoutModal]=useState(false)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user')
-        navigate('/'); 
+        if(result.success == true){
+          localStorage.removeItem('token');
+          localStorage.removeItem('user')
+          localStorage.removeItem('ruser')
+          navigate('/'); 
+        }else{
+          console.error(result)
+        }
+      
       })
       .catch((error) => {
         console.error(error);

@@ -40,6 +40,7 @@ function Login() {
           if (result.success === true) {
             console.log(result,"login")
             localStorage.setItem("token", result.token.access.token);
+            localStorage.setItem("rtoken", result.token.refresh.token);
             localStorage.setItem("user", JSON.stringify(result.user));
             navigate("/dashboard");
           } else {
