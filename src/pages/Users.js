@@ -129,6 +129,7 @@ const url = searchQuery
       .then((result) => {
         setLoading(false);
         if (result.success === true) {
+          setShowDeleteModal(false)
           fetchUsers();
         }
         console.log(result, "delete user")

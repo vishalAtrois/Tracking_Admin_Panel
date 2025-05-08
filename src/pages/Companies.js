@@ -133,6 +133,7 @@ const Companies = () => {
       .then((result) => {
         setLoading(false);
         if (result.success === true) {
+          setShowDeleteModal(false)
           fetchCompany();
           console.log(result, "deleting company ");
         }
