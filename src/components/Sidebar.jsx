@@ -6,7 +6,7 @@ import Logo from '../assets/images/logo4.avif';
 
 const Sidebar = () => {
 const navigate=useNavigate()
-const [showLogoutModal,setShowLogoutModal]=useState(false)
+ 
 
   useEffect(() => {
     Get()
@@ -44,6 +44,7 @@ const [showLogoutModal,setShowLogoutModal]=useState(false)
       .then((result) => {
         console.log(result);
         if(result.success == true){
+          alert("you are logged out ")
           localStorage.removeItem('token');
           localStorage.removeItem('user')
           localStorage.removeItem('ruser')
@@ -86,7 +87,7 @@ const [showLogoutModal,setShowLogoutModal]=useState(false)
    <div className="logout-section">
         <button
           className="logout-button"
-          onClick={() => setShowLogoutModal(true)}
+          onClick={() =>  Logout()}
         >
           <i className="fa fa-sign-out"></i> Logout
         </button>
@@ -95,28 +96,7 @@ const [showLogoutModal,setShowLogoutModal]=useState(false)
       
    
       {/* Logout Modal */}
-      {showLogoutModal && (
-        <div className="fixed inset-1 bg-black bg-opacity-75 flex items-start justify-center z-50 pt-20"> {/* Increased opacity and moved to top */}
-          <div className="bg-white rounded-lg p-6 w-128 shadow-lg">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">Confirm Logout</h2>
-            <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={() => setShowLogoutModal(false)}
-                className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-600 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={()=>Logout()}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+  
   </div>
   );
 };
