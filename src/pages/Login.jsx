@@ -34,7 +34,7 @@ function Login() {
         redirect: "follow"
       };
 
-      const loginUrl = values.userType === "superadmin"
+      const loginUrl = values.userType === "subadmin"
         ? "https://tracking-backend-admin.vercel.app/v1/superadmin/login"
         : "https://tracking-backend-admin.vercel.app/v1/admin/loginAdmin";
 
@@ -45,7 +45,12 @@ function Login() {
             localStorage.setItem("token", result.token.access.token);
             localStorage.setItem("rtoken", result.token.refresh.token);
             localStorage.setItem("user", JSON.stringify(result.user));
-            navigate("/dashboard");
+            // navigate("/dashboard");
+            if (values.userType === "subadmin") {
+              navigate("/Subdashboard");
+            } else {
+              navigate("/dashboard");
+            }
           } else {
             alert("Login failed: Incorrect credentials");
           }
@@ -119,12 +124,12 @@ function Login() {
               <input
                 type="radio"
                 name="userType"
-                value="superadmin"
-                checked={formik.values.userType === "superadmin"}
+                value="subadmin"
+                checked={formik.values.userType === "subadmin"}
                 onChange={formik.handleChange}
                 className="mr-2"
               />
-              Superadmin
+              subadmin
             </label>
           </div>
         </div>

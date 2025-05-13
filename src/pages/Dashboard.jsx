@@ -68,23 +68,22 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
-    <div className="md:hidden p-4">
-      <button
-        onClick={() => setSidebarOpen(true)}
-        className="text-white focus:outline-none"
-      >
-        <i className="bi bi-list text-3xl"></i>
-      </button>
-    </div>
-
-    {/* Overlay */}
+    {/* Mobile Sidebar Toggle */}
+    <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4">
+  <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
+    <i className="bi bi-list text-3xl"></i>
+  </button>
+  <h2 className="text-white text-xl font-semibold">Dashboard</h2>
+</div>
+  
+    {/* Overlay for Mobile Sidebar */}
     {sidebarOpen && (
       <div
         className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
         onClick={() => setSidebarOpen(false)}
-      ></div>
+      />
     )}
-
+  
     {/* Sidebar */}
     <div
       className={`fixed md:relative z-50 transform top-0 left-0 h-full w-64 transition-transform duration-300 ease-in-out bg-gray-800 shadow-lg ${
@@ -93,63 +92,60 @@ const Dashboard = () => {
     >
       <Sidebar />
     </div>
-
+  
+    {/* Main Content */}
     <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
-  <div className="bg-gray-900 p-4 sm:p-6 rounded-lg shadow-lg min-h-screen">
-    <h2 className="text-white text-2xl sm:text-3xl mb-6 -mt-2 sm:-mt-4">Dashboard</h2>
-
-    {/* User and Company Cards */}
-    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-      {/* User Section */}
-      <div
-        className="bg-gray-800 text-white p-4 sm:p-6 rounded-lg flex-1 border border-gray-500 shadow-md cursor-pointer hover:bg-gray-700 transition"
-        onClick={() => navigate('/users')}
-      >
-        <h3 className="text-2xl sm:text-3xl font-semibold mb-4">Users</h3>
-        {loading ? (
-          <div className="flex flex-col items-center justify-center mt-6">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="mt-2 text-sm text-blue-600 font-medium">Loading User...</p>
+      <div className="bg-gray-900 p-4 sm:p-6 rounded-lg shadow-lg min-h-screen">
+        <h2 className="text-white text-2xl sm:text-3xl mb-6 -mt-2 sm:-mt-4 font-bold tracking-wide">
+          Welcome to Dashboard
+        </h2>
+  
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          {/* Users Card */}
+          <div
+            onClick={() => navigate('/users')}
+            className="bg-gradient-to-br from-purple-700 to-purple-900 hover:from-purple-800 hover:to-purple-950 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">Total Users</h3>
+                <p className="text-3xl sm:text-4xl font-bold">
+                  {loading ? '...' : userCount}
+                </p>
+              </div>
+              <i className="fa fa-user text-4xl sm:text-5xl opacity-80" />
+            </div>
           </div>
-        ) : (
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xl sm:text-2xl font-bold">{userCount}</span>
-            <i className="fa fa-user text-3xl sm:text-4xl"></i>
+  
+          {/* Companies Card */}
+          <div
+            onClick={() => navigate('/companies')}
+            className="bg-gradient-to-br from-indigo-600 to-indigo-900 hover:from-indigo-700 hover:to-indigo-950 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">Total Companies</h3>
+                <p className="text-3xl sm:text-4xl font-bold">
+                  {loading ? '...' : companyCount}
+                </p>
+              </div>
+              <i className="fa fa-building text-4xl sm:text-5xl opacity-80" />
+            </div>
           </div>
-        )}
-      </div>
-
-      {/* Company Section */}
-      <div
-        className="bg-gray-800 text-white p-4 sm:p-6 rounded-lg flex-1 border border-gray-500 shadow-md cursor-pointer hover:bg-gray-700 transition"
-        onClick={() => navigate('/companies')}
-      >
-        <h3 className="text-2xl sm:text-3xl font-semibold mb-4">Companies</h3>
-        {loading ? (
-          <div className="flex flex-col items-center justify-center mt-6">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="mt-2 text-sm text-blue-600 font-medium">Loading companies...</p>
+        </div>
+  
+        {/* Graph */}
+        <div className="mt-6">
+          <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
+            <h3 className="text-2xl sm:text-3xl font-semibold mb-4">User Growth</h3>
+            <UserGrowthGraph />
           </div>
-        ) : (
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xl sm:text-2xl font-bold">{companyCount}</span>
-            <i className="fa fa-building text-3xl sm:text-4xl"></i>
-          </div>
-        )}
-      </div>
-    </div>
-
-    {/* Graph Section */}
-    <div className="mt-4 sm:mt-6">
-      <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-lg border border-gray-500 shadow-md">
-        <h3 className="text-2xl sm:text-3xl font-semibold mb-4">Graph</h3>
-        <UserGrowthGraph />
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-  </div>
+  
   );
 };
 

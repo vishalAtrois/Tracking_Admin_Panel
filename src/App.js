@@ -1,5 +1,4 @@
 import React from 'react';
-import Sidebar from './components/Sidebar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
@@ -9,6 +8,8 @@ import Notifications from './pages/Notification'; // if you have this
 import './App.css';
 import 'font-awesome/css/font-awesome.min.css';
 import Login from './pages/Login';
+import Subdashboard from './Subadmin/Subdashboard';
+
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/companies" element={<Companies />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/about" element={<AboutUs />} />
+            <Route path="/Subdashboard" element={<Subdashboard />} />
           </Routes>
         {/* </div>
       </div> */}

@@ -11,14 +11,13 @@ const AboutUs = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
-    <div className="md:hidden p-4">
-      <button
-        onClick={() => setSidebarOpen(true)}
-        className="text-white focus:outline-none"
-      >
-        <i className="bi bi-list text-3xl"></i>
-      </button>
-    </div>
+      {/* side bar icon */}
+      <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4">
+  <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
+    <i className="bi bi-list text-3xl"></i>
+  </button>
+  <h2 className="text-white text-xl font-semibold">About us </h2>
+</div>
 
     {/* Overlay */}
     {sidebarOpen && (

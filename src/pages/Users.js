@@ -179,15 +179,16 @@ const goToNextPage = () => {
 }
 
 
-  return ( <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
-    <div className="md:hidden p-4">
-      <button
-        onClick={() => setSidebarOpen(true)}
-        className="text-white focus:outline-none"
-      >
-        <i className="bi bi-list text-3xl"></i>
-      </button>
-    </div>
+  return ( 
+    <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
+
+      {/* side bar button */}
+    <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4">
+  <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
+    <i className="bi bi-list text-3xl"></i>
+  </button>
+  <h2 className="text-white text-xl font-semibold">User List</h2>
+</div>
 
     {/* Overlay */}
     {sidebarOpen && (
@@ -207,96 +208,92 @@ const goToNextPage = () => {
     </div>
 
     <div className="flex-1 p-6 overflow-y-auto">
+    <h2 className="text-white text-2xl sm:text-3xl mb-6 -mt-2 sm:-mt-4 font-bold tracking-wide">
+          Users List
+        </h2>
   {/* The rest of your component (search bar, table, pagination, modals, etc.) remains exactly the same */}
 
   {/* Search Bar */}
-  <div className="flex items-center space-x-4 bg-gray-900 rounded-lg shadow-lg mb-3 sticky top-0 z-10">
-    <input
-      className="form-control p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto mt-2"
-      id="exampleData"
-      placeholder="Search User ...."
-      value={searchQuery}
-      onChange={handleSearchChange}
-    />
-    <button
-      title="Search"
-      className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out w-full sm:w-auto mt-2"
-      onClick={fetchUsers}
-    >
-      Search
-    </button>
-  </div>
+  <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-0 z-20 mb-4">
+      <input
+        className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0"
+        placeholder="Search User..."
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
+      <button
+        title="Search"
+        className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto"
+        onClick={fetchUsers}
+      >
+        Search
+      </button>
+    </div>
 
-  {/* Table */}
-  <div className="rounded-lg shadow-md overflow-x-auto w-full max-w-full">
-    {loading ? (
-      <div className="flex flex-col justify-center items-center py-20 text-white">
-        <div className="relative">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-blue-300 border-t-transparent rounded-full animate-spin-slow opacity-30"></div>
+   {/* Table Section */}
+   <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700">
+    
+      {loading ? (
+        <div className="flex flex-col justify-center items-center py-20">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="absolute top-0 left-0 w-16 h-16 border-4 border-blue-300 border-t-transparent rounded-full animate-spin-slow opacity-30"></div>
+          </div>
+          <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading user...</p>
         </div>
-        <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading user...</p>
-      </div>
-    ) : (
-      <table className="min-w-full table-auto border border-gray-200">
-        <thead className="bg-gray-200 text-gray-700">
-          <tr className="transition-all duration-300 ease-in bg-gray-700 text-white">
-            <th className="py-1 text-center border-b border-r border-black font-serif">Sr.no</th>
-            <th className="py-1 text-center border-b border-r border-black font-serif">Name</th>
-            <th className="py-1 text-center border-b border-r border-black font-serif">Email</th>
-            <th className="py-1 text-center border-b border-r border-black font-serif">Mobile Number</th>
-            <th className="py-1 text-center border-b border-r border-black font-serif">Company Name</th>
-            <th className="py-1 text-center border-b border-r border-black font-serif">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usersData.map((item, index) => (
-            <tr key={item.id} className="bg-white">
-              <td className="border-b border-r border-black text-center font-serif">{(currentpage - 1) * limit + index + 1}</td>
-              <td className="border-b border-r border-black text-center font-serif">{item.fullName}</td>
-              <td className="border-b border-r border-black text-center font-serif">{item.email}</td>
-              <td className="border-b border-r border-black text-center font-serif">{item.phoneNumber}</td>
-              <td className="border-b border-r border-black text-center font-serif">{item.companyName}</td>
-              <td className="border-b border-r border-black text-center">
-                <div className="flex justify-center gap-4">
-                  {/* Edit Button */}
-                  <button
-                    onClick={() => { handleEditClick(item) }}
-                    data-bs-toggle="modalfade"
-                    data-bs-target="#editUserModal"
-                    className="p-2 rounded-full hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition"
-                    title="Edit"
-                  >
-                    <i className="bi bi-pencil-fill text-lg"></i>
-                  </button>
-
-                  {/* Delete Button */}
-                  <button
-                    onClick={() => { handleDeleteClick(item) }}
-                    className="p-2 rounded-full hover:bg-red-100 text-red-600 hover:text-red-800 transition"
-                    title="Delete"
-                  >
-                    <i className="bi bi-trash-fill text-lg"></i>
-                  </button>
-                </div>
-              </td>
+      ) : (
+        <table className="min-w-full table-auto bg-gray-900 text-white">
+          <thead className="bg-gray-700">
+            <tr>
+              {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Actions'].map((heading) => (
+                <th key={heading} className="py-1 text-center font-semibold border-b border-r  border-gray-600 font-serif">
+                  {heading}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
-  </div>
+          </thead>
+          <tbody>
+            {usersData.map((item, index) => (
+              <tr key={item.id} className="bg-gray-800  ">
+                <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
+                <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
+                <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
+                <td className="border-b border-r border-gray-700 text-center">{item.phoneNumber}</td>
+                <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
+                <td className="border-b border-gray-700 text-center">
+                  <div className="flex justify-center gap-4">
+                    <button
+                      onClick={() => handleEditClick(item)}
+                      className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
+                      title="Edit"
+                    >
+                      <i className="bi bi-pencil-fill text-lg"></i>
+                    </button>
+                    <button
+                      onClick={() => handleDeleteClick(item)}
+                      className="p-2 rounded-full hover:bg-red-100 text-red-500 hover:text-red-800 transition"
+                      title="Delete"
+                    >
+                      <i className="bi bi-trash-fill text-lg"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
 
   {/* Pagination UI */}
-  <div className="s-cus-pagintion custompaginationtoprightbox" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', position: 'sticky', bottom: '0px' }}>
+  <div className="custom-pagination-container flex justify-center mt-4">
     <nav aria-label="Page navigation example">
       <ul className="pagination">
         <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
-          <a onClick={goToPrevPage} className="page-link" style={{ cursor: 'pointer' }} aria-label="Previous">
+          <a onClick={goToPrevPage} className="page-link" aria-label="Previous">
             <span aria-hidden="true">«</span>
           </a>
         </li>
-
         {pageNumbers.map((num, index) => (
           <li className={`page-item ${num === currentpage ? 'active' : ''}`} key={index}>
             {num === '...' ? (
@@ -316,9 +313,8 @@ const goToNextPage = () => {
             )}
           </li>
         ))}
-
         <li className={`page-item ${currentpage === npage ? 'disabled' : ''}`}>
-          <a onClick={goToNextPage} className="page-link" style={{ cursor: 'pointer' }} aria-label="Next">
+          <a onClick={goToNextPage} className="page-link" aria-label="Next">
             <span aria-hidden="true">»</span>
           </a>
         </li>
@@ -431,6 +427,8 @@ const goToNextPage = () => {
 </div>
 
   </div>
+
+  
   
   );
 };
