@@ -188,7 +188,7 @@ const goToNextPage = () => {
     <i className="bi bi-list text-3xl"></i>
   </button>
   <h2 className="text-white text-xl font-semibold">User List</h2>
-
+  </div>
 
     {/* Overlay */}
     {sidebarOpen && (
@@ -425,7 +425,7 @@ const goToNextPage = () => {
   )}
 
 </div>
-</div>
+
   </div>
 
   
