@@ -183,7 +183,7 @@ const goToNextPage = () => {
     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
 
       {/* side bar button */}
-    <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4">
+    <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
   <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
     <i className="bi bi-list text-3xl"></i>
   </button>

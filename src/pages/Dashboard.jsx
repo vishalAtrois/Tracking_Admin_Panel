@@ -69,7 +69,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
     {/* Mobile Sidebar Toggle */}
-    <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4">
+    <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
   <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
     <i className="bi bi-list text-3xl"></i>
   </button>
@@ -95,7 +95,7 @@ const Dashboard = () => {
   
     {/* Main Content */}
     <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
-      <div className="bg-gray-900 p-4 sm:p-6 rounded-lg shadow-lg min-h-screen">
+      <div className="bg-gray-900 p-4 sm:p-6 rounded-lg shadow-lg min-h-screen ">
         <h2 className="text-white text-2xl sm:text-3xl mb-6 -mt-2 sm:-mt-4 font-bold tracking-wide">
           Welcome to Dashboard
         </h2>
