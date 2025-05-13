@@ -245,7 +245,7 @@ const goToNextPage = () => {
             <th className="py-1 text-center border-b border-r border-black font-serif">Name</th>
             <th className="py-1 text-center border-b border-r border-black font-serif">Email</th>
             <th className="py-1 text-center border-b border-r border-black font-serif">Mobile Number</th>
-            <th className="py-1 text-center border-b border-r border-black font-serif hidden sm:table-cell">Company Name</th>
+            <th className="py-1 text-center border-b border-r border-black font-serif">Company Name</th>
             <th className="py-1 text-center border-b border-r border-black font-serif">Actions</th>
           </tr>
         </thead>
