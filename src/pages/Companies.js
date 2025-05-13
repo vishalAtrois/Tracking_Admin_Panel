@@ -92,6 +92,7 @@ const Companies = () => {
             setData(result.searchedCompany.data);
             setCompanyCount(result.searchedCompany.totalResults);
           } else {
+            console.log(result,"fetch companies")
             setData(result.UserList.results);
             setCompanyCount(result.UserList.totalResults);
           }
@@ -220,7 +221,7 @@ const Companies = () => {
         <table className="min-w-full table-auto bg-gray-900 text-white">
           <thead className="bg-gray-700">
             <tr>
-              {['Sr.no', 'Name', 'Address', 'Total Employees', 'Actions'].map((heading) => (
+              {['Sr.no', 'Name', 'Address','Industry', 'Total Employees', 'Actions'].map((heading) => (
                 <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif">
                   {heading}
                 </th>
@@ -233,6 +234,7 @@ const Companies = () => {
                 <td className="  border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
                 <td className="  border-b border-r border-gray-700 text-center">{item.name}</td>
                 <td className="  border-b border-r border-gray-700 text-center">{item.address}</td>
+                <td className="  border-b border-r border-gray-700 text-center">{item.industry}</td>
                 <td className="  border-b border-r border-gray-700 text-center">{item.totalEmployees}</td>
                 <td className="  border-b border-gray-700 text-center">
                   <div className="flex justify-center gap-4">
