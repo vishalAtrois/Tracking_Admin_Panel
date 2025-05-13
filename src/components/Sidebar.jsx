@@ -62,9 +62,7 @@ const navigate=useNavigate()
   
   return (
     <div className="sidebar">
-    <div className="logo">
-      <img className="logo" src={Logo} alt="Profile" />
-    </div>
+    
 
     {/* User Profile Section */}
     <div className="profile-section">

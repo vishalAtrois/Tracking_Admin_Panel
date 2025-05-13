@@ -187,7 +187,7 @@ const goToNextPage = () => {
   <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
     <i className="bi bi-list text-3xl"></i>
   </button>
-  <h2 className="text-white text-xl font-semibold">User List</h2>
+  <h2 className="text-white text-xl font-semibold">Tracking App</h2>
   </div>
 
     {/* Overlay */}
