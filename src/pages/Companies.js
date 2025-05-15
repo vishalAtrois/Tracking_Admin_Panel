@@ -250,7 +250,7 @@ const Companies = () => {
   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-0 z-20 mb-4">
       <input
         className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0"
-        placeholder="Search User..."
+        placeholder="Search Company..."
         value={searchQuery}
         onChange={handleSearchChange}
       />
@@ -271,7 +271,7 @@ const Companies = () => {
             <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
             <div className="absolute top-0 left-0 w-16 h-16 border-4 border-blue-300 border-t-transparent rounded-full animate-spin-slow opacity-30"></div>
           </div>
-          <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading user...</p>
+          <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading Company...</p>
         </div>
       ) : (
         <table className="min-w-full table-auto bg-gray-900 text-white">
