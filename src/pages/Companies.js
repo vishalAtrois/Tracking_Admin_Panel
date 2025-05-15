@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
+import { FaIndustry } from 'react-icons/fa6';
 
 const Companies = () => {
   const [data, setData] = useState([]);
@@ -18,7 +19,62 @@ const Companies = () => {
     address: '',
     totalEmployees: '',
   });
+
+
+  // add new company 
+  const [newCompany, setNewCompany] = useState({
+    name: '',
+    industry: '',
+    address: '',
+    totalEmployees: '',
+    description:'',
+  });
+  const handleAddChange = (e) => {
+    const { name, value } = e.target;
+    setNewCompany((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const saveNewCompany = async () => {
+    const token = localStorage.getItem('token');
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+    myHeaders.append("Content-Type", "application/json");
+  
+    try {
+      const response = await fetch("https://tracking-backend-admin.vercel.app/v1/admin/addCompany", {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(newCompany),
+      });
+  
+      const result = await response.json();
+      if (result.success) {
+        console.log("added company",result)
+        alert("Company added successfully");
+        setShowAddModal(false);
+        fetchCompany(); // Refresh the list
+        setNewCompany({
+          name: '',
+          industry: '',
+          totalEmployees: '',
+          address: '',
+          description:'',
+        });
+      } else {
+        alert("Failed to add company: " + result.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred.");
+    }
+  };
+      
+
+
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleEditClick = (company) => {
@@ -238,17 +294,24 @@ const Companies = () => {
                 <td className="  border-b border-r border-gray-700 text-center">{item.totalEmployees}</td>
                 <td className="  border-b border-gray-700 text-center">
                   <div className="flex justify-center gap-4">
+                  <button
+  onClick={() => setShowAddModal(true)}
+  className="p-2 rounded-full hover:bg-green-100 text-green-500 hover:text-green-800 transition"
+  title="Add New Company"
+>
+  <i className="bi bi-plus-circle-fill text-lg"></i>
+</button>
                     <button
                       onClick={() => handleEditClick(item)}
                       className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
-                      title="Edit"
+                      title="Edit Company"
                     >
                       <i className="bi bi-pencil-fill text-lg"></i>
                     </button>
                     <button
                       onClick={() => handleDeleteClick(item)}
                       className="p-2 rounded-full hover:bg-red-100 text-red-500 hover:text-red-800 transition"
-                      title="Delete"
+                      title="Delete Company"
                     >
                       <i className="bi bi-trash-fill text-lg"></i>
                     </button>
@@ -342,6 +405,69 @@ const Companies = () => {
       </div>
     </div>
   )}
+
+{/* add company prompt  */}
+
+{showAddModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg w-full sm:w-96">
+      <h2 className="text-xl font-bold mb-4">Add Company</h2>
+
+      <input
+        name="name"
+        value={newCompany.name}
+        onChange={handleAddChange}
+        placeholder="Company Name"
+        className="w-full mb-2 p-2 border rounded"
+      />
+      <input
+        name="industry"
+        value={newCompany.industry}
+        onChange={handleAddChange}
+        placeholder="industry"
+        className="w-full mb-2 p-2 border rounded"
+      />
+      <input
+        name="totalEmployees"
+        value={newCompany.totalEmployees}
+        onChange={handleAddChange}
+        placeholder="totalEmployees"
+        className="w-full mb-2 p-2 border rounded"
+      />
+      <input
+        name="address"
+        value={newCompany.address}
+        onChange={handleAddChange}
+        placeholder="address"
+        className="w-full mb-2 p-2 border rounded"
+      />
+
+   <input
+        name="description"
+        value={newCompany.description}
+        onChange={handleAddChange}
+        placeholder="description"
+        className="w-full mb-2 p-2 border rounded"
+      />
+
+      <div className="flex justify-end gap-4">
+        <button
+          onClick={saveNewCompany}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
+          Add
+        </button>
+        <button
+          onClick={() => setShowAddModal(false)}
+          className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
 
   {/* Confirm Delete Modal */}
   {showDeleteModal && (

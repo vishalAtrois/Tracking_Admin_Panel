@@ -265,14 +265,14 @@ const goToNextPage = () => {
                     <button
                       onClick={() => handleEditClick(item)}
                       className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
-                      title="Edit"
+                      title="Edit User"
                     >
                       <i className="bi bi-pencil-fill text-lg"></i>
                     </button>
                     <button
                       onClick={() => handleDeleteClick(item)}
                       className="p-2 rounded-full hover:bg-red-100 text-red-500 hover:text-red-800 transition"
-                      title="Delete"
+                      title="Delete User"
                     >
                       <i className="bi bi-trash-fill text-lg"></i>
                     </button>
