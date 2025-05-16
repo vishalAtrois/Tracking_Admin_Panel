@@ -336,10 +336,10 @@ const goToNextPage = () => {
         />
         <div className="relative w-full mb-2">
           <input
-            name="phoneNumber"
+            name="email"
             value={editedUser.email}
             disabled
-            placeholder="Phone Number"
+            placeholder="email"
             className="w-full p-2 pr-10 border rounded bg-gray-100 text-gray-700"
           />
           <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
