@@ -34,8 +34,8 @@ function Login() {
         redirect: "follow"
       };
 
-      const loginUrl = values.userType === "subadmin"
-        ? "https://tracking-backend-admin.vercel.app/v1/superadmin/login"
+      const loginUrl = values.userType === "subAdmin"
+        ? "https://tracking-backend-admin.vercel.app/v1/subAdmin/loginSubAdmin"
         : "https://tracking-backend-admin.vercel.app/v1/admin/loginAdmin";
 
       fetch(loginUrl, requestOptions)
@@ -46,7 +46,7 @@ function Login() {
             localStorage.setItem("rtoken", result.token.refresh.token);
             localStorage.setItem("user", JSON.stringify(result.user));
             // navigate("/dashboard");
-            if (values.userType === "subadmin") {
+            if (values.userType === "subAdmin") {
               navigate("/Subdashboard");
             } else {
               navigate("/dashboard");
@@ -124,8 +124,8 @@ function Login() {
               <input
                 type="radio"
                 name="userType"
-                value="subadmin"
-                checked={formik.values.userType === "subadmin"}
+                value="subAdmin"
+                checked={formik.values.userType === "subAdmin"}
                 onChange={formik.handleChange}
                 className="mr-2"
               />
@@ -140,6 +140,13 @@ function Login() {
         >
           LOGIN
         </button>
+
+        <div className="text-center mt-4">
+  <span className="text-gray-600">Don't have an account? </span>
+  <a href="/register" className="text-purple-600 font-medium hover:underline">
+    Create one
+  </a>
+</div>
 
         <div className="text-center">
           <a href="#!" className="small text-muted me-2">Terms of use</a>

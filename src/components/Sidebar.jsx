@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';  
 import './Sidebar.css';
 import profilePhoto from '../assets/images/profilephoto.jpg';
-import Logo from '../assets/images/logo4.avif';
+ 
 
 const Sidebar = () => {
 const navigate=useNavigate()
@@ -78,6 +78,7 @@ const navigate=useNavigate()
       <li><NavLink to="/users" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user"></i> User</NavLink></li>
       <li><NavLink to="/companies" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-building"></i> Company</NavLink></li>
       <li><NavLink to="/notifications" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell"></i> Notifications</NavLink></li>
+      <li><NavLink to="/report" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard"></i> Reports</NavLink></li>
       <li><NavLink to="/about" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-info-circle"></i> About Us</NavLink></li>
     </ul>
 
