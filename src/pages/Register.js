@@ -1,12 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+ 
 
 function Register() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+const [allCompanies, setAllCompanies] = useState([]);
+ 
+
+useEffect(() => {
+  fetch(`https://tracking-backend-admin.vercel.app/v1/auth/companyList?sortBy=createdAt&order=desc`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (Array.isArray(data.companyList)) {
+              // const names = data.companyList.map((company) => company.name);
+        // Map names and remove duplicates using Set
+        const uniqueNames = [
+          ...new Set(data.companyList.map((company) => company.name.trim()))
+        ];
+        setAllCompanies(uniqueNames);
+      } else {
+        console.error("Invalid company list structure:", data);
+      }
+    })
+    .catch((error) => {
+      console.error("Failed to fetch companies:", error);
+    });
+}, []);
+
 
   const passReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
   const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -160,36 +184,34 @@ function Register() {
             )}
           </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Company Name</label>
-            <input
-              name="companyName"
-              placeholder="Enter your company name"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
-              value={formik.values.companyName}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.errors.companyName && formik.touched.companyName && (
-              <div className="text-red-500 text-sm mt-1">{formik.errors.companyName}</div>
-            )}
-          </div>
+<div>
+  <label className="block mb-1 font-medium">Company Name</label>
+  <select
+    name="companyName"
+    value={formik.values.companyName}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white"
+  >
+    <option value="">Select a company</option>
+    {allCompanies.map((company, index) => (
+      <option key={index} value={company}>
+        {company}
+      </option>
+    ))}
+  </select>
+  {formik.errors.companyName && formik.touched.companyName && (
+    <div className="text-red-500 text-sm mt-1">{formik.errors.companyName}</div>
+  )}
+</div>
+
+
+ 
+
+
 
           {/* Hidden input for roleType */}
-           <div>
-            <label className="block mb-1 font-medium">Role type</label>
-            <input
-              name="roleType"
-              placeholder="Enter your role"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
-              value={formik.values.roleType}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.errors.roleType && formik.touched.roleType && (
-              <div className="text-red-500 text-sm mt-1">{formik.errors.roleType}</div>
-            )}
-          </div>
+          <input type="hidden" name="roleType" value="subAdmin" />
 
           <button
             type="submit"
