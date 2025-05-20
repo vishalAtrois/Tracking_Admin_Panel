@@ -22,7 +22,7 @@ export const Subemployees = () => {
     fullName: '',
     email: '',
     phoneNumber: '',
-    companyName: ''
+    // companyName: ''
   });
   const [showEditModal, setShowEditModal] = useState(false);
    const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -33,7 +33,7 @@ export const Subemployees = () => {
       fullName: user.fullName,
       email: user.email,
       phoneNumber: user.phoneNumber,
-      companyName: user.companyName
+      // companyName: user.companyName
     });
     setShowEditModal(true);
   };
@@ -57,7 +57,7 @@ export const Subemployees = () => {
     const { id, ...userData } = editedUser;
   
     try {
-      const response = await fetch(`https://tracking-backend-admin.vercel.app/v1/admin/updateUser?userId=${id}`, {
+      const response = await fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/updateUser?userId=${id}`, {
         method: 'PUT', 
         headers: myHeaders,
         body: JSON.stringify(userData)
@@ -105,7 +105,7 @@ export const Subemployees = () => {
         redirect: "follow"
       };
   const url = searchQuery
-      ?`https://tracking-backend-admin.vercel.app/v1/admin/searchUser?query=${searchQuery}&page=${currentpage}&limit=${limit}`
+      ?`https://tracking-backend-admin.vercel.app/v1/subAdmin/searchUser?query=${searchQuery}&page=${currentpage}&limit=${limit}`
       :`https://tracking-backend-admin.vercel.app/v1/subAdmin/fetchUserList?page=${currentpage}&limit=${limit}&sortBy=created:desc`
       fetch(url,requestOptions)
       .then((response) => response.json())
@@ -138,7 +138,7 @@ export const Subemployees = () => {
         redirect: "follow"
       };
   
-      fetch(`https://tracking-backend-admin.vercel.app/v1/admin/deleteUser?userId=${si}`, requestOptions)
+      fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/deleteUser?userId=${si}`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
           setLoading(false);
@@ -402,13 +402,13 @@ export const Subemployees = () => {
                 </svg>
               </div>
             </div>
-            <input
+            {/* <input
               name="companyName"
               value={editedUser.companyName}
               onChange={handleEditChange}
               placeholder="Company Name"
               className="w-full mb-4 p-2 border rounded text-sm sm:text-base"
-            />
+            /> */}
             <div className="flex justify-end gap-4">
               <button onClick={saveEditedUser} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm sm:text-base">Save</button>
               <button onClick={() => setShowEditModal(false)} className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 text-sm sm:text-base">Cancel</button>
