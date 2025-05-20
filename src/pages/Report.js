@@ -204,7 +204,7 @@ const fetchUserReport = async (item) => {
                         <button
                           onClick={() =>  fetchUserReport(item)}
                           className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
-                          title="Reports"
+                          title="Reports" 
                         >
                           <i className="fa fa-clipboard text-lg"></i>
                         </button>

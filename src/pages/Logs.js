@@ -37,7 +37,7 @@ function GetReports(item) {
     redirect: "follow"
   };
 
-  fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getUserCheckInOutTimes?userId=${item.id}`, requestOptions)
+  fetch(`https://tracking-backend-admin.vercel.app/v1/admin/getUserCheckInOutTimes?userId=${item.id}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       if (result.success === true) {
