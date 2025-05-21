@@ -225,7 +225,7 @@ const fetchUserReport = async (item) => {
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
         <h3 className="text-xl font-bold text-gray-800">User Report List</h3>
         <button
-          className="text-gray-600 hover:text-red-500 text-3xl font-bold"
+          className="text-red-500 text-3xl font-bold"
           onClick={() => setReportModalOpen(false)}
           title='close'
         >

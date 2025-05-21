@@ -167,48 +167,68 @@ function fetchCompany() {
         </div> */}
         {/* Graph */}
 <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-  {/* User Growth Chart */}
-  {/* <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
-    <h3 className="text-2xl sm:text-3xl font-semibold mb-4">User Growth</h3>
-    <UserGrowthGraph />
-  </div> */}
+  <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
+    <h3 className="text-2xl sm:text-3xl font-semibold mb-4 text-center sm:text-left">
+      Task Status Overview
+    </h3>
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart>
+        <Pie
+          data={taskChartData}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          outerRadius={80}
+          innerRadius={50}
+          fill="#8884d8"
+          paddingAngle={5}
+          labelLine={false}
+          label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+        >
+          {taskChartData.map((entry, index) => {
+            const COLORS = {
+              Active: '#22c55e',
+              Completed: '#3b82f6',
+              Pending: '#f59e0b',
+            };
+            return (
+              <Cell key={`cell-${index}`} fill={COLORS[entry.name] || '#8884d8'} />
+            );
+          })}
+        </Pie>
+        <Tooltip
+          contentStyle={{
+            backgroundColor: '#ffffff',
+            borderColor: '#374151',
+            borderRadius: '8px',
+          }}
+        />
+      </PieChart>
+    </ResponsiveContainer>
 
-  {/* Task Status Bar Chart */}
- <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
-  <h3 className="text-2xl sm:text-3xl font-semibold mb-4">Task Status Overview</h3>
-  <ResponsiveContainer width="100%" height={300}>
-   <PieChart>
-  <Pie
-    data={taskChartData}
-    dataKey="value"
-    nameKey="name"
-    cx="50%"
-    cy="50%"
-    outerRadius={100}
-    innerRadius={60} // Donut chart
-    fill="#8884d8"
-    paddingAngle={5}
-    label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-  >
-    {taskChartData.map((entry, index) => {
-      const COLORS = {
-        Active: '#22c55e',    // green
-        Completed: '#3b82f6', // blue
-        Pending: '#f59e0b',   // orange (Tailwind amber-500)
-      };
-      return <Cell key={`cell-${index}`} fill={COLORS[entry.name] || '#8884d8'} />;
-    })}
-  </Pie>
-  <Tooltip
-    contentStyle={{ backgroundColor: '#ffffff', borderColor: '#374151', borderRadius: '8px' }}
-  />
-</PieChart>
-
-  </ResponsiveContainer>
+    {/* Custom legend below the chart */}
+    <div className="flex justify-center mt-4 space-x-6">
+      {taskChartData.map(({ name }, index) => {
+        const COLORS = {
+          Active: '#22c55e',
+          Completed: '#3b82f6',
+          Pending: '#f59e0b',
+        };
+        return (
+          <div key={index} className="flex items-center space-x-2 text-white text-sm font-medium">
+            <span
+              className="w-4 h-4 rounded-full"
+              style={{ backgroundColor: COLORS[name] || '#8884d8' }}
+            />
+            <span>{name}</span>
+          </div>
+        );
+      })}
+    </div>
+  </div>
 </div>
 
-
-</div>
 
       </div>
     </div>
