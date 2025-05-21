@@ -224,46 +224,54 @@ function GetReports(item) {
  
 
  {showLogsModal && (
-  <div className="fixed inset-1 bg-black bg-opacity-75 flex items-start justify-center z-50 pt-20">
-    <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full   p-6">
-      <h3 className="text-xl font-semibold mb-4 text-gray-800">Logs</h3>
-      {logsData.length > 0 ? (
-   <div className="max-h-128 overflow-y-auto">
-  <table className="w-full text-left text-sm border border-gray-300">
-    <thead className="sticky top-0 bg-gray-100 text-gray-700">
-      <tr>
-        <th className="border px-4 py-2 text-center">Check-In</th>
-        <th className="border px-4 py-2 text-center">Check-Out</th>
-        <th className="border px-4 py-2 text-center">Alarms</th>
-      </tr>
-      <tr className="bg-gray-100 text-gray-700">
-        <th className="border px-4 py-2 text-center">Date/Time</th>
-        <th className="border px-4 py-2 text-center">Date/Time</th>
-        <th className="border px-4 py-2 text-center">—</th>
-      </tr>
-    </thead>
-    <tbody className="text-gray-800">
-      {logsData.map((log, index) => (
-        <tr key={index} className="hover:bg-gray-50">
-          <td className="border px-4 py-2 text-center">{new Date(log.checkInTime).toLocaleString()}</td>
-          <td className="border px-4 py-2 text-center">{new Date(log.checkOutTime).toLocaleString()}</td>
-          <td className="border px-4 py-2 text-center">{log.alarmLogs}</td>
-           
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+<div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
+    <div className="relative w-full max-w-6xl mx-auto my-[80.5rem] mb-10 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
+      <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
+        <h3 className="text-xl font-bold text-gray-800">Logs</h3>
+        <button
+          className="text-gray-600 hover:text-red-500 text-3xl font-bold"
+          onClick={() => setShowLogsModal(false)} 
+          title='close'
+        > 
+          &times;
+        </button>
+      </div>
 
+       
+
+      {logsData.length > 0 ? (
+        <div className="max-h-128 overflow-y-auto">
+          <table className="w-full text-left text-sm border border-gray-300">
+            <thead className="sticky top-0 bg-gray-100 text-gray-700">
+              <tr>
+                <th className="border px-4 py-2 text-center">Check-In</th>
+                <th className="border px-4 py-2 text-center">Check-Out</th>
+                <th className="border px-4 py-2 text-center">Alarms</th>
+              </tr>
+              <tr className="bg-gray-100 text-gray-700">
+                <th className="border px-4 py-2 text-center">Date/Time</th>
+                <th className="border px-4 py-2 text-center">Date/Time</th>
+                <th className="border px-4 py-2 text-center">—</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-800">
+              {logsData.map((log, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="border px-4 py-2 text-center">
+                    {new Date(log.checkInTime).toLocaleString()}
+                  </td>
+                  <td className="border px-4 py-2 text-center">
+                    {new Date(log.checkOutTime).toLocaleString()}
+                  </td>
+                  <td className="border px-4 py-2 text-center">{log.alarmLogs}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <p className="text-gray-600">No logs found.</p>
       )}
-      <button
-        onClick={() => setShowLogsModal(false)}
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
-        Close
-      </button>
     </div>
   </div>
 )}

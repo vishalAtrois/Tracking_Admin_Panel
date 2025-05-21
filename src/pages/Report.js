@@ -219,53 +219,97 @@ const fetchUserReport = async (item) => {
 
 
 {reportModalOpen && (
-     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
-    <div className="relative w-full max-w-3xl mx-auto my-[80.5rem] mb-10 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
+    <div className="relative w-full max-w-6xl mx-auto my-[80.5rem] mb-10 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
+      {/* Header */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
         <h3 className="text-xl font-bold text-gray-800">User Report List</h3>
         <button
-          className="text-gray-600 hover:text-red-500 text-xl font-bold"
+          className="text-gray-600 hover:text-red-500 text-3xl font-bold"
           onClick={() => setReportModalOpen(false)}
+          title='close'
         >
           &times;
         </button>
       </div>
 
+      {/* Content */}
       {selectedUserReports.length === 0 ? (
         <p className="text-gray-600 text-center">No reports found.</p>
       ) : (
         <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
           {selectedUserReports.map((report, idx) => (
-            <div key={report._id} className="border p-4 rounded-lg shadow bg-gray-50">
-              <p><strong>Company:</strong> {report.companyName}</p>
-              <p><strong>Address:</strong> {report.address}</p>
-              <p><strong>Business Size:</strong> {report.businessSize}</p>
-              <p><strong>Report Date:</strong> {new Date(report.reportDate).toLocaleDateString()}</p>
-              <p><strong>Report Time:</strong> {report.reportTime}</p>
-              <p><strong>Notes:</strong> {report.notes}</p>
-              <p><strong>File:</strong>
-                <a
-                  href={report.file?.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 underline ml-2 break-all"
-                >
-                  {decodeURIComponent(report.file?.name)}
-                </a>
-              </p>
-              <div className="mt-2">
-                <strong>Images:</strong>
-                <div className="flex gap-2 mt-1 overflow-x-auto">
-                  {report.images?.map((imgUrl, index) => (
-                    <img
-                      key={index}
-                      src={imgUrl}
-                      alt={`Report ${idx} Image ${index}`}
-                      className="h-24 w-24 object-cover rounded border"
-                    />
-                  ))}
+            <div key={report._id} className="border p-4 rounded-lg shadow bg-gray-50 space-y-4">
+
+              {/* Company & Address */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold">Company</p>
+                  <p className="text-gray-900">{report.companyName}</p>
+                </div>
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold">Address</p>
+                  <p className="text-gray-900">{report.address}</p>
                 </div>
               </div>
+
+              {/* Business Size & Report Time */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
+                  <p className="text-gray-900">{report.businessSize}</p>
+                </div>
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
+                  <p className="text-gray-900">{report.reportTime}</p>
+                </div>
+              </div>
+
+              {/* Report Date & Notes */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
+                  <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
+                </div>
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold">Notes</p>
+                  <p className="text-gray-900">{report.notes}</p>
+                </div>
+              </div>
+
+              {/* File */}
+              {report.file?.url && (
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold">File</p>
+                  <a
+                    href={report.file.url}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline break-all"
+                  >
+                    {decodeURIComponent(report.file.name)}
+                  </a>
+                </div>
+              )}
+
+              {/* Images */}
+              {report.images?.length > 0 && (
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
+                  <div className="flex gap-3 overflow-x-auto">
+                    {report.images.map((imgUrl, index) => (
+                      <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={imgUrl}
+                          alt={`Report ${idx} Image ${index}`}
+                          className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -273,6 +317,9 @@ const fetchUserReport = async (item) => {
     </div>
   </div>
 )}
+
+
+
 
 
 

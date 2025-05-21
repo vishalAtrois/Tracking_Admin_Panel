@@ -249,18 +249,25 @@ const Companies = () => {
   {/* Search Section */}
   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-0 z-20 mb-4">
       <input
-        className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0"
+        className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0 mt-2"
         placeholder="Search Company..."
         value={searchQuery}
         onChange={handleSearchChange}
       />
       <button
         title="Search"
-        className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto"
+        className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto mt-1"
         onClick={fetchCompany}
       >
         Search
       </button>
+                     <button
+  onClick={() => setShowAddModal(true)}
+  className="bg-green-600 hover:bg-green-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto mt-1"
+  title="Add New Company"
+>
+   Add New Company 
+</button>
     </div>
 
   {/* Company Data Table */}
@@ -294,13 +301,7 @@ const Companies = () => {
                 <td className="  border-b border-r border-gray-700 text-center">{item.totalEmployees}</td>
                 <td className="  border-b border-gray-700 text-center">
                   <div className="flex justify-center gap-4">
-                  <button
-  onClick={() => setShowAddModal(true)}
-  className="p-2 rounded-full hover:bg-green-100 text-green-500 hover:text-green-800 transition"
-  title="Add New Company"
->
-  <i className="bi bi-plus-circle-fill text-lg"></i>
-</button>
+   
                     <button
                       onClick={() => handleEditClick(item)}
                       className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"

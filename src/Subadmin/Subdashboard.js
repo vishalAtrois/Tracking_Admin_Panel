@@ -43,7 +43,7 @@ const Subdashboard = () => {
       .catch((error) => console.error(error));
   }
 
- function fetchCompany() {
+function fetchCompany() {
   const token = localStorage.getItem('token');
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${token}`);
@@ -54,24 +54,27 @@ const Subdashboard = () => {
     redirect: "follow"
   };
 
-  fetch("https://mocki.io/v1/e105d6bd-424f-474f-a1a0-ecb42b10bd08", requestOptions)
+  fetch("https://mocki.io/v1/c9f560f0-7037-4e50-968b-4cccc8b56b2f", requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log('tasks ', result);
 
-      // Count active and completed
+      // Count active, completed and pending
       const tasks = result;
       let active = 0;
       let completed = 0;
+      let pending = 0;
 
       tasks.forEach(task => {
         if (task.status === 'active') active++;
         else if (task.status === 'completed') completed++;
+        else if (task.status === 'pending') pending++;
       });
 
       setTaskChartData([
         { name: 'Active', value: active },
         { name: 'Completed', value: completed },
+        { name: 'Pending', value: pending },  // Added pending here
       ]);
 
       setCompanyCount(tasks.length);
@@ -174,31 +177,33 @@ const Subdashboard = () => {
  <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
   <h3 className="text-2xl sm:text-3xl font-semibold mb-4">Task Status Overview</h3>
   <ResponsiveContainer width="100%" height={300}>
-    <PieChart>
-      <Pie
-        data={taskChartData}
-        dataKey="value"
-        nameKey="name"
-        cx="50%"
-        cy="50%"
-        outerRadius={100}
-        innerRadius={60} // Makes it a donut chart
-        fill="#8884d8"
-        paddingAngle={5}
-        label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-      >
-        {taskChartData.map((entry, index) => {
-          const COLORS = {
-            Active: '#22c55e',
-            Completed: '#3b82f6',
-          };
-          return <Cell key={`cell-${index}`} fill={COLORS[entry.name] || '#8884d8'} />;
-        })}
-      </Pie>
-      <Tooltip 
-        contentStyle={{ backgroundColor: '#ffffff', borderColor: '#374151', borderRadius: '8px' }}
-      />
-    </PieChart>
+   <PieChart>
+  <Pie
+    data={taskChartData}
+    dataKey="value"
+    nameKey="name"
+    cx="50%"
+    cy="50%"
+    outerRadius={100}
+    innerRadius={60} // Donut chart
+    fill="#8884d8"
+    paddingAngle={5}
+    label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+  >
+    {taskChartData.map((entry, index) => {
+      const COLORS = {
+        Active: '#22c55e',    // green
+        Completed: '#3b82f6', // blue
+        Pending: '#f59e0b',   // orange (Tailwind amber-500)
+      };
+      return <Cell key={`cell-${index}`} fill={COLORS[entry.name] || '#8884d8'} />;
+    })}
+  </Pie>
+  <Tooltip
+    contentStyle={{ backgroundColor: '#ffffff', borderColor: '#374151', borderRadius: '8px' }}
+  />
+</PieChart>
+
   </ResponsiveContainer>
 </div>
 

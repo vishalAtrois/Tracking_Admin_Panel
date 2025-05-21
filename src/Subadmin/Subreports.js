@@ -221,64 +221,65 @@ const fetchUserReport = async (item) => {
 {reportModalOpen && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
     <div className="relative w-full max-w-6xl mx-auto my-[80.5rem] mb-10 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
+      {/* Header */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
         <h3 className="text-xl font-bold text-gray-800">User Report List</h3>
         <button
           className="text-gray-600 hover:text-red-500 text-3xl font-bold"
-          onClick={() => setReportModalOpen(false)} 
-        > 
+          onClick={() => setReportModalOpen(false)}
+          title='close'
+        >
           &times;
         </button>
       </div>
 
+      {/* Content */}
       {selectedUserReports.length === 0 ? (
         <p className="text-gray-600 text-center">No reports found.</p>
       ) : (
         <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
           {selectedUserReports.map((report, idx) => (
-            <div key={report._id} className="border p-4 rounded-lg shadow bg-gray-50 space-y-3">
-              
-              {/* Company and Address */}
+            <div key={report._id} className="border p-4 rounded-lg shadow bg-gray-50 space-y-4">
+
+              {/* Company & Address */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
+                <div className="border rounded p-3 bg-white">
                   <p className="text-sm text-gray-700 font-extrabold">Company</p>
                   <p className="text-gray-900">{report.companyName}</p>
                 </div>
-                <div>
+                <div className="border rounded p-3 bg-white">
                   <p className="text-sm text-gray-700 font-extrabold">Address</p>
                   <p className="text-gray-900">{report.address}</p>
                 </div>
               </div>
 
-              {/* Business Size and Report Time */}
+              {/* Business Size & Report Time */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
+                <div className="border rounded p-3 bg-white">
                   <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
                   <p className="text-gray-900">{report.businessSize}</p>
                 </div>
-                <div>
+                <div className="border rounded p-3 bg-white">
                   <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
                   <p className="text-gray-900">{report.reportTime}</p>
                 </div>
               </div>
 
-              {/* Report Date */}
+              {/* Report Date & Notes */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
-                <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
-              </div>
-
-              {/* Notes */}
-              <div>
-                <p className="text-sm text-gray-700 font-extrabold">Notes</p>
-                <p className="text-gray-900">{report.notes}</p>
-              </div>
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
+                  <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
+                </div>
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold">Notes</p>
+                  <p className="text-gray-900">{report.notes}</p>
+                </div>
               </div>
 
               {/* File */}
               {report.file?.url && (
-                <div>
+                <div className="border rounded p-3 bg-white">
                   <p className="text-sm text-gray-700 font-extrabold">File</p>
                   <a
                     href={report.file.url}
@@ -294,9 +295,9 @@ const fetchUserReport = async (item) => {
 
               {/* Images */}
               {report.images?.length > 0 && (
-                <div>
-                  <p className="text-sm text-gray-700 font-extrabold">Images</p>
-                  <div className="flex gap-3 mt-1 overflow-x-auto">
+                <div className="border rounded p-3 bg-white">
+                  <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
+                  <div className="flex gap-3 overflow-x-auto">
                     {report.images.map((imgUrl, index) => (
                       <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
                         <img
@@ -316,6 +317,7 @@ const fetchUserReport = async (item) => {
     </div>
   </div>
 )}
+
 
 
 
