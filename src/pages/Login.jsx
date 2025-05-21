@@ -65,9 +65,10 @@ function Login() {
   });
 
   return (
-   <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-400 p-4">
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-400 px-2 sm:px-4">
+   <div className="bg-gray-100 w-full max-w-2xl rounded-xl shadow-lg p-6 sm:p-16">
   <form onSubmit={formik.handleSubmit}>
-    <div className="bg-gray-100 w-full max-w-lg rounded-xl shadow-lg p-6 sm:p-16">
+
       <h2 className="text-3xl font-bold text-center mb-8">Login</h2>
 
       <div className="space-y-6">
@@ -155,8 +156,8 @@ function Login() {
           <a href="#!" className="small text-muted">Privacy policy</a>
         </div>
       </div>
-    </div>
   </form>
+    </div>
 </div>
 
   );
