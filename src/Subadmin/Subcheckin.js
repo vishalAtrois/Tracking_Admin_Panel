@@ -248,11 +248,7 @@ function GetReports(item) {
                 <th className="border px-4 py-2 text-center">Check-Out</th>
                 <th className="border px-4 py-2 text-center">Alarms</th>
               </tr>
-              <tr className="bg-gray-100 text-gray-700">
-                <th className="border px-4 py-2 text-center">Date/Time</th>
-                <th className="border px-4 py-2 text-center">Date/Time</th>
-                <th className="border px-4 py-2 text-center">—</th>
-              </tr>
+           {/* removed  */}
             </thead>
             <tbody className="text-gray-800">
               {logsData.map((log, index) => (
