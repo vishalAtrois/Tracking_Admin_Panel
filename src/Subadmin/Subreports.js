@@ -299,11 +299,11 @@ const fetchUserReport = async (item) => {
               <div key={report._id} className="border p-2 rounded-lg shadow bg-gray-50 space-y-4">
                 {/* Company & Address */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="border px-2 rounded bg-white">
+                  <div className="border px-2 py-2 rounded bg-white">
                     <p className="text-sm text-gray-700 font-extrabold">Company</p>
                     <p className="text-gray-900">{report.companyName}</p>
                   </div>
-                  <div className="border px-2 rounded bg-white">
+                  <div className="border px-2 py-2 rounded bg-white">
                     <p className="text-sm text-gray-700 font-extrabold">Address</p>
                     <p className="text-gray-900">{report.address}</p>
                   </div>
@@ -311,11 +311,11 @@ const fetchUserReport = async (item) => {
 
                 {/* Business Size & Report Time */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="border rounded px-2 bg-white">
+                  <div className="border rounded px-2 py-2 bg-white">
                     <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
                     <p className="text-gray-900">{report.businessSize}</p>
                   </div>
-                  <div className="border rounded px-2 bg-white">
+                  <div className="border rounded px-2 py-2 bg-white">
                     <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
                     <p className="text-gray-900">{report.reportTime}</p>
                   </div>
@@ -323,11 +323,11 @@ const fetchUserReport = async (item) => {
 
                 {/* Report Date & Notes */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="border rounded px-2 bg-white">
+                  <div className="border rounded px-2 py-2 bg-white">
                     <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
                     <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
                   </div>
-                  <div className="border rounded px-2 bg-white">
+                  <div className="border rounded px-2 py-2 bg-white">
                     <p className="text-sm text-gray-700 font-extrabold">Notes</p>
                     <p className="text-gray-900">{report.notes}</p>
                   </div>
@@ -335,7 +335,7 @@ const fetchUserReport = async (item) => {
 
                 {/* File */}
                 {report.file?.url && (
-                  <div className="border rounded px-2 bg-white">
+                  <div className="border rounded px-2 py-2 bg-white">
                     <p className="text-sm text-gray-700 font-extrabold">File</p>
                     <a
                       href={report.file.url}
@@ -351,7 +351,7 @@ const fetchUserReport = async (item) => {
 
                 {/* Images */}
                 {report.images?.length > 0 && (
-                  <div className="border rounded px-2 bg-white">
+                  <div className="border rounded px-2 py-2 bg-white">
                     <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
                     <div className="flex gap-3 overflow-x-auto">
                       {report.images.map((imgUrl, index) => (
