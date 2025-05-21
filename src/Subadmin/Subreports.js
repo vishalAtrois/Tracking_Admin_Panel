@@ -224,7 +224,7 @@ const fetchUserReport = async (item) => {
 
 {reportModalOpen && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
-    <div className="relative w-full max-w-6xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6">
+    <div className="relative w-full max-w-xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6">
 
       {/* Header */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
