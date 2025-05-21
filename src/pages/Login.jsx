@@ -141,12 +141,14 @@ function Login() {
           LOGIN
         </button>
 
-        <div className="text-center mt-4">
-  <span className="text-gray-600">Don't have an account? </span>
-  <a href="/register" className="text-purple-600 font-medium hover:underline">
-    Create one
-  </a>
-</div>
+   {formik.values.userType === "subAdmin" && (
+  <div className="text-center mt-4">
+    <span className="text-gray-600">Don't have an account? </span>
+    <a href="/register" className="text-purple-600 font-medium hover:underline">
+      Create one
+    </a>
+  </div>
+)}
 
         <div className="text-center">
           <a href="#!" className="small text-muted me-2">Terms of use</a>
