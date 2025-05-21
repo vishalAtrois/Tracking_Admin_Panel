@@ -271,7 +271,7 @@ const fetchUserReport = async (item) => {
       }}
     >
       <p className="font-semibold text-gray-800">{companyName}</p>
-      <p className="text-sm text-gray-600">Latest Report: {latestDate}</p>
+      <p className="text-sm text-gray-600"> Report: {latestDate}</p>
     </button>
   );
 })}
