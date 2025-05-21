@@ -12,7 +12,9 @@
    const limit = 10;
    const [selectedUserReports, setSelectedUserReports] = useState([]);
 const [reportModalOpen, setReportModalOpen] = useState(false);
-
+const [selectedCompany, setSelectedCompany] = useState(null);  // stores selected company name
+const [companyReports, setCompanyReports] = useState([]);      // stores detailed reports of selected company
+const [loadingReports, setLoadingReports] = useState(false); 
   
  
 const fetchUserReport = async (item) => {
@@ -220,103 +222,158 @@ const fetchUserReport = async (item) => {
 
 {reportModalOpen && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
-    <div className="relative w-full max-w-6xl mx-auto my-[80.5rem] mb-10 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
+    <div className="relative w-full max-w-6xl mx-auto my-4 mb-10 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
+
       {/* Header */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
-        <h3 className="text-xl font-bold text-gray-800">User Report List</h3>
+        <h3 className="text-xl font-bold text-gray-800">
+          {selectedCompany ? `Reports for ${selectedCompany}` : "User Report List"}
+        </h3>
         <button
-          className="text-gray-600 hover:text-red-500 text-3xl font-bold"
-          onClick={() => setReportModalOpen(false)}
-          title='close'
+          className="text-red-500 text-3xl font-bold"
+          onClick={() => {
+            setReportModalOpen(false);
+            setSelectedCompany(null);
+            setCompanyReports([]);
+          }}
+          title="close"
         >
           &times;
         </button>
       </div>
 
       {/* Content */}
-      {selectedUserReports.length === 0 ? (
-        <p className="text-gray-600 text-center">No reports found.</p>
+      {!selectedCompany ? (
+        // Step 1: Show only company names clickable
+        selectedUserReports.length === 0 ? (
+          <p className="text-gray-600 text-center">No reports found.</p>
+        ) : (
+          <div className="space-y-2 max-h-[75vh] overflow-y-auto pr-2">
+            {Array.from(new Set(selectedUserReports.map(report => report.companyName))).map((companyName, idx) => (
+              <button
+                key={idx}
+                className="w-full text-left p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
+                onClick={() => {
+                  setSelectedCompany(companyName);
+                  // Filter reports of that company
+                  setLoadingReports(true);
+                  const filteredReports = selectedUserReports.filter(report => report.companyName === companyName);
+                  setCompanyReports(filteredReports);
+                  setLoadingReports(false);
+                }}
+              >
+                {companyName}
+              </button>
+            ))}
+          </div>
+        )
       ) : (
-        <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
-          {selectedUserReports.map((report, idx) => (
-            <div key={report._id} className="border p-4 rounded-lg shadow bg-gray-50 space-y-4">
+        // Step 2: Show detailed reports for selected company
+        loadingReports ? (
+          <p className="text-center text-gray-600">Loading reports...</p>
+        ) : companyReports.length === 0 ? (
+          <p className="text-gray-600 text-center">No reports found for this company.</p>
+        ) : (
+          <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
+            <button
+  className="mb-4 inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold border border-blue-600 hover:border-blue-800 rounded-md px-3 py-1.5 transition-colors duration-300"
+  onClick={() => setSelectedCompany(null)}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+  </svg>
+  Back to company list
+</button>
 
-              {/* Company & Address */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="border rounded p-3 bg-white">
-                  <p className="text-sm text-gray-700 font-extrabold">Company</p>
-                  <p className="text-gray-900">{report.companyName}</p>
-                </div>
-                <div className="border rounded p-3 bg-white">
-                  <p className="text-sm text-gray-700 font-extrabold">Address</p>
-                  <p className="text-gray-900">{report.address}</p>
-                </div>
-              </div>
 
-              {/* Business Size & Report Time */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="border rounded p-3 bg-white">
-                  <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
-                  <p className="text-gray-900">{report.businessSize}</p>
-                </div>
-                <div className="border rounded p-3 bg-white">
-                  <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
-                  <p className="text-gray-900">{report.reportTime}</p>
-                </div>
-              </div>
-
-              {/* Report Date & Notes */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="border rounded p-3 bg-white">
-                  <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
-                  <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
-                </div>
-                <div className="border rounded p-3 bg-white">
-                  <p className="text-sm text-gray-700 font-extrabold">Notes</p>
-                  <p className="text-gray-900">{report.notes}</p>
-                </div>
-              </div>
-
-              {/* File */}
-              {report.file?.url && (
-                <div className="border rounded p-3 bg-white">
-                  <p className="text-sm text-gray-700 font-extrabold">File</p>
-                  <a
-                    href={report.file.url}
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline break-all"
-                  >
-                    {decodeURIComponent(report.file.name)}
-                  </a>
-                </div>
-              )}
-
-              {/* Images */}
-              {report.images?.length > 0 && (
-                <div className="border rounded p-3 bg-white">
-                  <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
-                  <div className="flex gap-3 overflow-x-auto">
-                    {report.images.map((imgUrl, index) => (
-                      <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
-                        <img
-                          src={imgUrl}
-                          alt={`Report ${idx} Image ${index}`}
-                          className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
-                        />
-                      </a>
-                    ))}
+            {companyReports.map((report, idx) => (
+              <div key={report._id} className="border p-4 rounded-lg shadow bg-gray-50 space-y-4">
+                {/* Company & Address */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="border rounded p-3 bg-white">
+                    <p className="text-sm text-gray-700 font-extrabold">Company</p>
+                    <p className="text-gray-900">{report.companyName}</p>
+                  </div>
+                  <div className="border rounded p-3 bg-white">
+                    <p className="text-sm text-gray-700 font-extrabold">Address</p>
+                    <p className="text-gray-900">{report.address}</p>
                   </div>
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
+
+                {/* Business Size & Report Time */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="border rounded p-3 bg-white">
+                    <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
+                    <p className="text-gray-900">{report.businessSize}</p>
+                  </div>
+                  <div className="border rounded p-3 bg-white">
+                    <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
+                    <p className="text-gray-900">{report.reportTime}</p>
+                  </div>
+                </div>
+
+                {/* Report Date & Notes */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="border rounded p-3 bg-white">
+                    <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
+                    <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
+                  </div>
+                  <div className="border rounded p-3 bg-white">
+                    <p className="text-sm text-gray-700 font-extrabold">Notes</p>
+                    <p className="text-gray-900">{report.notes}</p>
+                  </div>
+                </div>
+
+                {/* File */}
+                {report.file?.url && (
+                  <div className="border rounded p-3 bg-white">
+                    <p className="text-sm text-gray-700 font-extrabold">File</p>
+                    <a
+                      href={report.file.url}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline break-all"
+                    >
+                      {decodeURIComponent(report.file.name)}
+                    </a>
+                  </div>
+                )}
+
+                {/* Images */}
+                {report.images?.length > 0 && (
+                  <div className="border rounded p-3 bg-white">
+                    <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
+                    <div className="flex gap-3 overflow-x-auto">
+                      {report.images.map((imgUrl, index) => (
+                        <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
+                          <img
+                            src={imgUrl}
+                            alt={`Report ${idx} Image ${index}`}
+                            className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
+                          />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )
       )}
     </div>
   </div>
 )}
+
+
 
 
 
