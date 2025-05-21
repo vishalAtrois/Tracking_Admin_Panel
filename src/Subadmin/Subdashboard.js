@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {  Tooltip, ResponsiveContainer,  Cell, Pie, PieChart } from 'recharts';
+
  
  
 import Subsidebar from './Subsidebar';
-import UserGrowthGraph from '../pages/UserGrowthGraph';
+ 
  
 
 const Subdashboard = () => {
@@ -13,6 +15,8 @@ const Subdashboard = () => {
   const [companyCount, setCompanyCount] = useState(0);
     const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const [taskChartData, setTaskChartData] = useState([]);
+
 
   function fetchUsers (){
 
@@ -39,29 +43,43 @@ const Subdashboard = () => {
       .catch((error) => console.error(error));
   }
 
-  function fetchCompany(){
-    const token = localStorage.getItem('token')
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${token}`);
+ function fetchCompany() {
+  const token = localStorage.getItem('token');
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${token}`);
 
-    const requestOptions = {
-      method: "GET",
-      headers:myHeaders,
-      redirect: "follow"
-    };
-    
-    fetch("https://tracking-backend-admin.vercel.app/v1/admin/fetchCompanyList?page=1&limit=10&sortBy=createdAt:desc", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        if(result.success === true){
-          console.log(result);
-          setCompanyCount(result.UserList.totalResults)
-          setLoading(false)
-        }
-      })
-      .catch((error) => console.error(error));
-  }
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow"
+  };
+
+  fetch("https://mocki.io/v1/e105d6bd-424f-474f-a1a0-ecb42b10bd08", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log('tasks ', result);
+
+      // Count active and completed
+      const tasks = result;
+      let active = 0;
+      let completed = 0;
+
+      tasks.forEach(task => {
+        if (task.status === 'active') active++;
+        else if (task.status === 'completed') completed++;
+      });
+
+      setTaskChartData([
+        { name: 'Active', value: active },
+        { name: 'Completed', value: completed },
+      ]);
+
+      setCompanyCount(tasks.length);
+      setLoading(false);
+    })
+    .catch((error) => console.error(error));
+}
+
 
   useEffect(() => {
     fetchUsers();
@@ -138,12 +156,55 @@ const Subdashboard = () => {
         </div>
   
         {/* Graph */}
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
             <h3 className="text-2xl sm:text-3xl font-semibold mb-4">User Growth</h3>
             <UserGrowthGraph />
           </div>
-        </div>
+        </div> */}
+        {/* Graph */}
+<div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+  {/* User Growth Chart */}
+  {/* <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
+    <h3 className="text-2xl sm:text-3xl font-semibold mb-4">User Growth</h3>
+    <UserGrowthGraph />
+  </div> */}
+
+  {/* Task Status Bar Chart */}
+ <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
+  <h3 className="text-2xl sm:text-3xl font-semibold mb-4">Task Status Overview</h3>
+  <ResponsiveContainer width="100%" height={300}>
+    <PieChart>
+      <Pie
+        data={taskChartData}
+        dataKey="value"
+        nameKey="name"
+        cx="50%"
+        cy="50%"
+        outerRadius={100}
+        innerRadius={60} // Makes it a donut chart
+        fill="#8884d8"
+        paddingAngle={5}
+        label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+      >
+        {taskChartData.map((entry, index) => {
+          const COLORS = {
+            Active: '#22c55e',
+            Completed: '#3b82f6',
+          };
+          return <Cell key={`cell-${index}`} fill={COLORS[entry.name] || '#8884d8'} />;
+        })}
+      </Pie>
+      <Tooltip 
+        contentStyle={{ backgroundColor: '#ffffff', borderColor: '#374151', borderRadius: '8px' }}
+      />
+    </PieChart>
+  </ResponsiveContainer>
+</div>
+
+
+</div>
+
       </div>
     </div>
   </div>

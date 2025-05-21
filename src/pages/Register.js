@@ -4,13 +4,11 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
  
-
 function Register() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 const [allCompanies, setAllCompanies] = useState([]);
  
-
 useEffect(() => {
   fetch(`https://tracking-backend-admin.vercel.app/v1/auth/companyList?sortBy=createdAt&order=desc`)
     .then((res) => res.json())
