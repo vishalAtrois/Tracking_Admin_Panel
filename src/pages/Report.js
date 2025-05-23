@@ -249,27 +249,22 @@ const fetchUserReport = async (item) => {
           <p className="text-gray-600 text-center">No reports found.</p>
         ) : (
           <div className="space-y-2 max-h-[75vh] overflow-y-auto pr-2">
-          {Array.from(new Set(selectedUserReports.map(report => report.companyName))).map((companyName, idx) => {
-  const companyReports = selectedUserReports.filter(report => report.companyName === companyName);
-  const latestDate = companyReports.length
-    ? new Date(
-        Math.max(...companyReports.map(r => new Date(r.reportDate)))
-      ).toLocaleDateString()
-    : "N/A";
+        {selectedUserReports.map((report, idx) => {
+  const latestDate = new Date(report.reportDate).toLocaleDateString();
 
   return (
     <button
-      key={idx}
+      key={report._id}
       className="w-full text-left p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
       onClick={() => {
-        setSelectedCompany(companyName);
+        setSelectedCompany(report.companyName);
         setLoadingReports(true);
-        setCompanyReports(companyReports);
+        setCompanyReports([report]);
         setLoadingReports(false);
       }}
     >
-      <p className="font-semibold text-gray-800">{companyName}</p>
-      <p className="text-sm text-gray-600"> Report: {latestDate}</p>
+      <p className="font-semibold text-gray-800">{report.companyName}</p>
+      <p className="text-sm text-gray-600">Report: {latestDate}</p>
     </button>
   );
 })}
