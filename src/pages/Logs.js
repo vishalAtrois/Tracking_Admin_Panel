@@ -253,9 +253,9 @@ function GetReports(item) {
                 <th className="border-3 border-gray-500 px-4 py-3 text-center">
                   Check-Out
                 </th>
-                <th className="border-3 border-gray-500 px-4 py-3 text-center">
+                {/* <th className="border-3 border-gray-500 px-4 py-3 text-center">
                   Alarms
-                </th>
+                </th> */} 
               </tr>
             </thead>
             <tbody className="text-gray-800 font-medium">
@@ -270,7 +270,7 @@ function GetReports(item) {
                   <td className="border-3 border-gray-500 px-4 py-3 text-center">
                     {new Date(log.checkOutTime).toLocaleString()}
                   </td>
-                  <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                  {/* <td className="border-3 border-gray-500 px-4 py-3 text-center">
                     {log.alarmLogs && log.alarmLogs.length > 0 ? (
                       <div className="flex justify-center gap-3 flex-wrap">
                         {log.alarmLogs.slice(0, 3).map((alarm) => (
@@ -296,7 +296,7 @@ function GetReports(item) {
                     ) : (
                       <span className="text-gray-400 italic">No alarms</span>
                     )}
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
