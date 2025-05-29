@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Subsidebar from './Subsidebar';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, Polygon } from '@react-google-maps/api';
+
 import { Smartphone } from 'lucide-react';
  
 
@@ -71,7 +72,7 @@ function GetReports(item) {
 
 
    const mapContainerStyle = {
-    height: '300px',
+    height: '500px',
     width: '100%',
     marginTop: '1rem',
   };
@@ -356,8 +357,7 @@ function GetReports(item) {
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
     <div className="relative w-full max-w-4xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
-        <button
+         <button
           onClick={() => {
             setShowMapModal(false);
             setShowLogsModal(true);
@@ -366,6 +366,8 @@ function GetReports(item) {
         >
           ← Back to Logs
         </button>
+      <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
+     
         <h3 className="text-xl font-bold text-gray-800 text-center flex-grow">Location View</h3>
         <button
           onClick={() => {
@@ -394,6 +396,24 @@ function GetReports(item) {
               position={{ lat: loc.latitude, lng: loc.longitude }}
             />
           ))}
+           <Polygon
+    paths={selectedLocation.map((loc) => ({
+      lat: loc.latitude,
+      lng: loc.longitude
+    }))}
+    options={{
+      fillColor: "#FF0000",
+      fillOpacity: 0.2,
+      strokeColor: "#FF0000",
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      clickable: false,
+      draggable: false,
+      editable: false,
+      geodesic: false,
+      zIndex: 1
+    }}
+  />
         </GoogleMap>
     </div>
   </div>

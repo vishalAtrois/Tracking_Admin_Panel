@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
  import { Smartphone } from "lucide-react";
 import Sidebar from '../components/Sidebar';
+import { GoogleMap, LoadScript, Marker, Polygon } from '@react-google-maps/api';
 
 export const  Logs = () => {
 
@@ -14,6 +15,9 @@ export const  Logs = () => {
     const limit = 10;
     const [showLogsModal, setShowLogsModal] = useState(false);
 const [logsData, setLogsData] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null); // new state for map location
+  const [showMapModal, setShowMapModal] = useState(false);
+
 
    
   
@@ -26,28 +30,46 @@ const [logsData, setLogsData] = useState([]);
  
 
 
+
 function GetReports(item) {
   const token = localStorage.getItem('token');
-  const myHeaders = new Headers();
-  myHeaders.append("Authorization", `Bearer ${token}`);
 
-  const requestOptions = {
+  fetch(`https://tracking-backend-admin.vercel.app/v1/admin/getUserCheckInOutTimes?userId=${item.id}`, {
     method: "GET",
-    headers: myHeaders,
+    headers: { Authorization: `Bearer ${token}` },
     redirect: "follow"
-  };
+  })
+    .then(res => res.json())
+    .then((response) => {
+      console.log("API Response for GetReports:", response); 
 
-  fetch(`https://tracking-backend-admin.vercel.app/v1/admin/getUserCheckInOutTimes?userId=${item.id}`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      if (result.success === true) {
-        console.log("logs data ",result)
-        setLogsData(result.List.logs || []);
-        setShowLogsModal(true);
-      }
+      const { success, List } = response;
+      if (!success || !List?.logs) return;
+
+      const logs = Object.entries(List.logs).flatMap(([date, { timing = [], locations = [] }]) =>
+        (timing || []).map(entry => ({
+          date,
+          checkInTime: entry.checkInTime,
+          checkOutTime: entry.checkOutTime,
+          alarmLogs: entry.alarmLogs || [],
+          location: locations.length > 0 ? locations : null, // attach full locations array or null
+          // Or you could use locations[0] if you want just the first location
+        }))
+      );
+
+      setLogsData(logs);
+      setShowLogsModal(true);
+      setSelectedLocation(null);
     })
-    .catch((error) => console.error("Error fetching reports", error));
+    .catch(err => console.error("Error fetching reports", err));
 }
+
+
+   const mapContainerStyle = {
+    height: '500px',
+    width: '100%',
+    marginTop: '1rem',
+  };
 
 
   
@@ -122,6 +144,7 @@ function GetReports(item) {
   
     
   return (
+     <LoadScript googleMapsApiKey="AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE">
       <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
     
           {/* side bar button */}
@@ -228,88 +251,172 @@ function GetReports(item) {
 
        
 
-     {showLogsModal && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
-    <div className="relative w-full max-w-6xl mx-auto my-[80.5rem] mb-10 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
-      <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
-        <h3 className="text-xl font-bold text-gray-800">Logs</h3>
-        <button
-          className="text-red-500 text-4xl font-bold"
-          onClick={() => setShowLogsModal(false)}
-          title="close"
-        >
-          &times;
-        </button>
-      </div>
-
-      {logsData.length > 0 ? (
-        <div className="max-h-[32rem] overflow-y-auto rounded-lg shadow-lg border-2 border-gray-500">
-          <table className="min-w-full text-sm text-left border-collapse">
-            <thead className="sticky top-0 z-10 bg-blue-200 text-blue-900 font-bold uppercase text-[13px] tracking-wider border-b-2 border-gray-500">
-              <tr>
-                <th className="border-3 border-gray-500 px-4 py-3 text-center">
-                  Check-In
-                </th>
-                <th className="border-3 border-gray-500 px-4 py-3 text-center">
-                  Check-Out
-                </th>
-                {/* <th className="border-3 border-gray-500 px-4 py-3 text-center">
-                  Alarms
-                </th> */} 
-              </tr>
-            </thead>
-            <tbody className="text-gray-800 font-medium">
-              {logsData.map((log, index) => (
-                <tr
-                  key={index}
-                  className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
-                >
-                  <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                    {new Date(log.checkInTime).toLocaleString()}
-                  </td>
-                  <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                    {new Date(log.checkOutTime).toLocaleString()}
-                  </td>
-                  {/* <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                    {log.alarmLogs && log.alarmLogs.length > 0 ? (
-                      <div className="flex justify-center gap-3 flex-wrap">
-                        {log.alarmLogs.slice(0, 3).map((alarm) => (
-                          <span
-                            key={alarm._id}
-                            title={`Turned off by ${alarm.turnedOffBy} at ${new Date(
-                              alarm.time
-                            ).toLocaleTimeString()}`}
-                            className="inline-block"
-                          >
-                            <Smartphone
-                              size={24}
-                              strokeWidth={2.5}
-                              className={`rounded-full p-1 shadow-sm ${
-                                alarm.turnedOffBy === "user"
-                                  ? "text-green-700 bg-green-100"
-                                  : "text-red-700 bg-red-100"
-                              }`}
-                            />
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
-                      <span className="text-gray-400 italic">No alarms</span>
-                    )}
-                  </td> */}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <p className="text-gray-600 italic mt-4 text-center">No logs found.</p>
-      )}
-      
-    </div>
-  </div>
-)}
-
+    {showLogsModal && (
+           <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
+             <div className="relative w-full max-w-6xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
+               <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
+                 <h3 className="text-xl font-bold text-gray-800">Logs</h3>
+                 <button
+                   className="text-red-500 text-4xl font-bold"
+                   onClick={() => setShowLogsModal(false)}
+                   title="close"
+                 >
+                   &times;
+                 </button>
+               </div>
+   
+               {logsData.length > 0 ? (
+                 <>
+                   <div className="max-h-[32rem] overflow-y-auto rounded-lg shadow-lg border-2 border-gray-500">
+                     <table className="min-w-full text-sm text-left border-collapse">
+                       <thead className="sticky top-0 z-10 bg-blue-200 text-blue-900 font-bold uppercase text-[13px] tracking-wider border-b-2 border-gray-500">
+                         <tr>
+                           <th className="border-3 border-gray-500 px-4 py-3 text-center">Check-In</th>
+                           <th className="border-3 border-gray-500 px-4 py-3 text-center">Check-Out</th>
+                           <th className="border-3 border-gray-500 px-4 py-3 text-center">Alarms</th>
+                           <th className="border-3 border-gray-500 px-4 py-3 text-center">Location</th> {/* New column */}
+                         </tr>
+                       </thead>
+                       <tbody className="text-gray-800 font-medium">
+                         {logsData.map((log, index) => (
+                           <tr
+                             key={index}
+                             className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
+                           >
+                             <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                               {new Date(log.checkInTime).toLocaleString()}
+                             </td>
+                             <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                               {new Date(log.checkOutTime).toLocaleString()}
+                             </td>
+                             <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                               {log.alarmLogs && log.alarmLogs.length > 0 ? (
+                                 <div className="flex justify-center gap-3 flex-wrap">
+                                   {log.alarmLogs.slice(0, 3).map((alarm) => (
+                                     <span
+                                       key={alarm._id}
+                                       title={`Turned off by ${alarm.turnedOffBy} at ${new Date(
+                                         alarm.time
+                                       ).toLocaleTimeString()}`}
+                                       className="inline-block"
+                                     >
+                                       <Smartphone
+                                         size={24}
+                                         strokeWidth={2.5}
+                                         className={`rounded-full p-1 shadow-sm ${
+                                           alarm.turnedOffBy === "user"
+                                             ? "text-green-700 bg-green-100"
+                                             : "text-red-700 bg-red-100"
+                                         }`}
+                                       />
+                                     </span>
+                                   ))}
+                                 </div>
+                               ) : (
+                                 <span className="text-gray-400 italic">No alarms</span>
+                               )}
+                             </td>
+                             <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                               {log.location ? (
+                                 <button
+                                  onClick={() => {
+                                                  setSelectedLocation(log.location);
+                                            setShowLogsModal(false);
+                                           setShowMapModal(true);
+                                              }}
+   
+                                   className="px-2 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
+                                 >
+                                   Show Location
+                                 </button>
+                               ) : (
+                                 <span className="text-gray-400 italic">No location</span>
+                               )}
+                             </td>
+                           </tr>
+                         ))}
+                       </tbody>
+                     </table>
+                   </div>
+   
+                   
+                 </>
+               ) : (
+                 <p className="text-gray-600 italic mt-4 text-center">No logs found.</p>
+               )}
+             </div>
+           </div>
+         )}
+   
+   
+         {/* location view  */}
+   
+   
+       {showMapModal && selectedLocation && Array.isArray(selectedLocation) && (
+     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
+       <div className="relative w-full max-w-4xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
+         {/* Header */}
+          <button
+             onClick={() => {
+               setShowMapModal(false);
+               setShowLogsModal(true);
+             }}
+             className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md"
+           >
+             ← Back to Logs
+           </button>
+         <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
+          
+           <h3 className="text-xl font-bold text-gray-800  text-center flex-grow">Location View</h3>
+           <button
+             onClick={() => {
+               setShowMapModal(false);
+               setSelectedLocation(null);
+             }}
+             className="text-red-500 text-4xl font-bold"
+           >
+             &times;
+           </button>
+         </div>
+   
+         {/* Google Map Wrapper */}
+       
+           <GoogleMap
+             mapContainerStyle={mapContainerStyle}
+             center={{
+               lat: selectedLocation[0]?.latitude || 0,
+               lng: selectedLocation[0]?.longitude || 0
+             }}
+             zoom={15}
+           >
+             {selectedLocation.map((loc, idx) => (
+               <Marker
+                 key={idx}
+                 position={{ lat: loc.latitude, lng: loc.longitude }}
+               />
+             ))}
+              <Polygon
+       paths={selectedLocation.map((loc) => ({
+         lat: loc.latitude,
+         lng: loc.longitude
+       }))}
+       options={{
+         fillColor: "#FF0000",
+         fillOpacity: 0.2,
+         strokeColor: "#FF0000",
+         strokeOpacity: 0.8,
+         strokeWeight: 2,
+         clickable: false,
+         draggable: false,
+         editable: false,
+         geodesic: false,
+         zIndex: 1
+       }}
+     />
+           </GoogleMap>
+       </div>
+     </div>
+   )}
     
       {/* Pagination UI */}
       <div className="custom-pagination-container flex justify-center mt-4">
@@ -349,6 +456,7 @@ function GetReports(item) {
       </div>
     </div>
       </div>
+      </LoadScript>
     
   )
 }
