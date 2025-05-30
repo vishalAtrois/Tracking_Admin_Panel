@@ -394,6 +394,10 @@ function GetReports(item) {
             <Marker
               key={idx}
               position={{ lat: loc.latitude, lng: loc.longitude }}
+               icon={{
+    url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P4//8/AwAI/AL+YRm3VwAAAABJRU5ErkJggg==",
+    scaledSize: new window.google.maps.Size(1, 1)
+  }}
             />
           ))}
            <Polygon
