@@ -66,7 +66,7 @@ const navigate=useNavigate()
 
     {/* User Profile Section */}
     <div className="profile-section">
-      <img className="profile-img" src={profilePhoto} alt="Profile" />
+      {/* <img className="profile-img" src={profilePhoto} alt="Profile" /> */}
       <div className="profile-info">
         <div className="profile-name">{myData?.fullName}</div>
         <div className="profile-role">Admin</div>

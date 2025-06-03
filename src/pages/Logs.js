@@ -12,7 +12,7 @@ export const  Logs = () => {
      const [sidebarOpen, setSidebarOpen] = useState(false);
      const [searchQuery, setSearchQuery] = useState('');
     const [currentpage, setCurrentpage] = useState(1);
-    const limit = 10;
+    const limit = 20;
     const [showLogsModal, setShowLogsModal] = useState(false);
 const [logsData, setLogsData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null); // new state for map location
@@ -148,7 +148,7 @@ function GetReports(item) {
       <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
     
           {/* side bar button */}
-        <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
+        <div className="md:hidden p-2 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
       <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
         <i className="bi bi-list text-3xl"></i>
       </button>
@@ -172,8 +172,8 @@ function GetReports(item) {
            <Sidebar />
         </div>
     
-        <div className="flex-1 p-6 overflow-y-auto">
-        <h2 className="text-white text-2xl sm:text-3xl mb-6 -mt-2 sm:-mt-4 font-bold tracking-wide">
+        <div className="flex-1 p-3 overflow-y-auto">
+        <h2 className="text-white text-2xl sm:text-3xl mb-2 -mt-2 sm:-mt-4 font-bold tracking-wide">
               Logs
             </h2>
       {/* The rest of your component (search bar, table, pagination, modals, etc.) remains exactly the same */}
@@ -424,7 +424,7 @@ function GetReports(item) {
    )}
     
       {/* Pagination UI */}
-      <div className="custom-pagination-container flex justify-center mt-4">
+      <div className="custom-pagination-container flex justify-center mt-2">
         <nav aria-label="Page navigation example">
           <ul className="pagination">
             <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>

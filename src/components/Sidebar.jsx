@@ -65,13 +65,13 @@ const navigate=useNavigate()
     
 
     {/* User Profile Section */}
-    <div className="profile-section">
-      <img className="profile-img" src={profilePhoto} alt="Profile" />
+    {/* <div className="profile-section"> */}
+      {/* <img className="profile-img" src={profilePhoto} alt="Profile" /> */}
       <div className="profile-info">
         <div className="profile-name">{myData?.fullName}</div>
         <div className="profile-role">Admin</div>
       </div>
-    </div>
+    {/* </div> */}
 
     <ul className="nav-list">
       <li><NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tachometer"></i> Dashboard</NavLink></li>
