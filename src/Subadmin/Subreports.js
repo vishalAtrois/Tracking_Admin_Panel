@@ -151,15 +151,11 @@ const fetchUserReport = async (item) => {
         <Subsidebar />
      </div>
  
-     <div className="flex-1 p-6 flex flex-col">
-  <h2
-    className="text-white text-2xl sm:text-3xl mb-2  font-bold tracking-wide sticky top-0 bg-gray-900 z-30"
-  >    Reports
-         </h2>
-   {/* The rest of your component (search bar, table, pagination, modals, etc.) remains exactly the same */}
+     <div className="flex-1 p-3 flex flex-col">
+ 
  
    {/* Search Bar */}
-   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-[3.75rem] z-20 mb-4">
+   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-[3.75rem] z-20 mb-2">
     <input
       className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0 mt-2"
          placeholder="Search employee..."
@@ -231,7 +227,7 @@ const fetchUserReport = async (item) => {
 
  
    {/* Pagination UI */}
-   <div className="custom-pagination-container flex justify-center mt-4">
+   <div className="custom-pagination-container flex justify-center mt-2">
      <nav aria-label="Page navigation example">
        <ul className="pagination">
          <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
