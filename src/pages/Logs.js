@@ -145,7 +145,7 @@ function GetReports(item) {
     
   return (
      <LoadScript googleMapsApiKey="AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE">
-      <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
+      <div className="flex flex-col md:flex-row h-auto w-screen bg-gray-900">
     
           {/* side bar button */}
         <div className="md:hidden p-2 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
@@ -172,32 +172,34 @@ function GetReports(item) {
            <Sidebar />
         </div>
     
-        <div className="flex-1 p-3 overflow-y-auto">
-        <h2 className="text-white text-2xl sm:text-3xl mb-2 -mt-2 sm:-mt-4 font-bold tracking-wide">
-              Logs
-            </h2>
-      {/* The rest of your component (search bar, table, pagination, modals, etc.) remains exactly the same */}
-    
-      {/* Search Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-0 z-20 mb-4">
-          <input
-            className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0 mt-2"
-            placeholder="Search User..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <button
-            title="Search"
-            className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto mt-1"
-            onClick={fetchUsers}
-          >
-            Search
-          </button>
-        </div>
-    
-       {/* Table Section */}
-       <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700">
-        
+     <div className="flex-1 p-6 flex flex-col">
+
+  {/* Users List heading */}
+  <h2
+    className="text-white text-2xl sm:text-3xl mb-2  font-bold tracking-wide sticky top-0 bg-gray-900 z-30"
+  >
+    Logs
+  </h2>
+
+  {/* Search Bar */}
+  <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-[3.75rem] z-20 mb-4">
+    <input
+      className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0 mt-2"
+      placeholder="Search User..."
+      value={searchQuery}
+      onChange={handleSearchChange}
+    />
+    <button
+      title="Search"
+      className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto mt-1"
+      onClick={fetchUsers}
+    >
+      Search
+    </button>
+  </div>
+
+  {/* Scrollable Table Container */}
+  <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 flex-1 max-h-[calc(100vh-8rem)] overflow-y-auto">
           {loading ? (
             <div className="flex flex-col justify-center items-center py-20">
               <div className="relative">
@@ -211,9 +213,9 @@ function GetReports(item) {
               <thead className="bg-gray-700">
                 <tr>
                   {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Logs'].map((heading) => (
-                    <th key={heading} className="py-1 text-center font-semibold border-b border-r  border-gray-600 font-serif">
-                      {heading}
-                    </th>
+                    <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
+                  {heading}
+                </th>
                   ))}
                 </tr>
               </thead>
@@ -252,113 +254,113 @@ function GetReports(item) {
        
 
     {showLogsModal && (
-           <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
-             <div className="relative w-full max-w-6xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
-               <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
-                 <h3 className="text-xl font-bold text-gray-800">Logs</h3>
-                 <button
-                   className="text-red-500 text-4xl font-bold"
-                   onClick={() => setShowLogsModal(false)}
-                   title="close"
-                 >
-                   &times;
-                 </button>
-               </div>
+     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
+       <div className="relative w-full max-w-6xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
+         
+         {/* Header */}
+         <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10 flex-shrink-0">
+           <h3 className="text-xl font-bold text-gray-800">Logs</h3>
+           <button
+             className="text-red-500 text-4xl font-bold"
+             onClick={() => setShowLogsModal(false)}
+             title="close"
+           >
+             &times;
+           </button>
+         </div>
    
-               {logsData.length > 0 ? (
-                 <>
-                   <div className="max-h-[32rem] overflow-y-auto rounded-lg shadow-lg border-2 border-gray-500">
-                     <table className="min-w-full text-sm text-left border-collapse">
-                       <thead className="sticky top-0 z-10 bg-blue-200 text-blue-900 font-bold uppercase text-[13px] tracking-wider border-b-2 border-gray-500">
-                         <tr>
-                           <th className="border-3 border-gray-500 px-4 py-3 text-center">Check-In</th>
-                           <th className="border-3 border-gray-500 px-4 py-3 text-center">Check-Out</th>
-                           <th className="border-3 border-gray-500 px-4 py-3 text-center">Alarms</th>
-                           <th className="border-3 border-gray-500 px-4 py-3 text-center">Location</th> {/* New column */}
-                         </tr>
-                       </thead>
-                       <tbody className="text-gray-800 font-medium">
-                         {logsData.map((log, index) => (
-                           <tr
-                             key={index}
-                             className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
-                           >
-                             <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                               {new Date(log.checkInTime).toLocaleString()}
-                             </td>
-                             <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                               {new Date(log.checkOutTime).toLocaleString()}
-                             </td>
-                             <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                               {log.alarmLogs && log.alarmLogs.length > 0 ? (
-                                 <div className="flex justify-center gap-3 flex-wrap">
-                                   {log.alarmLogs.slice(0, 3).map((alarm) => (
-                                     <span
-                                       key={alarm._id}
-                                       title={`Turned off by ${alarm.turnedOffBy} at ${new Date(
-                                         alarm.time
-                                       ).toLocaleTimeString()}`}
-                                       className="inline-block"
-                                     >
-                                       <Smartphone
-                                         size={24}
-                                         strokeWidth={2.5}
-                                         className={`rounded-full p-1 shadow-sm ${
-                                           alarm.turnedOffBy === "user"
-                                             ? "text-green-700 bg-green-100"
-                                             : "text-red-700 bg-red-100"
-                                         }`}
-                                       />
-                                     </span>
-                                   ))}
-                                 </div>
-                               ) : (
-                                 <span className="text-gray-400 italic">No alarms</span>
-                               )}
-                             </td>
-                             <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                               {log.location ? (
-                                 <button
-                                  onClick={() => {
-                                                  setSelectedLocation(log.location);
-                                            setShowLogsModal(false);
-                                           setShowMapModal(true);
-                                              }}
-   
-                                   className="px-2 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
-                                 >
-                                   Show Location
-                                 </button>
-                               ) : (
-                                 <span className="text-gray-400 italic">No location</span>
-                               )}
-                             </td>
-                           </tr>
-                         ))}
-                       </tbody>
-                     </table>
-                   </div>
-   
-                   
-                 </>
-               ) : (
-                 <p className="text-gray-600 italic mt-4 text-center">No logs found.</p>
-               )}
-             </div>
+         {/* Logs table */}
+         {logsData.length > 0 ? (
+           <div className="overflow-y-auto rounded-lg shadow-lg border-2 border-gray-500"
+                style={{ maxHeight: 'calc(90vh - 5rem)' }} // adjust to leave space for header + padding
+           >
+             <table className="min-w-full text-sm text-left border-collapse">
+               <thead className="sticky top-0 z-10 bg-blue-200 text-blue-900 font-bold uppercase text-[13px] tracking-wider border-b-2 border-gray-500">
+                 <tr>
+                   <th className="border-3 border-gray-500  text-center">Check-In</th>
+                   <th className="border-3 border-gray-500  text-center">Check-Out</th>
+                   <th className="border-3 border-gray-500  text-center">Alarms</th>
+                   <th className="border-3 border-gray-500  text-center">Location</th>
+                 </tr>
+               </thead>
+               <tbody className="text-gray-800 font-medium">
+                 {logsData.map((log, index) => (
+                   <tr
+                     key={index}
+                     className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
+                   >
+                     <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                       {new Date(log.checkInTime).toLocaleString()}
+                     </td>
+                     <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                       {new Date(log.checkOutTime).toLocaleString()}
+                     </td>
+                     <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                       {log.alarmLogs && log.alarmLogs.length > 0 ? (
+                         <div className="flex justify-center gap-3 flex-wrap">
+                           {log.alarmLogs.slice(0, 3).map((alarm) => (
+                             <span
+                               key={alarm._id}
+                               title={`Turned off by ${alarm.turnedOffBy} at ${new Date(
+                                 alarm.time
+                               ).toLocaleTimeString()}`}
+                               className="inline-block"
+                             >
+                               <Smartphone
+                                 size={24}
+                                 strokeWidth={2.5}
+                                 className={`rounded-full p-1 shadow-sm ${
+                                   alarm.turnedOffBy === "user"
+                                     ? "text-green-700 bg-green-100"
+                                     : "text-red-700 bg-red-100"
+                                 }`}
+                               />
+                             </span>
+                           ))}
+                         </div>
+                       ) : (
+                         <span className="text-gray-400 italic">No alarms</span>
+                       )}
+                     </td>
+                     <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                       {log.location ? (
+                         <button
+                           onClick={() => {
+                             setSelectedLocation(log.location);
+                             setShowLogsModal(false);
+                             setShowMapModal(true);
+                           }}
+                           className="px-2 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
+                         >
+                           Show Location
+                         </button>
+                       ) : (
+                         <span className="text-gray-400 italic">No location</span>
+                       )}
+                     </td>
+                   </tr>
+                 ))}
+               </tbody>
+             </table>
            </div>
+         ) : (
+           <p className="text-gray-600 italic mt-4 text-center">No logs found.</p>
          )}
+       </div>
+     </div>
+   )}
+   
    
    
          {/* location view  */}
    
+   {showMapModal && selectedLocation && Array.isArray(selectedLocation) && (
+     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
+       <div className="relative w-full max-w-4xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
    
-       {showMapModal && selectedLocation && Array.isArray(selectedLocation) && (
-     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
-       <div className="relative w-full max-w-4xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6">
          {/* Header */}
-          
-         <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
-          <button
+         <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10 flex-shrink-0">
+           <button
              onClick={() => {
                setShowMapModal(false);
                setShowLogsModal(true);
@@ -367,8 +369,7 @@ function GetReports(item) {
            >
              ← Back to Logs
            </button>
-{/*           
-           <h3 className="text-xl font-bold text-gray-800  text-center flex-grow">Location View</h3> */}
+   
            <button
              onClick={() => {
                setShowMapModal(false);
@@ -380,10 +381,10 @@ function GetReports(item) {
            </button>
          </div>
    
-         {/* Google Map Wrapper */}
+         {/* Map Container - FIXED HEIGHT wrapper to let Google Map display */}
        
            <GoogleMap
-             mapContainerStyle={mapContainerStyle}
+             mapContainerStyle={mapContainerStyle} // keep your existing style here
              center={{
                lat: selectedLocation[0]?.latitude || 0,
                lng: selectedLocation[0]?.longitude || 0
@@ -394,37 +395,40 @@ function GetReports(item) {
                <Marker
                  key={idx}
                  position={{ lat: loc.latitude, lng: loc.longitude }}
-                           icon={{
-    url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P4//8/AwAI/AL+YRm3VwAAAABJRU5ErkJggg==",
-    scaledSize: new window.google.maps.Size(1, 1)
-  }}
+                 icon={{
+                   url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P4//8/AwAI/AL+YRm3VwAAAABJRU5ErkJggg==",
+                   scaledSize: new window.google.maps.Size(1, 1)
+                 }}
                />
              ))}
-              <Polygon
-       paths={selectedLocation.map((loc) => ({
-         lat: loc.latitude,
-         lng: loc.longitude
-       }))}
-       options={{
-         fillColor: "#FF0000",
-         fillOpacity: 0.2,
-         strokeColor: "#FF0000",
-         strokeOpacity: 0.8,
-         strokeWeight: 2,
-         clickable: false,
-         draggable: false,
-         editable: false,
-         geodesic: false,
-         zIndex: 1
-       }}
-     />
+             <Polygon
+               paths={selectedLocation.map((loc) => ({
+                 lat: loc.latitude,
+                 lng: loc.longitude
+               }))}
+               options={{
+                 fillColor: "#FF0000",
+                 fillOpacity: 0.2,
+                 strokeColor: "#FF0000",
+                 strokeOpacity: 0.8,
+                 strokeWeight: 2,
+                 clickable: false,
+                 draggable: false,
+                 editable: false,
+                 geodesic: false,
+                 zIndex: 1
+               }}
+             />
            </GoogleMap>
+          
        </div>
      </div>
    )}
+   
+   
     
       {/* Pagination UI */}
-      <div className="custom-pagination-container flex justify-center mt-2">
+      <div className="custom-pagination-container flex justify-center mt-4">
         <nav aria-label="Page navigation example">
           <ul className="pagination">
             <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>

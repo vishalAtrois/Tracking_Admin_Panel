@@ -10,7 +10,7 @@ import Subsidebar from './Subsidebar';
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
    const [currentpage, setCurrentpage] = useState(1);
-   const limit = 10;
+   const limit = 20;
    const [selectedUserReports, setSelectedUserReports] = useState([]);
 const [reportModalOpen, setReportModalOpen] = useState(false);
 const [selectedCompany, setSelectedCompany] = useState(null);  // stores selected company name
@@ -124,7 +124,7 @@ const fetchUserReport = async (item) => {
  
  
    return ( 
-     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
+     <div className="flex flex-col md:flex-row h-auto w-screen bg-gray-900">
  
        {/* side bar button */}
      <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
@@ -151,16 +151,17 @@ const fetchUserReport = async (item) => {
         <Subsidebar />
      </div>
  
-     <div className="flex-1 p-6 overflow-y-auto">
-     <h2 className="text-white text-2xl sm:text-3xl mb-6 -mt-2 sm:-mt-4 font-bold tracking-wide">
-           Reports
+     <div className="flex-1 p-6 flex flex-col">
+  <h2
+    className="text-white text-2xl sm:text-3xl mb-2  font-bold tracking-wide sticky top-0 bg-gray-900 z-30"
+  >    Reports
          </h2>
    {/* The rest of your component (search bar, table, pagination, modals, etc.) remains exactly the same */}
  
    {/* Search Bar */}
-   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-0 z-20 mb-4">
-       <input
-         className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0 mt-2"
+   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-[3.75rem] z-20 mb-4">
+    <input
+      className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0 mt-2"
          placeholder="Search employee..."
          value={searchQuery}
          onChange={handleSearchChange}
@@ -175,8 +176,8 @@ const fetchUserReport = async (item) => {
      </div>
  
     {/* Table Section */}
-    <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700">
-     
+    <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 flex-1 max-h-[calc(100vh-8rem)] overflow-y-auto">
+
        {loading ? (
          <div className="flex flex-col justify-center items-center py-20">
            <div className="relative">
@@ -190,9 +191,9 @@ const fetchUserReport = async (item) => {
            <thead className="bg-gray-700">
              <tr>
                {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Reports'].map((heading) => (
-                 <th key={heading} className="py-1 text-center font-semibold border-b border-r  border-gray-600 font-serif">
-                   {heading}
-                 </th>
+               <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
+                  {heading}
+                </th>
                ))}
              </tr>
            </thead>
@@ -222,12 +223,60 @@ const fetchUserReport = async (item) => {
        )}
      </div>
 
-{reportModalOpen && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
-    <div className="relative w-full max-w-6xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6">
 
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
+
+
+
+
+
+ 
+   {/* Pagination UI */}
+   <div className="custom-pagination-container flex justify-center mt-4">
+     <nav aria-label="Page navigation example">
+       <ul className="pagination">
+         <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
+           <a onClick={goToPrevPage} className="page-link" aria-label="Previous">
+             <span aria-hidden="true">«</span>
+           </a>
+         </li>
+         {pageNumbers.map((num, index) => (
+           <li className={`page-item ${num === currentpage ? 'active' : ''}`} key={index}>
+             {num === '...' ? (
+               <span className="page-link">...</span>
+             ) : (
+               <span
+                 onClick={() => setCurrentpage(num)}
+                 className="page-link"
+                 style={{
+                   backgroundColor: currentpage === num ? '#00b6f0' : 'white',
+                   color: currentpage === num ? 'white' : 'black',
+                   cursor: 'pointer'
+                 }}
+               >
+                 {num}
+               </span>
+             )}
+           </li>
+         ))}
+         <li className={`page-item ${currentpage === npage ? 'disabled' : ''}`}>
+           <a onClick={goToNextPage} className="page-link" aria-label="Next">
+             <span aria-hidden="true">»</span>
+           </a>
+         </li>
+       </ul>
+     </nav>
+   </div>  
+ </div>
+ 
+
+
+{reportModalOpen && (
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
+    {/* Modal box with max height and flex column */}
+    <div className="relative w-full max-w-6xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
+
+      {/* Header stays sticky */}
+      <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10 flex-shrink-0">
         <h3 className="text-xl font-bold text-gray-800">
           {selectedCompany ? `Reports for ${selectedCompany}` : "User Report List"}
         </h3>
@@ -246,30 +295,32 @@ const fetchUserReport = async (item) => {
 
       {/* Content */}
       {!selectedCompany ? (
-        // Step 1: Show only company names clickable
         selectedUserReports.length === 0 ? (
           <p className="text-gray-600 text-center">No reports found.</p>
         ) : (
-          <div className="space-y-2 max-h-[75vh] overflow-y-auto pr-2">
-         {selectedUserReports.map((report, idx) => {
-  const latestDate = new Date(report.reportDate).toLocaleDateString();
-
-  return (
-    <button
-      key={report._id}
-      className="w-full text-left p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
-      onClick={() => {
-        setSelectedCompany(report.companyName);
-        setLoadingReports(true);
-        setCompanyReports([report]);
-        setLoadingReports(false);
-      }}
-    >
-      <p className="font-semibold text-gray-800">{report.companyName}</p>
-      <p className="text-sm text-gray-600">Report: {latestDate}</p>
-    </button>
-  );
-})}
+          // Scrollable container only for buttons list
+          <div
+            className="space-y-2 overflow-y-auto pr-2"
+            style={{ maxHeight: 'calc(90vh - 4rem)' }} // subtract header height approx
+          >
+            {selectedUserReports.map((report) => {
+              const latestDate = new Date(report.reportDate).toLocaleDateString();
+              return (
+                <button
+                  key={report._id}
+                  className="w-full text-left p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
+                  onClick={() => {
+                    setSelectedCompany(report.companyName);
+                    setLoadingReports(true);
+                    setCompanyReports([report]);
+                    setLoadingReports(false);
+                  }}
+                >
+                  <p className="font-semibold text-gray-800">{report.companyName}</p>
+                  <p className="text-sm text-gray-600">Report: {latestDate}</p>
+                </button>
+              );
+            })}
 
 
           </div>
@@ -383,50 +434,6 @@ const fetchUserReport = async (item) => {
 
 
 
-
-
-
- 
-   {/* Pagination UI */}
-   <div className="custom-pagination-container flex justify-center mt-4">
-     <nav aria-label="Page navigation example">
-       <ul className="pagination">
-         <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
-           <a onClick={goToPrevPage} className="page-link" aria-label="Previous">
-             <span aria-hidden="true">«</span>
-           </a>
-         </li>
-         {pageNumbers.map((num, index) => (
-           <li className={`page-item ${num === currentpage ? 'active' : ''}`} key={index}>
-             {num === '...' ? (
-               <span className="page-link">...</span>
-             ) : (
-               <span
-                 onClick={() => setCurrentpage(num)}
-                 className="page-link"
-                 style={{
-                   backgroundColor: currentpage === num ? '#00b6f0' : 'white',
-                   color: currentpage === num ? 'white' : 'black',
-                   cursor: 'pointer'
-                 }}
-               >
-                 {num}
-               </span>
-             )}
-           </li>
-         ))}
-         <li className={`page-item ${currentpage === npage ? 'disabled' : ''}`}>
-           <a onClick={goToNextPage} className="page-link" aria-label="Next">
-             <span aria-hidden="true">»</span>
-           </a>
-         </li>
-       </ul>
-     </nav>
-   </div>
- 
-   
- </div>
- 
    </div>
  
    

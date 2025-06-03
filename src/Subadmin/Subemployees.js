@@ -12,7 +12,7 @@ export const Subemployees = () => {
      const [sidebarOpen, setSidebarOpen] = useState(false);
      const [searchQuery, setSearchQuery] = useState('');
     const [currentpage, setCurrentpage] = useState(1);
-    const limit = 10;
+    const limit = 20;
    
   
   
@@ -194,7 +194,7 @@ export const Subemployees = () => {
   
     
   return (
-      <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
+      <div className="flex flex-col md:flex-row h-auto w-screen bg-gray-900">
     
           {/* side bar button */}
         <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
@@ -221,16 +221,17 @@ export const Subemployees = () => {
           <Subsidebar />
         </div>
     
-        <div className="flex-1 p-6 overflow-y-auto">
-        <h2 className="text-white text-2xl sm:text-3xl mb-6 -mt-2 sm:-mt-4 font-bold tracking-wide">
-              Employees List
+         <div className="flex-1 p-6 flex flex-col">
+  <h2
+    className="text-white text-2xl sm:text-3xl mb-2  font-bold tracking-wide sticky top-0 bg-gray-900 z-30"
+  >       Employees List
             </h2>
       {/* The rest of your component (search bar, table, pagination, modals, etc.) remains exactly the same */}
     
       {/* Search Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-0 z-20 mb-4">
-          <input
-            className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0 mt-2"
+      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-[3.75rem] z-20 mb-4">
+    <input
+      className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0 mt-2"
             placeholder="Search Employee..."
             value={searchQuery}
             onChange={handleSearchChange}
@@ -245,8 +246,8 @@ export const Subemployees = () => {
         </div>
     
        {/* Table Section */}
-       <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700">
-        
+       <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 flex-1 max-h-[calc(100vh-8rem)] overflow-y-auto">
+
           {loading ? (
             <div className="flex flex-col justify-center items-center py-20">
               <div className="relative">
@@ -260,9 +261,9 @@ export const Subemployees = () => {
               <thead className="bg-gray-700">
                 <tr>
                   {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Actions'].map((heading) => (
-                    <th key={heading} className="py-1 text-center font-semibold border-b border-r  border-gray-600 font-serif">
-                      {heading}
-                    </th>
+                   <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
+                  {heading}
+                </th>
                   ))}
                 </tr>
               </thead>
