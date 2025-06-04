@@ -5,7 +5,7 @@ import profilePhoto from '../assets/images/profilephoto.jpg';
  
 
 const Subsidebar = () => {
-const navigate=useNavigate()
+
  
 
   useEffect(() => {
@@ -23,42 +23,6 @@ const navigate=useNavigate()
     setToken(token)
   }
 
-  function Logout() {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-  
-    const raw = JSON.stringify({
-      refreshToken: token,
-      email: myData?.email
-    });
-  
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow"
-    };
-  
-    fetch("https://tracking-backend-admin.vercel.app/v1/subAdmin/logoutSubAdmin", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        if(result.success == true){
-          alert("you are logged out ")
-          localStorage.removeItem('token');
-          localStorage.removeItem('user')
-          localStorage.removeItem('ruser')
-          navigate('/'); 
-        }else{
-          console.error(result)
-        }
-      
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Logout failed.");
-      });
-  }
   
   return (
     <div className="sidebar">
@@ -79,18 +43,10 @@ const navigate=useNavigate()
       <li><NavLink to="/Subemployees" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user"></i>Employees</NavLink></li>
       <li><NavLink to="/Subreports" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard"></i> Reports</NavLink></li>
       <li><NavLink to="/Subcheckin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note"></i> Logs</NavLink></li>
-       <li><NavLink to="/Settings" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa	fa-cog"></i> Settings</NavLink></li>
     </ul>
 
    {/* Logout Button */}
-   <div className="logout-section">
-        <button
-          className="logout-button"
-          onClick={() =>  Logout()}
-        >
-          <i className="fa fa-sign-out"></i> Logout
-        </button>
-      </div>
+    
 
       
    

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {  Tooltip, ResponsiveContainer,  Cell, Pie, PieChart } from 'recharts';
+import { FaCog } from 'react-icons/fa'; // Add this import at the top
 
  
  
@@ -9,13 +10,70 @@ import Subsidebar from './Subsidebar';
  
 
 const Subdashboard = () => {
- 
+ const [showDropdown, setShowDropdown] = useState(false);
  const [loading,setLoading]=useState(true) 
   const [userCount, setUserCount] = useState(0);
   const [companyCount, setCompanyCount] = useState(0);
     const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const [taskChartData, setTaskChartData] = useState([]);
+   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  
+ useEffect(() => {
+    Get()
+  }, [])
+
+  const [myData, setMyData] =  useState(null)
+  const [token, setToken] = useState('')
+
+  function Get() {
+    const data = localStorage.getItem('user')
+    const token = localStorage.getItem('rtoken')
+    const ud = JSON.parse(data)
+    setMyData(ud)
+    setToken(token)
+  }
+
+
+
+function Logout() {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    const raw = JSON.stringify({
+      refreshToken: token,
+      email: myData?.email
+    });
+  
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+  
+    fetch("https://tracking-backend-admin.vercel.app/v1/subAdmin/logoutSubAdmin", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if(result.success == true){
+          localStorage.removeItem('token');
+          localStorage.removeItem('user')
+          localStorage.removeItem('ruser')
+          navigate('/'); 
+        }else{
+          console.error(result)
+        }
+      
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Logout failed.");
+      });
+  }
+  
+
+
 
 
   function fetchUsers (){
@@ -119,10 +177,49 @@ function fetchCompany() {
     {/* Main Content */}
     <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
       <div className="bg-gray-900 p-4 sm:p-6 rounded-lg shadow-lg min-h-screen ">
-        <h2 className="text-white text-2xl sm:text-3xl mb-6 -mt-2 sm:-mt-4 font-bold tracking-wide">
-            Dashboard
-        </h2>
-  
+      <div className="flex justify-between items-center mb-6 -mt-2 sm:-mt-4">
+  <h2 className="text-white text-2xl sm:text-3xl font-bold tracking-wide">
+    Dashboard
+  </h2>
+
+  {/* Settings Dropdown */}
+  <div className="relative">
+    <button
+      onClick={() => setShowDropdown(prev => !prev)}
+      className="text-white text-xl focus:outline-none"
+    >
+      <FaCog className="text-2xl" />
+    </button>
+
+    {showDropdown && (
+      <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+        <ul className="py-1 text-gray-700">
+          <li
+            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            onClick={() => navigate('/profile')}
+          >
+            Profile
+          </li>
+          <li
+            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            onClick={() => navigate('/forgetpassword')}
+          >
+            Forget Password
+          </li>
+          <li
+            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            onClick={() => {
+              setShowLogoutModal(true)
+            }}
+          >
+            Logout
+          </li>
+        </ul>
+      </div>
+    )}
+  </div>
+</div>
+
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* Users Card */}
@@ -157,7 +254,8 @@ function fetchCompany() {
             </div>
           </div>
         </div>
-  
+ 
+
         {/* Graph */}
         {/* <div className="mt-6">
           <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
@@ -228,6 +326,32 @@ function fetchCompany() {
     </div>
   </div>
 </div>
+
+
+      {/* Confirm Delete Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-1 bg-black bg-opacity-75 flex items-start justify-center z-50 pt-20">
+          <div className="bg-white rounded-lg p-6 w-128 shadow-lg">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800">Confirm Logout</h2>
+            <p className="text-gray-600 mb-6">Are you sure you want to Logout?</p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-600 transition text-white text-sm sm:text-base"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => Logout()}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm sm:text-base"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
 
       </div>
