@@ -7,6 +7,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   
   const passReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
   const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -18,6 +20,7 @@ function Login() {
       userType: 'admin', // default selected
     },
     onSubmit: (values) => {
+      setLoading(true);
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -41,11 +44,12 @@ function Login() {
       fetch(loginUrl, requestOptions)
         .then((response) => response.json())
         .then((result) => {
+              setLoading(false);
           if (result.success === true) {
             localStorage.setItem("token", result.token.access.token);
             localStorage.setItem("rtoken", result.token.refresh.token);
             localStorage.setItem("user", JSON.stringify(result.user));
-            // navigate("/dashboard");
+            navigate("/dashboard");
             if (values.userType === "subAdmin") {
               navigate("/Subdashboard");
             } else {
@@ -55,7 +59,10 @@ function Login() {
             alert("Login failed: Incorrect credentials");
           }
         })
-        .catch((error) => console.error(error));
+      .catch((error) => {
+      console.error(error);
+      setLoading(false);  
+    });
     },
 
     validationSchema: yup.object({
@@ -64,7 +71,21 @@ function Login() {
     })
   });
 
+const LoaderPrompt = () => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-40 backdrop-blur-sm">
+    <div className="flex flex-col items-center space-y-3">
+      <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      <p className="text-2xl text-white">Logging in...</p>
+    </div>
+  </div>
+);
+
+
+
+
   return (
+    <>
+       {loading && <LoaderPrompt />}
   <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-400 px-2 sm:px-4">
    <div className="bg-gray-100 w-full max-w-2xl rounded-xl shadow-lg p-6 sm:p-16">
   <form onSubmit={formik.handleSubmit}>
@@ -138,7 +159,9 @@ function Login() {
         <button
           type="submit"
           className="w-full py-2 rounded-full bg-gray-900 text-white font-semibold transition duration-300 hover:opacity-90"
-        >
+        
+       >
+          
           LOGIN
         </button>
 
@@ -159,6 +182,7 @@ function Login() {
   </form>
     </div>
 </div>
+</>
 
   );
 }

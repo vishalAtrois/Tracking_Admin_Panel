@@ -169,7 +169,7 @@ const fetchUserReport = async (item) => {
   </div>
 
   {/* Scrollable Table Container */}
-  <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 flex-1 max-h-[calc(100vh-8rem)] overflow-y-auto">
+  <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700">
        {loading ? (
          <div className="flex flex-col justify-center items-center py-20">
            <div className="relative">

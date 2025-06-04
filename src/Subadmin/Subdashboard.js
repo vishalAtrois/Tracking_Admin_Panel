@@ -120,7 +120,7 @@ function fetchCompany() {
     <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
       <div className="bg-gray-900 p-4 sm:p-6 rounded-lg shadow-lg min-h-screen ">
         <h2 className="text-white text-2xl sm:text-3xl mb-6 -mt-2 sm:-mt-4 font-bold tracking-wide">
-          Welcome to Dashboard
+            Dashboard
         </h2>
   
         {/* Cards Grid */}
