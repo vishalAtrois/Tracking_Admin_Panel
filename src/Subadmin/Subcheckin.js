@@ -150,8 +150,8 @@ function GetReports(item) {
   
     
   return (
-      <LoadScript googleMapsApiKey="AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE">
-      <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
+    <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
+        
     
           {/* side bar button */}
         <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
@@ -246,8 +246,8 @@ function GetReports(item) {
             </table>
           )}
         </div>
-
 {/* logs modal  */}
+<LoadScript googleMapsApiKey="AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE">
  {showLogsModal && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
     <div className="relative w-full max-w-6xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
@@ -419,7 +419,7 @@ function GetReports(item) {
     </div>
   </div>
 )}
-
+</LoadScript>
 
 
 
@@ -461,8 +461,8 @@ function GetReports(item) {
         </nav>
       </div>
     </div>
+            
       </div>
-            </LoadScript>
     
   )
 }

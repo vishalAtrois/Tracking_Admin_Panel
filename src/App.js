@@ -17,6 +17,7 @@ import { Subemployees } from './Subadmin/Subemployees';
 import Subdashboard from './Subadmin/Subdashboard';
 import { Subcheckin } from './Subadmin/Subcheckin';
 import { Logs } from './pages/Logs';
+import { Setting } from './Subadmin/Setting';
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
               <Route path="/Subreports" element={<Subreports />} />
               <Route path='/Subemployees' element={<Subemployees />} />
               <Route path='/Subcheckin' element={<Subcheckin />} />
+                <Route path='/Settings' element={<Setting />} />
           </Routes>
     </Router>
   );

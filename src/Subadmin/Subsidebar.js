@@ -79,6 +79,7 @@ const navigate=useNavigate()
       <li><NavLink to="/Subemployees" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user"></i>Employees</NavLink></li>
       <li><NavLink to="/Subreports" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard"></i> Reports</NavLink></li>
       <li><NavLink to="/Subcheckin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note"></i> Logs</NavLink></li>
+       <li><NavLink to="/Settings" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa	fa-cog"></i> Settings</NavLink></li>
     </ul>
 
    {/* Logout Button */}
