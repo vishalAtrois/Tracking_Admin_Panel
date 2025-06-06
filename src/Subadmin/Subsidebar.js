@@ -33,16 +33,18 @@ const Subsidebar = () => {
       {/* <img className="profile-img" src={profilePhoto} alt="Profile" /> */}
       <div className="profile-info">
         <div className="profile-name">{myData?.fullName}</div>
-        <div className="profile-role">Admin</div>
+        <div className="profile-role">Sub Admin</div>
       </div>
     </div>
 
     <ul className="nav-list">
       <li><NavLink to="/Subdashboard" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tachometer"></i> Dashboard</NavLink></li>
       <li><NavLink to="/Suballtasks" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tasks"></i> All Tasks</NavLink></li>
+      <li><NavLink to="/Subreports" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard"></i>Daily Reports</NavLink></li>
+      <li><NavLink to="/Subcheckin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note"></i> Work Hours</NavLink></li>
       <li><NavLink to="/Subemployees" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user"></i>Employees</NavLink></li>
-      <li><NavLink to="/Subreports" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard"></i> Reports</NavLink></li>
-      <li><NavLink to="/Subcheckin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note"></i> Logs</NavLink></li>
+      <li><NavLink to="/Subnotification" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell"></i> Notifications</NavLink></li>
+        
     </ul>
 
    {/* Logout Button */}

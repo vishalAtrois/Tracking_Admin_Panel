@@ -44,6 +44,7 @@ const fetchUserReport = async (item) => {
 };
 
 
+
  
  
    function fetchUsers() {
@@ -121,7 +122,7 @@ const fetchUserReport = async (item) => {
  
  
    return ( 
-     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
+     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900 overflow-x-hidden">
  
        {/* side bar button */}
      <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
@@ -149,7 +150,7 @@ const fetchUserReport = async (item) => {
      </div>
  
    
-   <div className="flex-1 p-3 flex flex-col">
+   <div className="flex-1 p-3 flex flex-col overflow-y-auto max-h-screen">
 
   {/* Search Bar */}
   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-[3.75rem] z-20 mb-2">
@@ -169,7 +170,7 @@ const fetchUserReport = async (item) => {
   </div>
 
   {/* Scrollable Table Container */}
-  <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700">
+  <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 max-w-full">
        {loading ? (
          <div className="flex flex-col justify-center items-center py-20">
            <div className="relative">
@@ -179,7 +180,7 @@ const fetchUserReport = async (item) => {
            <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading user...</p>
          </div>
        ) : (
-         <table className="min-w-full table-auto bg-gray-900 text-white">
+       <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
            <thead className="bg-gray-700">
              <tr>
                {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Reports'].map((heading) => (
@@ -266,14 +267,12 @@ const fetchUserReport = async (item) => {
  
    
  </div>
-
 {reportModalOpen && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
-    {/* Modal box with max height and flex column */}
-    <div className="relative w-full max-w-6xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
+    <div className="relative w-full max-w-6xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6">
 
-      {/* Header stays sticky */}
-      <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10 flex-shrink-0">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
         <h3 className="text-xl font-bold text-gray-800">
           {selectedCompany ? `Reports for ${selectedCompany}` : "User Report List"}
         </h3>
@@ -348,85 +347,90 @@ const fetchUserReport = async (item) => {
 </button>
 
 
-            {companyReports.map((report, idx) => (
-              <div key={report._id} className="border p-2 rounded-lg shadow bg-gray-50 space-y-4">
-                {/* Company & Address */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="border px-2 py-2 rounded bg-white">
-                    <p className="text-sm text-gray-700 font-extrabold">Company</p>
-                    <p className="text-gray-900">{report.companyName}</p>
-                  </div>
-                  <div className="border px-2 py-2 rounded bg-white">
-                    <p className="text-sm text-gray-700 font-extrabold">Address</p>
-                    <p className="text-gray-900">{report.address}</p>
-                  </div>
-                </div>
+           <div className="max-h-[calc(100vh-8rem)] overflow-y-auto px-2 sm:px-4 space-y-4">
+  {companyReports.map((report, idx) => (
+    <div key={report._id} className="border p-3 rounded-lg shadow bg-gray-50 space-y-4">
+      {/* Company & Address */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="border px-2 py-2 rounded bg-white">
+          <p className="text-sm text-gray-700 font-extrabold">Company</p>
+          <p className="text-gray-900">{report.companyName}</p>
+        </div>
+        <div className="border px-2 py-2 rounded bg-white">
+          <p className="text-sm text-gray-700 font-extrabold">Address</p>
+          <p className="text-gray-900">{report.address}</p>
+        </div>
+      </div>
 
-                {/* Business Size & Report Time */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="border rounded px-2 py-2 bg-white">
-                    <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
-                    <p className="text-gray-900">{report.businessSize}</p>
-                  </div>
-                  <div className="border rounded px-2 py-2 bg-white">
-                    <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
-                    <p className="text-gray-900">{report.reportTime}</p>
-                  </div>
-                </div>
+      {/* Business Size & Report Time */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="border rounded px-2 py-2 bg-white">
+          <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
+          <p className="text-gray-900">{report.businessSize}</p>
+        </div>
+        <div className="border rounded px-2 py-2 bg-white">
+          <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
+          <p className="text-gray-900">{report.reportTime}</p>
+        </div>
+      </div>
 
-                {/* Report Date & Notes */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="border rounded px-2 py-2 bg-white">
-                    <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
-                    <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
-                  </div>
-                  <div className="border rounded px-2 py-2 bg-white">
-                    <p className="text-sm text-gray-700 font-extrabold">Notes</p>
-                    <p className="text-gray-900">{report.notes}</p>
-                  </div>
-                </div>
+      {/* Report Date & Notes */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="border rounded px-2 py-2 bg-white">
+          <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
+          <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
+        </div>
+        <div className="border rounded px-2 py-2 bg-white">
+          <p className="text-sm text-gray-700 font-extrabold">Notes</p>
+          <p className="text-gray-900">{report.notes}</p>
+        </div>
+      </div>
 
-                {/* File */}
-                {report.file?.url && (
-                  <div className="border rounded px-2 py-2 bg-white">
-                    <p className="text-sm text-gray-700 font-extrabold">File</p>
-                    <a
-                      href={report.file.url}
-                      download
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline break-all"
-                    >
-                      {decodeURIComponent(report.file.name)}
-                    </a>
-                  </div>
-                )}
+      {/* File */}
+      {report.file?.url && (
+        <div className="border rounded px-2 py-2 bg-white">
+          <p className="text-sm text-gray-700 font-extrabold">File</p>
+          <a
+            href={report.file.url}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline break-all"
+          >
+            {decodeURIComponent(report.file.name)}
+          </a>
+        </div>
+      )}
 
-                {/* Images */}
-                {report.images?.length > 0 && (
-                  <div className="border rounded px-2 py-2 bg-white">
-                    <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
-                    <div className="flex gap-3 overflow-x-auto">
-                      {report.images.map((imgUrl, index) => (
-                        <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
-                          <img
-                            src={imgUrl}
-                            alt={`Report ${idx} Image ${index}`}
-                            className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
-                          />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+      {/* Images */}
+      {report.images?.length > 0 && (
+        <div className="border rounded px-2 py-2 bg-white">
+          <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
+          <div className="flex gap-3 overflow-x-auto">
+            {report.images.map((imgUrl, index) => (
+              <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
+                <img
+                  src={imgUrl}
+                  alt={`Report ${idx} Image ${index}`}
+                  className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
+                />
+              </a>
             ))}
+          </div>
+        </div>
+      )}
+    </div>
+  ))}
+</div>
+
           </div>
         )
       )}
     </div>
   </div>
 )}
+
+
 
 
 

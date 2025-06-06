@@ -146,7 +146,7 @@ function GetReports(item) {
     
   return (
     
-      <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
+      <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900 overflow-x-hidden">
     
           {/* side bar button */}
         <div className="md:hidden p-2 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
@@ -173,7 +173,7 @@ function GetReports(item) {
            <Sidebar />
         </div>
     
-     <div className="flex-1 p-3 flex flex-col">
+<div className="flex-1 p-3 flex flex-col overflow-y-auto max-h-screen">
 
   
 
@@ -195,7 +195,7 @@ function GetReports(item) {
   </div>
 
   {/* Scrollable Table Container */}
-    <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700">
+    <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 max-w-full">
           {loading ? (
             <div className="flex flex-col justify-center items-center py-20">
               <div className="relative">
@@ -205,7 +205,7 @@ function GetReports(item) {
               <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading user...</p>
             </div>
           ) : (
-            <table className="min-w-full table-auto bg-gray-900 text-white">
+           <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
               <thead className="bg-gray-700">
                 <tr>
                   {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Logs'].map((heading) => (
