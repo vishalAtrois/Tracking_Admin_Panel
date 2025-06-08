@@ -33,23 +33,27 @@ const addExtraField = () => {
   setExtraFields([...extraFields, { key: "", value: "" }]);
 };
 
+const removeImage = (indexToRemove) => {
+  const updatedImages = newReportImages.filter((_, i) => i !== indexToRemove);
+  setNewReportImages(updatedImages);
+};
 
 
-const handleImageChange = (e) => {
-  const files = Array.from(e.target.files);
+const handleImageChange = (e, index) => {
+  const file = e.target.files[0]; // Only allow one image per box
+  if (!file) return;
 
-  if (files.length > 5) {
+  const updatedImages = [...newReportImages];
+  
+  if (newReportImages.length >= 5) {
     alert("You can upload up to 5 images only.");
     return;
   }
 
-  if (files.length < 1) {
-    alert("Please select at least 1 image.");
-    return;
-  }
-
-  setNewReportImages(files);
+  updatedImages[index] = file;
+  setNewReportImages(updatedImages);
 };
+
 const [newReport, setNewReport] = useState({
   companyName: '',
   address: '',
@@ -471,13 +475,58 @@ setUserId(item)
 </div>
 
 
-<input
-  type="file"
-    className="w-full p-2 border rounded"
-  accept="image/*"
-  multiple
-  onChange={handleImageChange}
-/>
+<div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+  {newReportImages.map((img, index) => (
+    <div
+      key={index}
+      className="relative group rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+    >
+      <label htmlFor={`image-upload-${index}`}>
+        <img
+          src={URL.createObjectURL(img)}
+          alt={`preview-${index}`}
+          className="w-full h-40 object-cover rounded-lg transform group-hover:scale-105 transition-transform duration-300"
+        />
+      </label>
+      <input
+        type="file"
+        id={`image-upload-${index}`}
+        accept="image/*"
+        onChange={(e) => handleImageChange(e, index)}
+        className="absolute inset-0 opacity-0 cursor-pointer"
+      />
+      <button
+        type="button"
+        onClick={() => removeImage(index)}
+        className="absolute top-2 right-2 bg-white bg-opacity-70 rounded-full p-1 shadow-md hover:bg-red-500 hover:text-white transition-colors duration-300"
+        aria-label="Remove image"
+      >
+        ✕
+      </button>
+    </div>
+  ))}
+
+  {newReportImages.length < 5 && (
+    <div className="relative group rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center h-40 cursor-pointer hover:border-blue-500 transition-colors duration-300">
+      <label htmlFor={`image-upload-new`} className="flex flex-col items-center justify-center text-gray-500 hover:text-blue-500 select-none">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>Add Image</span>
+      </label>
+      <input
+        type="file"
+        id={`image-upload-new`}
+        accept="image/*"
+        onChange={(e) => handleImageChange(e, newReportImages.length)}
+        className="absolute inset-0 opacity-0 cursor-pointer"
+      />
+    </div>
+  )}
+</div>
+
+
+
        <input
   type="text"
   placeholder="YYYY-MM-DD"
