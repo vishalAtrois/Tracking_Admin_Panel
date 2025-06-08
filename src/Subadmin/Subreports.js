@@ -63,23 +63,11 @@ const [newReport, setNewReport] = useState({
 
 
 
-const AddReport = async (id, reportData, file, images) => {
-    const token = localStorage.getItem('token');
-  console.log("tokenid ",token.id)
+const AddReport = async (id, reportData, file, images, extraFields) => {
+  const token = localStorage.getItem('token');
   const formData = new FormData();
 
-  // Log each field value
-  console.log("▶️ Submitting report for user ID:", id);
-  console.log("📋 Title:", reportData.title);
-  console.log("🏢 Company Name:", reportData.companyName);
-  console.log("📍 Address:", reportData.address);
-  console.log("📏 Business Size:", reportData.businessSize);
-  console.log("⏰ Report Time:", reportData.reportTime?.slice(0, 5));
-  console.log("📅 Report Date:", reportData.reportDate);
-  console.log("📝 Notes:", reportData.notes);
-  console.log("📎 File:", file);
-  console.log("🖼️ Images:", images);
-
+  // Add base fields
   formData.append("title", reportData.title);
   formData.append("companyName", reportData.companyName);
   formData.append("address", reportData.address);
@@ -88,13 +76,21 @@ const AddReport = async (id, reportData, file, images) => {
   formData.append("reportDate", reportData.reportDate);
   formData.append("notes", reportData.notes);
 
+  // Add file if present
   if (file) {
     formData.append("file", file);
   }
 
-  images.forEach((img, index) => {
+  // Add images
+  images.forEach((img) => {
     formData.append("images", img);
-    console.log(`🖼️ Image ${index + 1}:`, img.name);
+  });
+
+  // ✅ Add extra fields (excluding empty keys or values)
+  extraFields.forEach(({ key, value }) => {
+    if (key && value) {
+      formData.append(key, value);
+    }
   });
 
   try {
@@ -109,10 +105,9 @@ const AddReport = async (id, reportData, file, images) => {
       }
     );
 
-    const resultText = await response.text(); // get raw text
-    console.log("📨 Raw Response Text:", resultText);
-
+    const resultText = await response.text();
     let result;
+
     try {
       result = JSON.parse(resultText);
     } catch (e) {
@@ -123,10 +118,8 @@ const AddReport = async (id, reportData, file, images) => {
 
     if (result.success) {
       alert("✅ Report created successfully");
-      console.log("✅ Response Data:", result);
     } else {
       alert("❌ Failed to create report");
-      console.error("❌ API Error:", result);
     }
   } catch (error) {
     alert("❌ Network or fetch error");
@@ -158,7 +151,7 @@ const handleCreateReport = async () => {
     return;
   }
 
-  await AddReport(selectedUser.id, newReport, newReportFile, newReportImages);
+  await AddReport(selectedUser.id, newReport, newReportFile, newReportImages,extraFields);
 
   // Reset form and state after success
   setShowAddReportModal(false);
@@ -173,6 +166,7 @@ const handleCreateReport = async () => {
   });
   setNewReportFile(null);
   setNewReportImages([]);
+  setExtraFields([{ key: "", value: "" }]);
 };
 
  
@@ -417,15 +411,18 @@ setUserId(item)
             setNewReport({ ...newReport, address: e.target.value })
           }
         />
-        <input
-          type="text"
-          placeholder="Business Size"
-          className="w-full p-2 border rounded"
-          value={newReport.businessSize}
-          onChange={(e) =>
-            setNewReport({ ...newReport, businessSize: e.target.value })
-          }
-        />
+       <select
+  className="w-full p-2 border rounded bg-white text-gray-700"
+  value={newReport.businessSize}
+  onChange={(e) =>
+    setNewReport({ ...newReport, businessSize: e.target.value })
+  }
+>
+  <option value="">Select Business Size</option>
+  <option value="Small Business">Small Business</option>
+  <option value="Medium Business">Medium Business</option>
+  <option value="Large Business">Large Business</option>
+</select>
         <input
           type="time"
           className="w-full p-2 border rounded"
@@ -441,15 +438,42 @@ setUserId(item)
   value={newReport.title}
   onChange={(e) => setNewReport({ ...newReport, title: e.target.value })}
 />
-        <input
-  type="file"
-  accept=".pdf,.doc,.docx"
-  onChange={(e) => setNewReportFile(e.target.files[0])}
-  className="w-full p-2 border rounded"
-/>
+<div className="w-full">
+  <label className="block mb-1 text-sm font-medium text-gray-700">
+    Upload Report File (.pdf, .doc, .docx)
+  </label>
+  <div className="relative">
+    <input
+      type="file"
+      accept=".pdf,.doc,.docx"
+      id="reportFileInput"
+      onChange={(e) => setNewReportFile(e.target.files[0])}
+      className="hidden"
+    />
+    <label
+      htmlFor="reportFileInput"
+      className="flex items-center justify-between px-4 py-2 bg-white border rounded cursor-pointer hover:bg-gray-100 transition"
+    >
+      <span className="text-gray-700">
+        {newReportFile ? newReportFile.name : 'Choose File'}
+      </span>
+      <svg
+        className="w-5 h-5 text-blue-600"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v16h16V4H4zm4 8h8M8 8h8m-8 8h8" />
+      </svg>
+    </label>
+  </div>
+</div>
+
 
 <input
   type="file"
+    className="w-full p-2 border rounded"
   accept="image/*"
   multiple
   onChange={handleImageChange}
@@ -501,7 +525,7 @@ setUserId(item)
           </button>
         </div>
 
-        
+
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -528,36 +552,41 @@ setUserId(item)
 {reportModalOpen && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
     <div className="relative w-full max-w-6xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6">
- <button
-  onClick={() => {
-    setSelectedUser(userId);  
-    setReportModalOpen(false); // Close report view
-    setShowAddReportModal(true); // Then open add report modal
-  }}
-  className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
->
-  Add Report
-</button>
 
-
-
-      {/* Header */}
+      {/* Header with Title, Add Button and Close Button */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
         <h3 className="text-xl font-bold text-gray-800">
           {selectedCompany ? `Reports for ${selectedCompany}` : "User Report List"}
         </h3>
-        <button
-          className="text-red-500 text-3xl font-bold"
-          onClick={() => {
-            setReportModalOpen(false);
-            setSelectedCompany(null);
-            setCompanyReports([]);
-          }}
-          title="close"
-        >
-          &times;
-        </button>
+
+        <div className="flex items-center gap-4">
+          {/* Add Report Button */}
+          <button
+            onClick={() => {
+              setSelectedUser(userId);
+              setReportModalOpen(false);
+              setShowAddReportModal(true);
+            }}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          >
+            + Add Report
+          </button>
+
+          {/* Close Button */}
+          <button
+            className="text-red-500 text-3xl font-bold"
+            onClick={() => {
+              setReportModalOpen(false);
+              setSelectedCompany(null);
+              setCompanyReports([]);
+            }}
+            title="Close"
+          >
+            &times;
+          </button>
+        </div>
       </div>
+
 
       {/* Content */}
       {!selectedCompany ? (
@@ -618,79 +647,133 @@ setUserId(item)
 
 
            <div className="max-h-[calc(100vh-8rem)] overflow-y-auto px-2 sm:px-4 space-y-4">
-  {companyReports.map((report, idx) => (
-    <div key={report._id} className="border p-3 rounded-lg shadow bg-gray-50 space-y-4">
-      {/* Company & Address */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+{companyReports.map((report, idx) => (
+  <div key={report._id} className="border p-3 rounded-lg shadow bg-gray-50 space-y-4">
+    
+    {/* Title */}
+    <div className="text-lg font-bold text-gray-800 border-b pb-1">
+      Report {idx + 1}
+    </div>
+
+    {/* Company & Address */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {report.companyName && (
         <div className="border px-2 py-2 rounded bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Company</p>
           <p className="text-gray-900">{report.companyName}</p>
         </div>
+      )}
+      {report.address && (
         <div className="border px-2 py-2 rounded bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Address</p>
           <p className="text-gray-900">{report.address}</p>
         </div>
-      </div>
+      )}
+    </div>
 
-      {/* Business Size & Report Time */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {/* Business Size & Report Time */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {report.businessSize && (
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
           <p className="text-gray-900">{report.businessSize}</p>
         </div>
+      )}
+      {report.reportTime && (
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
           <p className="text-gray-900">{report.reportTime}</p>
         </div>
-      </div>
+      )}
+    </div>
 
-      {/* Report Date & Notes */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {/* Report Date & Notes */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {report.reportDate && (
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
           <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
         </div>
+      )}
+      {report.notes && (
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Notes</p>
           <p className="text-gray-900">{report.notes}</p>
         </div>
-      </div>
-
-      {/* File */}
-      {report.file?.url && (
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">File</p>
-          <a
-            href={report.file.url}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline break-all"
-          >
-            {decodeURIComponent(report.file.name)}
-          </a>
-        </div>
-      )}
-
-      {/* Images */}
-      {report.images?.length > 0 && (
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
-          <div className="flex gap-3 overflow-x-auto">
-            {report.images.map((imgUrl, index) => (
-              <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
-                <img
-                  src={imgUrl}
-                  alt={`Report ${idx} Image ${index}`}
-                  className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
-                />
-              </a>
-            ))}
-          </div>
-        </div>
       )}
     </div>
-  ))}
+
+    {/* Dynamically Added Extra Fields */}
+    {Object.entries(report).map(([key, value]) => {
+      const exclude = [
+        "_id", "userId", "__v", "companyName", "address", "businessSize",
+        "reportTime", "reportDate", "notes", "file", "images"
+      ];
+      if (exclude.includes(key) || value === undefined || value === null || value === '') return null;
+
+      return (
+        <div key={key} className="border rounded px-2 py-2 bg-white">
+          <p className="text-sm text-gray-700 font-extrabold capitalize">
+            {key.replace(/([A-Z])/g, ' $1')}
+          </p>
+   {typeof value === 'object' && !Array.isArray(value) ? (
+  Object.entries(value).map(([innerKey, innerValue]) => (
+    <div
+      key={`${key}-${innerKey}`}
+      className="border rounded px-2 py-2 bg-white mt-2"
+    >
+      <p className="text-sm text-gray-700 font-extrabold capitalize">
+        {innerKey.replace(/([A-Z])/g, ' $1')}
+      </p>
+      <p className="text-gray-900">{String(innerValue)}</p>
+    </div>
+  ))
+) : (
+  <p className="text-gray-900">{String(value)}</p>
+)}
+
+
+        </div>
+      );
+    })}
+
+    {/* File */}
+    {report.file?.url && (
+      <div className="border rounded px-2 py-2 bg-white">
+        <p className="text-sm text-gray-700 font-extrabold">File</p>
+        <a
+          href={report.file.url}
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline break-all"
+        >
+          {decodeURIComponent(report.file.name)}
+        </a>
+      </div>
+    )}
+
+    {/* Images */}
+    {report.images?.length > 0 && (
+      <div className="border rounded px-2 py-2 bg-white">
+        <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
+        <div className="flex gap-3 overflow-x-auto">
+          {report.images.map((imgUrl, index) => (
+            <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
+              <img
+                src={imgUrl}
+                alt={`Report ${idx + 1} Image ${index + 1}`}
+                className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
+              />
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+))}
+
+
 </div>
 
           </div>
