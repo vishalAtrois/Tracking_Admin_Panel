@@ -180,7 +180,7 @@ const fetchUserReport = async (item) => {
 setUserId(item)
   try {
     const response = await fetch(
-      `https://tracking-backend-admin.vercel.app/v1/subAdmin/getReportsByUser?userId=${userId.id}`,
+      `https://tracking-backend-admin.vercel.app/v1/subAdmin/getReportsByUser?userId=${item.id}`,
       {
         method: "GET",
         headers,
