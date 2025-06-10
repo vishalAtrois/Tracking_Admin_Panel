@@ -610,16 +610,18 @@ setUserId(item)
 
         <div className="flex items-center gap-4">
           {/* Add Report Button */}
-          <button
-            onClick={() => {
-              setSelectedUser(userId);
-              setReportModalOpen(false);
-              setShowAddReportModal(true);
-            }}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-          >
-            + Add Report
-          </button>
+           {!selectedCompany && (
+      <button
+        onClick={() => {
+          setSelectedUser(userId);
+          setReportModalOpen(false);
+          setShowAddReportModal(true);
+        }}
+        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+      >
+        + Add Report
+      </button>
+    )}
 
           {/* Close Button */}
           <button
@@ -700,9 +702,9 @@ setUserId(item)
   <div key={report._id} className="border p-3 rounded-lg shadow bg-gray-50 space-y-4">
     
     {/* Title */}
-    <div className="text-lg font-bold text-gray-800 border-b pb-1">
-      Report {idx + 1}
-    </div>
+    {/* <div className="text-lg font-bold text-gray-800 border-b pb-1">
+      Report 
+    </div> */}
 
     {/* Company & Address */}
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -752,14 +754,25 @@ setUserId(item)
       )}
     </div>
 
-    {/* Dynamically Added Extra Fields */}
+    
     {Object.entries(report).map(([key, value]) => {
       const exclude = [
         "_id", "userId", "__v", "companyName", "address", "businessSize",
-        "reportTime", "reportDate", "notes", "file", "images"
+        "reportTime", "reportDate", "notes", "file", "images",
       ];
-      if (exclude.includes(key) || value === undefined || value === null || value === '') return null;
+     if (exclude.includes(key) || value === undefined || value === null || value === '') return null;
 
+  // Handle customFields separately (skip its heading)
+  if (key === "customFields" && typeof value === "object") {
+    return Object.entries(value).map(([innerKey, innerValue]) => (
+      <div key={`custom-${innerKey}`} className="border rounded px-2 py-2 bg-white">
+        <p className="text-sm text-gray-700 font-extrabold capitalize">
+          {innerKey.replace(/([A-Z])/g, ' $1')}
+        </p>
+        <p className="text-gray-900">{String(innerValue)}</p>
+      </div>
+    ));
+  }
       return (
         <div key={key} className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold capitalize">
