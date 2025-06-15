@@ -22,6 +22,8 @@ const [newReportImages, setNewReportImages] = useState([]);
 const [userId,setUserId] = useState('')
 const [selectedUser, setSelectedUser] = useState(null);
 const [extraFields, setExtraFields] = useState([{ key: "", value: "" }]);
+const [isLoading, setIsLoading] = useState(false);
+
 
 const handleExtraFieldChange = (index, field, value) => {
   const updatedFields = [...extraFields];
@@ -155,8 +157,11 @@ const handleCreateReport = async () => {
     return;
   }
 
+  setIsLoading(true); // Start loader
   await AddReport(selectedUser.id, newReport, newReportFile, newReportImages,extraFields);
+  setIsLoading(false); // Stop loader
 
+  handleCloseAddReportModal(); // This will also reset the form
   // Reset form and state after success
   setShowAddReportModal(false);
   setNewReport({
@@ -171,6 +176,24 @@ const handleCreateReport = async () => {
   setNewReportFile(null);
   setNewReportImages([]);
   setExtraFields([{ key: "", value: "" }]);
+  
+};
+
+const handleCloseAddReportModal = () => {
+  setShowAddReportModal(false);
+  setNewReport({
+    companyName: '',
+    address: '',
+    businessSize: '',
+    reportTime: '',
+    reportDate: '',
+    notes: '',
+    title: '',
+  });
+  setNewReportFile(null);
+  setNewReportImages([]);
+  setExtraFields([{ key: '', value: '' }]);
+  
 };
 
  
@@ -388,10 +411,14 @@ setUserId(item)
 {showAddReportModal && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
     <div className="relative max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6">
-  
+    {isLoading && (
+    <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-50">
+      <div className="w-12 h-12 border-4 border-blue-600 border-dashed rounded-full animate-spin"></div>
+    </div>
+  )}
       <button
     type="button"
-    onClick={() => setShowAddReportModal(false)}
+    onClick={() => handleCloseAddReportModal()}
     className="absolute top-2 right-2 text-red-600 hover:text-red-800 text-3xl font-bold"
   >
     ×
@@ -438,7 +465,7 @@ setUserId(item)
   <div className="relative w-full">
   {!newReport.reportTime && (
     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-      time
+      select time
     </span>
   )}
   <input
