@@ -389,7 +389,15 @@ setUserId(item)
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
     <div className="relative max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6">
   
-      <h2 className="text-xl font-bold mb-4">Add New Report</h2>
+      <button
+    type="button"
+    onClick={() => setShowAddReportModal(false)}
+    className="absolute top-2 right-2 text-red-600 hover:text-red-800 text-3xl font-bold"
+  >
+    ×
+  </button>
+
+  <h2 className="text-xl font-bold mb-4">Add New Report</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -427,14 +435,23 @@ setUserId(item)
   <option value="Medium Business">Medium Business</option>
   <option value="Large Business">Large Business</option>
 </select>
-        <input
-          type="time"
-          className="w-full p-2 border rounded"
-          value={newReport.reportTime}
-          onChange={(e) =>
-            setNewReport({ ...newReport, reportTime: e.target.value })
-          }
-        />
+  <div className="relative w-full">
+  {!newReport.reportTime && (
+    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+      time
+    </span>
+  )}
+  <input
+    type="time"
+    className="w-full p-2 border rounded bg-transparent text-black"
+    value={newReport.reportTime}
+    onChange={(e) =>
+      setNewReport({ ...newReport, reportTime: e.target.value })
+    }
+  />
+</div>
+
+
         <input
   type="text"
   placeholder="Title"
@@ -527,9 +544,8 @@ setUserId(item)
 
 
 
-       <input
-  type="text"
-  placeholder="YYYY-MM-DD"
+   <input
+  type="date"
   className="w-full p-2 border rounded"
   value={newReport.reportDate}
   onChange={(e) =>
@@ -576,13 +592,6 @@ setUserId(item)
 
 
         <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={() => setShowAddReportModal(false)}
-            className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
-          >
-            Cancel
-          </button>
           <button
             type="submit"
             className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"

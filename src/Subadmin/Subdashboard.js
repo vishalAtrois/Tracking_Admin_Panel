@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {  Tooltip, ResponsiveContainer,  Cell, Pie, PieChart } from 'recharts';
-import { FaCog } from 'react-icons/fa'; // Add this import at the top
+ 
 
  
  
@@ -10,14 +10,14 @@ import Subsidebar from './Subsidebar';
  
 
 const Subdashboard = () => {
- const [showDropdown, setShowDropdown] = useState(false);
+ 
  const [loading,setLoading]=useState(true) 
   const [userCount, setUserCount] = useState(0);
   const [companyCount, setCompanyCount] = useState(0);
     const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const [taskChartData, setTaskChartData] = useState([]);
-   const [showLogoutModal, setShowLogoutModal] = useState(false);
+    
   
  useEffect(() => {
     Get()
@@ -181,43 +181,6 @@ function fetchCompany() {
   <h2 className="text-white text-2xl sm:text-3xl font-bold tracking-wide">
     Dashboard
   </h2>
-
-  {/* Settings Dropdown */}
-  <div className="relative">
-    <button
-      onClick={() => setShowDropdown(prev => !prev)}
-      className="text-white text-xl focus:outline-none"
-    >
-      <FaCog className="text-2xl" />
-    </button>
-
-    {showDropdown && (
-      <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
-        <ul className="py-1 text-gray-700">
-          <li
-            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-            onClick={() => navigate('/profile')}
-          >
-            Profile
-          </li>
-          <li
-            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-            onClick={() => navigate('/forgetpassword')}
-          >
-            Forget Password
-          </li>
-          <li
-            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-            onClick={() => {
-              setShowLogoutModal(true)
-            }}
-          >
-            Logout
-          </li>
-        </ul>
-      </div>
-    )}
-  </div>
 </div>
 
         {/* Cards Grid */}
@@ -327,30 +290,6 @@ function fetchCompany() {
   </div>
 </div>
 
-
-      {/* Confirm Delete Modal */}
-      {showLogoutModal && (
-        <div className="fixed inset-1 bg-black bg-opacity-75 flex items-start justify-center z-50 pt-20">
-          <div className="bg-white rounded-lg p-6 w-128 shadow-lg">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">Confirm Logout</h2>
-            <p className="text-gray-600 mb-6">Are you sure you want to Logout?</p>
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={() => setShowLogoutModal(false)}
-                className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-600 transition text-white text-sm sm:text-base"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => Logout()}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm sm:text-base"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
 
 
