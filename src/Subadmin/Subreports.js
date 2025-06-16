@@ -195,11 +195,6 @@ const handleCloseAddReportModal = () => {
   setExtraFields([{ key: '', value: '' }]);
   
 };
-
- 
-
-  
- 
 const fetchUserReport = async (item) => {
   const token = localStorage.getItem('token');
   const headers = new Headers();
@@ -225,10 +220,6 @@ setUserId(item)
     console.error("Error fetching report:", error);
   }
 };
-
-
- 
- 
    function fetchUsers() {
      const token = localStorage.getItem('token');
      setToken(token);
@@ -262,6 +253,7 @@ setUserId(item)
        })
        .catch((error) => console.error(error));
    }
+
  
      //  fetching data 
      useEffect(() => {
@@ -389,6 +381,7 @@ setUserId(item)
                         >
                           <i className="fa fa-clipboard text-lg"></i>
                         </button>
+                       
                    </div>
                  </td>
                </tr>

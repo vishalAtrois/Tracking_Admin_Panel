@@ -19,6 +19,10 @@ export const  Subcheckin = () => {
 const [logsData, setLogsData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null); // new state for map location
   const [showMapModal, setShowMapModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [userId,setUserId] = useState('')
 
 
   //   map view 
@@ -113,6 +117,41 @@ function GetReports(item) {
         .catch((error) => console.error(error));
     }
    
+const setTime = async () => {
+    const token = localStorage.getItem('token');
+
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("Authorization", `Bearer ${token}`);
+
+    const body = JSON.stringify({
+      userId: userId.id,
+      allowedCheckInTime: selectedTime,
+      date: selectedDate,
+    });
+
+    try {
+      const response = await fetch(
+        "https://tracking-backend-admin.vercel.app/v1/subAdmin/setCheckinTime",
+        {
+          method: "POST",
+          headers,
+          body,
+          redirect: "follow"
+        }
+      );
+
+      const result = await response.json();
+      console.log("Check-in time response:", result);
+      setShowModal(false); // Close modal after API call
+    } catch (error) {
+      console.error("Error setting check-in time:", error);
+    }
+  };
+
+
+
+
     // Logic part
   const npage = Math.ceil(userCount / limit);
   const pageNumbers = [];
@@ -229,15 +268,16 @@ function GetReports(item) {
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                     <td className="border-b border-gray-700 text-center">
                       <div className="flex justify-center gap-4">
-                        {/* report section */}
                      <button
-                          onClick={() => GetReports(item)}
+                          onClick={() => {GetReports(item)
+                             setUserId(item)
+                          }}
                           className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
                           title="Logs"
                         >
                           <i className="fa fa-sticky-note text-lg"></i>
                         </button>
- 
+                 
                       </div>
                     </td>
                   </tr>
@@ -253,16 +293,31 @@ function GetReports(item) {
     <div className="relative w-full max-w-6xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
       
       {/* Header */}
-      <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10 flex-shrink-0">
-        <h3 className="text-xl font-bold text-gray-800">Logs</h3>
-        <button
-          className="text-red-500 text-4xl font-bold"
-          onClick={() => setShowLogsModal(false)}
-          title="close"
-        >
-          &times;
-        </button>
-      </div>
+      <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10 p-4 shadow-sm">
+  <h3 className="text-xl font-bold text-gray-800">Logs</h3>
+  
+  <div className="flex items-center gap-3">
+     <button
+      onClick={() => {setShowModal(true)
+        setShowLogsModal(false)
+      }}
+      className="px-4 py-2 text-sm font-medium rounded bg-blue-100 text-blue-600 hover:bg-blue-200 transition"
+      title="Add Check-in Time"
+    >
+      + Add Check-in Time
+    </button>
+    <button
+      className="text-red-500 text-3xl font-bold leading-none"
+      onClick={() => setShowLogsModal(false)}
+      title="Close"
+    >
+      &times;
+    </button>
+
+   
+  </div>
+</div>
+
 
       {/* Logs table */}
       {logsData.length > 0 ? (
@@ -422,6 +477,45 @@ function GetReports(item) {
 </LoadScript>
 
 
+{/* view time modal  */}
+{showModal && (
+        <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+            <h2 className="text-xl font-semibold mb-4">Set Check-in Time</h2>
+
+            <label className="block mb-2">Select Date</label>
+            <input
+              type="date"
+              className="w-full p-2 border rounded mb-4"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
+
+            <label className="block mb-2">Select Time</label>
+            <input
+              type="time"
+              className="w-full p-2 border rounded mb-4"
+              value={selectedTime}
+              onChange={(e) => setSelectedTime(e.target.value)}
+            />
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={setTime}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     
       {/* Pagination UI */}
