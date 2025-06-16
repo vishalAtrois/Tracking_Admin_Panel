@@ -22,7 +22,7 @@ const [logsData, setLogsData] = useState([]);
     const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
-  const [userId,setUserId] = useState('')
+  const [selectedUser, setSelectedUser] = useState(null);
 
 
   //   map view 
@@ -125,7 +125,7 @@ const setTime = async () => {
     headers.append("Authorization", `Bearer ${token}`);
 
     const body = JSON.stringify({
-      userId: userId.id,
+       userId: selectedUser?.id,
       allowedCheckInTime: selectedTime,
       date: selectedDate,
     });
@@ -144,6 +144,9 @@ const setTime = async () => {
       const result = await response.json();
       console.log("Check-in time response:", result);
       setShowModal(false); // Close modal after API call
+          setSelectedDate("");
+    setSelectedTime("");
+    setSelectedUser(null);
     } catch (error) {
       console.error("Error setting check-in time:", error);
     }
@@ -270,7 +273,7 @@ const setTime = async () => {
                       <div className="flex justify-center gap-4">
                      <button
                           onClick={() => {GetReports(item)
-                             setUserId(item)
+                             setSelectedUser(item)
                           }}
                           className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
                           title="Logs"
