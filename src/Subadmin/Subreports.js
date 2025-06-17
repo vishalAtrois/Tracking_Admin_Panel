@@ -91,13 +91,13 @@ const AddReport = async (id, reportData, file, images, extraFields) => {
   images.forEach((img) => {
     formData.append("images", img);
   });
+// ✅ Add only extra field keys with empty values
+extraFields.forEach(({ key }) => {
+  if (key) {
+    formData.append(key, ""); // Send empty string for value
+  }
+});
 
-  // ✅ Add extra fields (excluding empty keys or values)
-  extraFields.forEach(({ key, value }) => {
-    if (key && value) {
-      formData.append(key, value);
-    }
-  });
 
   try {
     const response = await fetch(
@@ -142,10 +142,7 @@ const handleCreateReport = async () => {
   console.log("🖼️ Selected Images:", newReportImages);
   console.log("👤 Selected User:", selectedUser);
 
-  if (newReportImages.length < 1) {
-    alert("Please upload at least one image.");
-    return;
-  }
+   
 
   if (newReportImages.length > 5) {
     alert("You can upload a maximum of 5 images.");
@@ -200,7 +197,7 @@ const fetchUserReport = async (item) => {
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
 setUserId(item)
-  try {
+  try { 
     const response = await fetch(
       `https://tracking-backend-admin.vercel.app/v1/subAdmin/getReportsByUser?userId=${item.id}`,
       {
@@ -685,7 +682,7 @@ setUserId(item)
                   key={report._id}
                   className="w-full text-left p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
                   onClick={() => {
-                    setSelectedCompany(report.companyName);
+                  setSelectedCompany(report.companyName || "No Company");
                     setLoadingReports(true);
                     setCompanyReports([report]);
                     setLoadingReports(false);
@@ -737,50 +734,50 @@ setUserId(item)
 
     {/* Company & Address */}
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {report.companyName && (
+    
         <div className="border px-2 py-2 rounded bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Company</p>
-          <p className="text-gray-900">{report.companyName}</p>
+          <p className="text-gray-900">{report.companyName || 'N/A'}</p>
         </div>
-      )}
-      {report.address && (
+     
+     
         <div className="border px-2 py-2 rounded bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Address</p>
-          <p className="text-gray-900">{report.address}</p>
+          <p className="text-gray-900">{report.address || 'N/A'}</p>
         </div>
-      )}
+     
     </div>
 
     {/* Business Size & Report Time */}
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {report.businessSize && (
+ 
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
-          <p className="text-gray-900">{report.businessSize}</p>
+          <p className="text-gray-900">{report.businessSize || 'N/A'}</p>
         </div>
-      )}
-      {report.reportTime && (
+      
+    
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
-          <p className="text-gray-900">{report.reportTime}</p>
+          <p className="text-gray-900">{report.reportTime || 'N/A'}</p>
         </div>
-      )}
+    
     </div>
 
     {/* Report Date & Notes */}
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {report.reportDate && (
+     
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
-          <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
+          <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString() || 'N/A'}</p>
         </div>
-      )}
-      {report.notes && (
+       
+     
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Notes</p>
-          <p className="text-gray-900">{report.notes}</p>
+          <p className="text-gray-900">{report.notes || 'N/A'}</p>
         </div>
-      )}
+     
     </div>
 
     
@@ -829,38 +826,44 @@ setUserId(item)
     })}
 
     {/* File */}
-    {report.file?.url && (
-      <div className="border rounded px-2 py-2 bg-white">
-        <p className="text-sm text-gray-700 font-extrabold">File</p>
-        <a
-          href={report.file.url}
-          download
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 underline break-all"
-        >
-          {decodeURIComponent(report.file.name)}
-        </a>
-      </div>
-    )}
+<div className="border rounded px-2 py-2 bg-white">
+  <p className="text-sm text-gray-700 font-extrabold">File</p>
+  {report.file?.url ? (
+    <a
+      href={report.file.url}
+      download
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 underline break-all"
+    >
+      {decodeURIComponent(report.file.name)}
+    </a>
+  ) : (
+    <p className="text-gray-900">No file</p>
+  )}
+</div>
+
 
     {/* Images */}
-    {report.images?.length > 0 && (
-      <div className="border rounded px-2 py-2 bg-white">
-        <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
-        <div className="flex gap-3 overflow-x-auto">
-          {report.images.map((imgUrl, index) => (
-            <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
-              <img
-                src={imgUrl}
-                alt={`Report ${idx + 1} Image ${index + 1}`}
-                className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
-              />
-            </a>
-          ))}
-        </div>
-      </div>
-    )}
+  <div className="border rounded px-2 py-2 bg-white">
+  <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
+  {Array.isArray(report.images) && report.images.length > 0 ? (
+    <div className="flex gap-3 overflow-x-auto">
+      {report.images.map((imgUrl, index) => (
+        <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
+          <img
+            src={imgUrl}
+            alt={`Report Image ${index + 1}`}
+            className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
+          />
+        </a>
+      ))}
+    </div>
+  ) : (
+    <p className="text-gray-900">No images</p>
+  )}
+</div>
+
   </div>
 ))}
 
