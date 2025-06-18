@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock } from 'lucide-react';
 
 const SubResetPassword = () => {
@@ -131,7 +131,6 @@ if (response.ok) {
         {message && (
           <div className="mt-4 text-center text-sm text-purple-600 animate-pulse">{message}</div>
         )}
-
         <div className="mt-6 text-center text-sm text-gray-500">
           <a href="/" className="text-purple-600 hover:underline">
             Back to Login

@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+ 
 
 function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
+ 
   
   const passReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
   const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -49,6 +50,7 @@ function Login() {
             localStorage.setItem("token", result.token.access.token);
             localStorage.setItem("rtoken", result.token.refresh.token);
             localStorage.setItem("user", JSON.stringify(result.user));
+            console.log('login response',result)
             navigate("/dashboard");
             if (values.userType === "subAdmin") {
               navigate("/Subdashboard");

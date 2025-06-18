@@ -31,11 +31,11 @@ const SubForgotPassword = () => {
     requestOptions
   );
 
-  const result = await response.json(); // Parse as JSON
+  const result = await response.json();  
   console.log('Forgot password response:', result);
 
   if (response.ok && result.token) {
-    localStorage.setItem('subForgotPasswordToken', result.token); // ✅ Store token
+    localStorage.setItem('subForgotPasswordToken', result.token);  
     navigate('/SubVerifyOtp', { state: { email } });
   } else {
     setMessage(result.message || 'Failed to send OTP. Please try again.');
@@ -71,7 +71,6 @@ const SubForgotPassword = () => {
               placeholder="Enter your email"
             />
           </div>
-
           <button
             type="submit"
             disabled={loading}

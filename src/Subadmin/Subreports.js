@@ -25,8 +25,6 @@ const [extraFields, setExtraFields] = useState([{ key: "", value: "" }]);
 const [isLoading, setIsLoading] = useState(false);
 
 
-
-
 const handleExtraFieldChange = (index, field, value) => {
   const updatedFields = [...extraFields];
   updatedFields[index][field] = value;
@@ -41,7 +39,6 @@ const removeImage = (indexToRemove) => {
   const updatedImages = newReportImages.filter((_, i) => i !== indexToRemove);
   setNewReportImages(updatedImages);
 };
-
 
 const handleImageChange = (e, index) => {
   const file = e.target.files[0]; // Only allow one image per box
@@ -162,7 +159,6 @@ const handleCreateReport = async () => {
   setNewReportFile(null);
   setNewReportImages([]);
   setExtraFields([{ key: "", value: "" }]);
-  
 };
 
 const handleCloseAddReportModal = () => {
@@ -695,7 +691,6 @@ setUserId(item)
           <p className="text-gray-900">{report.reportTime || 'N/A'}</p>
         </div>
     </div>
-
     {/* Report Date & Notes */}
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="border rounded px-2 py-2 bg-white">
@@ -786,7 +781,7 @@ setUserId(item)
   </div>
 ))}
 </div>
-          </div>
+       </div>
         )
       )}
     </div>
@@ -830,7 +825,7 @@ setUserId(item)
      </nav>
    </div>  
  </div>
-   </div>
+ </div>
    );
  };
  

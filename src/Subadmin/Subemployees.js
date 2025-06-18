@@ -13,9 +13,6 @@ const [searchQuery, setSearchQuery] = useState('');
 const [currentpage, setCurrentpage] = useState(1);
 const limit = 20;
    
-  
-  
-    // State
   const [editedUser, setEditedUser] = useState({
     id: '',
     fullName: '',

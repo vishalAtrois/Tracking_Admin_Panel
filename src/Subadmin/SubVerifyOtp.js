@@ -88,7 +88,6 @@ else {
               placeholder="Enter your email"
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">OTP</label>
             <div className="flex justify-center gap-4">
@@ -108,7 +107,6 @@ else {
               ))}
             </div>
           </div>
-
           <button
             type="submit"
             className={`w-full py-2 px-4 text-white font-semibold rounded-lg shadow-md transition duration-300 ${
@@ -121,7 +119,6 @@ else {
         </form>
 
         {message && <div className="mt-4 text-center text-sm text-blue-600 animate-pulse">{message}</div>}
-
         <div className="mt-6 text-center text-sm text-gray-500">
           <a href="/" className="text-purple-600 hover:underline">
             Back to login

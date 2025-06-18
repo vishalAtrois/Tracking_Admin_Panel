@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Subsidebar from './Subsidebar';
  
-
-// Dummy data for Notifications
 const notifications = [
   { id: 1, message: "Your account has been successfully updated.", date: "2025-04-20" },
   { id: 2, message: "New messages from your team.", date: "2025-04-19" },
@@ -15,7 +13,6 @@ const Subnotification = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
-
       {/* side bar icon */}
     <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4">
   <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
@@ -23,7 +20,6 @@ const Subnotification = () => {
   </button>
   <h2 className="text-white text-xl font-semibold">Tracking App</h2>
 </div>
-
       {/* Overlay */}
       {sidebarOpen && (
         <div
@@ -40,14 +36,9 @@ const Subnotification = () => {
       >
         <Subsidebar />
       </div>
-
       <div className="flex-1 p-6 overflow-y-auto">
-        {/* The rest of your component (search bar, table, pagination, modals, etc.) remains exactly the same */}
-
-        {/* Insert your previous design code from this point onward */}
         <div className="p-6 bg-gray-100 rounded-lg shadow-md">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">Notifications</h2>
-
       <ul className="space-y-4">
         {notifications.map((notification) => (
           <li key={notification.id} className="p-4 bg-white rounded shadow-md flex justify-between">
@@ -59,7 +50,6 @@ const Subnotification = () => {
         ))}
       </ul>
     </div>
-
       </div>
     </div>
   );

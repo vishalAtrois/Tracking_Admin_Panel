@@ -440,8 +440,6 @@ const setTime = async () => {
     </div>
   </div>
 )}
- 
-
 {/* view time modal  */}
 {showModal && (
         <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex items-center justify-center">
@@ -516,7 +514,7 @@ const setTime = async () => {
         </nav>
       </div>
     </div>            
-      </div>
+    </div>
        
   )
 }
