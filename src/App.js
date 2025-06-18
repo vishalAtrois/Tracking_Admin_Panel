@@ -22,6 +22,7 @@ import SubVerifyOtp from './Subadmin/SubVerifyOtp';
 import SubResetPassword from './Subadmin/SubResetPassword';
 import SubProfile from './Subadmin/SubProfile';
 import VoiceTasks from './Subadmin/VoiceTasks';
+import SubPrefrences from './Subadmin/SubPrefrences';
  
 
 
@@ -50,6 +51,7 @@ function App() {
             <Route path='/ResetPassword' element={<SubResetPassword />} />
             <Route path='/SubProfile' element={<SubProfile />} />
             <Route path='/VoiceTasks' element={<VoiceTasks />} />
+            <Route path='/SubPrefrences' element={<SubPrefrences />} />
           </Routes>
     </Router>
   );
