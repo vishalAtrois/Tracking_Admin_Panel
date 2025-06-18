@@ -715,7 +715,7 @@ setUserId(item)
     {Object.entries(report).map(([key, value]) => {
       const exclude = [
         "_id", "userId", "__v", "companyName", "address", "businessSize",
-        "reportTime", "reportDate", "notes", "file", "images","createdBy","createdAt",
+        "reportTime", "reportDate", "notes", "file", "images","createdBy","createdAt","updatedBy"
       ];
      if (exclude.includes(key) || value === undefined || value === null || value === '') return null;
   // Handle customFields separately (skip its heading)
