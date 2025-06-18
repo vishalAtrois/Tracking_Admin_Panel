@@ -171,7 +171,16 @@ const LoaderPrompt = () => (
     <a href="/register" className="text-purple-600 font-medium hover:underline">
       Create one
     </a>
+     <div className="mt-2">
+      <a
+        href="/SubForgotPassword"
+        className="text-blue-600 font-medium hover:underline"
+      >
+        Forgot Password?
+      </a>
+    </div>
   </div>
+
 )}
 
         <div className="text-center">

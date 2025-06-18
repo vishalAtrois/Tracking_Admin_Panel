@@ -71,7 +71,6 @@ const [newReport, setNewReport] = useState({
 const AddReport = async (id, reportData, file, images, extraFields) => {
   const token = localStorage.getItem('token');
   const formData = new FormData();
-
   // Add base fields
   formData.append("title", reportData.title);
   formData.append("companyName", reportData.companyName);
@@ -80,12 +79,10 @@ const AddReport = async (id, reportData, file, images, extraFields) => {
   formData.append("reportTime", reportData.reportTime?.slice(0, 5));
   formData.append("reportDate", reportData.reportDate);
   formData.append("notes", reportData.notes);
-
   // Add file if present
   if (file) {
     formData.append("file", file);
   }
-
   // Add images
   images.forEach((img) => {
     formData.append("images", img);
@@ -96,8 +93,6 @@ extraFields.forEach(({ key }) => {
     formData.append(key, ""); // Send empty string for value
   }
 });
-
-
   try {
     const response = await fetch(
       `https://tracking-backend-admin.vercel.app/v1/subAdmin/createReport?userId=${id}`,

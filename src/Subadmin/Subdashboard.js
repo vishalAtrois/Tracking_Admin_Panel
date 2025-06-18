@@ -30,46 +30,6 @@ const Subdashboard = () => {
     setToken(token)
   }
 
-function Logout() {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-  
-    const raw = JSON.stringify({
-      refreshToken: token,
-      email: myData?.email
-    });
-  
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow"
-    };
-  
-    fetch("https://tracking-backend-admin.vercel.app/v1/subAdmin/logoutSubAdmin", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        if(result.success == true){
-          localStorage.removeItem('token');
-          localStorage.removeItem('user')
-          localStorage.removeItem('ruser')
-          navigate('/'); 
-        }else{
-          console.error(result)
-        }
-      
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Logout failed.");
-      });
-  }
-  
-
-
-
-
   function fetchUsers (){
 
     const token = localStorage.getItem('token')
@@ -150,7 +110,6 @@ function fetchCompany() {
   </button>
   <h2 className="text-white text-xl font-semibold">Tracking App</h2>
 </div>
-  
     {/* Overlay for Mobile Sidebar */}
     {sidebarOpen && (
       <div
@@ -158,7 +117,6 @@ function fetchCompany() {
         onClick={() => setSidebarOpen(false)}
       />
     )}
-  
     {/* Sidebar */}
     <div
       className={`fixed md:relative z-50 transform top-0 left-0 h-full w-64 transition-transform duration-300 ease-in-out bg-gray-800 shadow-lg ${
@@ -167,7 +125,6 @@ function fetchCompany() {
     >
      <Subsidebar />
     </div>
-  
     {/* Main Content */}
     <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
       <div className="bg-gray-900 p-4 sm:p-6 rounded-lg shadow-lg min-h-screen ">
@@ -176,7 +133,6 @@ function fetchCompany() {
     Dashboard
   </h2>
 </div>
-
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* Users Card */}
@@ -194,7 +150,6 @@ function fetchCompany() {
               <i className="fa fa-user text-4xl sm:text-5xl opacity-80" />
             </div>
           </div>
-  
           {/* Companies Card */}
           <div
             onClick={() => navigate('/Suballtasks')}
@@ -211,15 +166,7 @@ function fetchCompany() {
             </div>
           </div>
         </div>
- 
 
-        {/* Graph */}
-        {/* <div className="mt-6">
-          <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
-            <h3 className="text-2xl sm:text-3xl font-semibold mb-4">User Growth</h3>
-            <UserGrowthGraph />
-          </div>
-        </div> */}
         {/* Graph */}
 <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
   <div className="bg-gray-800 text-white p-4 sm:p-6 rounded-xl border border-gray-700 shadow-md">
@@ -283,10 +230,6 @@ function fetchCompany() {
     </div>
   </div>
 </div>
-
-
-
-
       </div>
     </div>
   </div>
