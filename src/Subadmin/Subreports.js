@@ -296,7 +296,7 @@ setUserId(item)
    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-[3.75rem] z-20 mb-2">
     <input
       className="p-2 rounded-md border border-gray-600 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1 mb-2 sm:mb-0 mt-2"
-         placeholder="Search employee..."
+         placeholder="Search Employee..."
          value={searchQuery}
          onChange={handleSearchChange}
        />
