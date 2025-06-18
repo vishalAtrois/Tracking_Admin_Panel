@@ -166,8 +166,8 @@ const VoiceTasks = () => {
               <tbody>
                 {usersData.map((item, index) => (
                   <tr key={item.id || index} className="bg-gray-800">
-                    <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
-                    <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
+                   <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
+                   <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.phoneNumber}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
