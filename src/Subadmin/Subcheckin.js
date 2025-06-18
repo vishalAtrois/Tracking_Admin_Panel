@@ -8,39 +8,28 @@ import { Smartphone } from 'lucide-react';
 export const  Subcheckin = () => {
 
   const [usersData, setUsersData] = useState([]);
-    const [userCount, setUserCount] = useState(0);
-    const [token, setToken] = useState('');
-    const [loading, setLoading] = useState(true);
-     const [sidebarOpen, setSidebarOpen] = useState(false);
-     const [searchQuery, setSearchQuery] = useState('');
-    const [currentpage, setCurrentpage] = useState(1);
-    const limit = 20;
-    const [showLogsModal, setShowLogsModal] = useState(false);
-const [logsData, setLogsData] = useState([]);
+  const [userCount, setUserCount] = useState(0);
+  const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentpage, setCurrentpage] = useState(1);
+  const limit = 20;
+  const [showLogsModal, setShowLogsModal] = useState(false);
+  const [logsData, setLogsData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null); // new state for map location
   const [showMapModal, setShowMapModal] = useState(false);
-    const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
 
-
-  //   map view 
-
-
-
-
-
-  
-  
    
       //  fetching data 
     useEffect(() => {
       fetchUsers();
     },[currentpage,searchQuery]);
-
  
-
 function GetReports(item) {
   const token = localStorage.getItem('token');
 
@@ -74,14 +63,11 @@ function GetReports(item) {
     .catch(err => console.error("Error fetching reports", err));
 }
 
-
    const mapContainerStyle = {
     height: '500px',
     width: '100%',
     marginTop: '1rem',
   };
-
-
   
     function fetchUsers() {
       const token = localStorage.getItem('token');
@@ -119,7 +105,6 @@ function GetReports(item) {
    
 const setTime = async () => {
     const token = localStorage.getItem('token');
-
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("Authorization", `Bearer ${token}`);
@@ -152,9 +137,6 @@ const setTime = async () => {
     }
   };
 
-
-
-
     // Logic part
   const npage = Math.ceil(userCount / limit);
   const pageNumbers = [];
@@ -180,21 +162,15 @@ const setTime = async () => {
   const goToNextPage = () => {
     if (currentpage < npage) setCurrentpage(currentpage + 1);
   };
-  
     
-  
    const handleSearchChange = (e) => {
       setSearchQuery(e.target.value);
     };
   
  
-  
-  
     
   return (
-   <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900 overflow-x-hidden">
-        
-    
+   <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900 overflow-x-hidden">       
           {/* side bar button */}
         <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
       <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
@@ -202,7 +178,6 @@ const setTime = async () => {
       </button>
       <h2 className="text-white text-xl font-semibold">Tracking App</h2>
       </div>
-    
         {/* Overlay */}
         {sidebarOpen && (
           <div
@@ -210,7 +185,6 @@ const setTime = async () => {
             onClick={() => setSidebarOpen(false)}
           ></div>
         )}
-    
         {/* Sidebar */}
         <div
           className={`fixed md:relative z-50 transform top-0 left-0 h-full w-64 transition-transform duration-300 ease-in-out bg-gray-800 shadow-lg ${
@@ -219,9 +193,7 @@ const setTime = async () => {
         >
           <Subsidebar />
         </div>
-    
        <div className="flex-1 p-3 flex flex-col overflow-y-auto max-h-screen">
-    
       {/* Search Bar */}
      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-[3.75rem] z-20 mb-2">
     <input
@@ -241,7 +213,6 @@ const setTime = async () => {
     
        {/* Table Section */}
    <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 max-w-full">
-
           {loading ? (
             <div className="flex flex-col justify-center items-center py-20">
               <div className="relative">
@@ -294,7 +265,6 @@ const setTime = async () => {
  {showLogsModal && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
     <div className="relative w-full max-w-6xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
-      
       {/* Header */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10 p-4 shadow-sm">
   <h3 className="text-xl font-bold text-gray-800">Logs</h3>
@@ -316,11 +286,8 @@ const setTime = async () => {
     >
       &times;
     </button>
-
-   
   </div>
 </div>
-
 
       {/* Logs table */}
       {logsData.length > 0 ? (
@@ -403,14 +370,10 @@ const setTime = async () => {
   </div>
 )}
 
-
-
       {/* location view  */}
-
 {showMapModal && selectedLocation && Array.isArray(selectedLocation) && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
     <div className="relative w-full max-w-4xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
-
       {/* Header */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10 flex-shrink-0">
         <button
@@ -422,7 +385,6 @@ const setTime = async () => {
         >
           ← Back to Logs
         </button>
-
         <button
           onClick={() => {
             setShowMapModal(false);
@@ -433,9 +395,6 @@ const setTime = async () => {
           &times;
         </button>
       </div>
-
-      {/* Map Container - FIXED HEIGHT wrapper to let Google Map display */}
-    
         <GoogleMap
           mapContainerStyle={mapContainerStyle} // keep your existing style here
           center={{
@@ -473,19 +432,16 @@ const setTime = async () => {
             }}
           />
         </GoogleMap>
-       
     </div>
   </div>
 )}
 </LoadScript>
-
 
 {/* view time modal  */}
 {showModal && (
         <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
             <h2 className="text-xl font-semibold mb-4">Set Check-in Time</h2>
-
             <label className="block mb-2">Select Date</label>
             <input
               type="date"
@@ -493,7 +449,6 @@ const setTime = async () => {
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
             />
-
             <label className="block mb-2">Select Time</label>
             <input
               type="time"
@@ -501,7 +456,6 @@ const setTime = async () => {
               value={selectedTime}
               onChange={(e) => setSelectedTime(e.target.value)}
             />
-
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowModal(false)}
@@ -520,7 +474,6 @@ const setTime = async () => {
         </div>
       )}
 
-    
       {/* Pagination UI */}
       <div className="custom-pagination-container flex justify-center mt-2">
         <nav aria-label="Page navigation example">
@@ -557,10 +510,8 @@ const setTime = async () => {
           </ul>
         </nav>
       </div>
-    </div>
-            
+    </div>            
       </div>
-    
   )
 }
   

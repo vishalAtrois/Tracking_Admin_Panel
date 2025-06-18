@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {  Tooltip, ResponsiveContainer,  Cell, Pie, PieChart } from 'recharts';
- 
-
- 
- 
 import Subsidebar from './Subsidebar';
  
  
@@ -33,8 +29,6 @@ const Subdashboard = () => {
     setMyData(ud)
     setToken(token)
   }
-
-
 
 function Logout() {
     const myHeaders = new Headers();

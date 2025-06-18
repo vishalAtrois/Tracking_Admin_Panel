@@ -3,16 +3,15 @@ import Subsidebar from './Subsidebar';
 
 export const Subemployees = () => {
 
-  const [usersData, setUsersData] = useState([]);
-    const [userCount, setUserCount] = useState(0);
-    const [token, setToken] = useState('');
-    const [si, setSi] = useState('');
-    const [reportId,setReportId]=useState('')
-    const [loading, setLoading] = useState(true);
-     const [sidebarOpen, setSidebarOpen] = useState(false);
-     const [searchQuery, setSearchQuery] = useState('');
-    const [currentpage, setCurrentpage] = useState(1);
-    const limit = 20;
+const [usersData, setUsersData] = useState([]);
+const [userCount, setUserCount] = useState(0);
+const [token, setToken] = useState('');
+const [si, setSi] = useState('');
+const [loading, setLoading] = useState(true);
+const [sidebarOpen, setSidebarOpen] = useState(false);
+const [searchQuery, setSearchQuery] = useState('');
+const [currentpage, setCurrentpage] = useState(1);
+const limit = 20;
    
   
   
@@ -87,12 +86,6 @@ export const Subemployees = () => {
 // setReportId(item.id)
 
 // }
-
-
- 
-
-
-  
     function fetchUsers() {
       const token = localStorage.getItem('token');
       setToken(token);
@@ -180,8 +173,6 @@ export const Subemployees = () => {
     if (currentpage < npage) setCurrentpage(currentpage + 1);
   };
   
-    
-  
    const handleSearchChange = (e) => {
       setSearchQuery(e.target.value);
     };
@@ -195,8 +186,6 @@ export const Subemployees = () => {
     
   return (
 <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900 overflow-x-hidden">
-
-    
           {/* side bar button */}
         <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
       <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
@@ -204,7 +193,6 @@ export const Subemployees = () => {
       </button>
       <h2 className="text-white text-xl font-semibold">Tracking App</h2>
       </div>
-    
         {/* Overlay */}
         {sidebarOpen && (
           <div
@@ -212,7 +200,6 @@ export const Subemployees = () => {
             onClick={() => setSidebarOpen(false)}
           ></div>
         )}
-    
         {/* Sidebar */}
         <div
           className={`fixed md:relative z-50 transform top-0 left-0 h-full w-64 transition-transform duration-300 ease-in-out bg-gray-800 shadow-lg ${
@@ -221,11 +208,7 @@ export const Subemployees = () => {
         >
           <Subsidebar />
         </div>
-    
         <div className="flex-1 p-3 flex flex-col overflow-y-auto max-h-screen">
-
-       
-    
       {/* Search Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-[3.75rem] z-20 mb-2">
     <input
@@ -242,12 +225,9 @@ export const Subemployees = () => {
             Search
           </button>
         </div>
-    
+
        {/* Table Section */}
    <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 max-w-full">
-
-
-
           {loading ? (
             <div className="flex flex-col justify-center items-center py-20">
               <div className="relative">
@@ -279,8 +259,6 @@ export const Subemployees = () => {
                     <td className="border-b border-gray-700 text-center">
                       <div className="flex justify-center gap-4">
                         {/* report section */}
-                    
-
                         <button
                           onClick={() => handleEditClick(item)}
                           className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
@@ -303,43 +281,6 @@ export const Subemployees = () => {
             </table>
           )}
         </div>
-    
-      {/* Pagination UI */}
-      <div className="custom-pagination-container flex justify-center mt-2">
-        <nav aria-label="Page navigation example">
-          <ul className="pagination">
-            <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
-              <a onClick={goToPrevPage} className="page-link" aria-label="Previous">
-                <span aria-hidden="true">«</span>
-              </a>
-            </li>
-            {pageNumbers.map((num, index) => (
-              <li className={`page-item ${num === currentpage ? 'active' : ''}`} key={index}>
-                {num === '...' ? (
-                  <span className="page-link">...</span>
-                ) : (
-                  <span
-                    onClick={() => setCurrentpage(num)}
-                    className="page-link"
-                    style={{
-                      backgroundColor: currentpage === num ? '#00b6f0' : 'white',
-                      color: currentpage === num ? 'white' : 'black',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {num}
-                  </span>
-                )}
-              </li>
-            ))}
-            <li className={`page-item ${currentpage === npage ? 'disabled' : ''}`}>
-              <a onClick={goToNextPage} className="page-link" aria-label="Next">
-                <span aria-hidden="true">»</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
     
       {/* Edit Prompt */}
       {showEditModal && (
@@ -404,13 +345,6 @@ export const Subemployees = () => {
                 </svg>
               </div>
             </div>
-            {/* <input
-              name="companyName"
-              value={editedUser.companyName}
-              onChange={handleEditChange}
-              placeholder="Company Name"
-              className="w-full mb-4 p-2 border rounded text-sm sm:text-base"
-            /> */}
             <div className="flex justify-end gap-4">
               <button onClick={saveEditedUser} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm sm:text-base">Save</button>
               <button onClick={() => setShowEditModal(false)} className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 text-sm sm:text-base">Cancel</button>
@@ -442,11 +376,45 @@ export const Subemployees = () => {
           </div>
         </div>
       )}
-    
-    </div>
-    
+
+       {/* Pagination UI */}
+      <div className="custom-pagination-container flex justify-center mt-2">
+        <nav aria-label="Page navigation example">
+          <ul className="pagination">
+            <li className={`page-item ${currentpage === 1 ? 'disabled' : ''}`}>
+              <a onClick={goToPrevPage} className="page-link" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+              </a>
+            </li>
+            {pageNumbers.map((num, index) => (
+              <li className={`page-item ${num === currentpage ? 'active' : ''}`} key={index}>
+                {num === '...' ? (
+                  <span className="page-link">...</span>
+                ) : (
+                  <span
+                    onClick={() => setCurrentpage(num)}
+                    className="page-link"
+                    style={{
+                      backgroundColor: currentpage === num ? '#00b6f0' : 'white',
+                      color: currentpage === num ? 'white' : 'black',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {num}
+                  </span>
+                )}
+              </li>
+            ))}
+            <li className={`page-item ${currentpage === npage ? 'disabled' : ''}`}>
+              <a onClick={goToNextPage} className="page-link" aria-label="Next">
+                <span aria-hidden="true">»</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
-    
+    </div>
+      </div>
   )
 }
   

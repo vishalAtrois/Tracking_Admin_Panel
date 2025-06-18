@@ -3,15 +3,15 @@ import Subsidebar from './Subsidebar';
  
  
  const Subreports = () => {
-   const [usersData, setUsersData] = useState([]);
-   const [userCount, setUserCount] = useState(0);
-   const [token, setToken] = useState('');
-   const [loading, setLoading] = useState(true);
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-   const [currentpage, setCurrentpage] = useState(1);
-   const limit = 20;
-   const [selectedUserReports, setSelectedUserReports] = useState([]);
+const [usersData, setUsersData] = useState([]);
+const [userCount, setUserCount] = useState(0);
+const [token, setToken] = useState('');
+const [loading, setLoading] = useState(true);
+const [sidebarOpen, setSidebarOpen] = useState(false);
+const [searchQuery, setSearchQuery] = useState('');
+const [currentpage, setCurrentpage] = useState(1);
+const limit = 20;
+const [selectedUserReports, setSelectedUserReports] = useState([]);
 const [reportModalOpen, setReportModalOpen] = useState(false);
 const [selectedCompany, setSelectedCompany] = useState(null);  // stores selected company name
 const [companyReports, setCompanyReports] = useState([]);      // stores detailed reports of selected company
@@ -23,6 +23,8 @@ const [userId,setUserId] = useState('')
 const [selectedUser, setSelectedUser] = useState(null);
 const [extraFields, setExtraFields] = useState([{ key: "", value: "" }]);
 const [isLoading, setIsLoading] = useState(false);
+
+
 
 
 const handleExtraFieldChange = (index, field, value) => {
@@ -65,9 +67,6 @@ const [newReport, setNewReport] = useState({
   notes: '',
   title:'',
 });
-
-
-
 
 const AddReport = async (id, reportData, file, images, extraFields) => {
   const token = localStorage.getItem('token');
@@ -131,9 +130,7 @@ extraFields.forEach(({ key }) => {
     alert("❌ Network or fetch error");
     console.error("❌ Fetch error:", error);
   }
-};
-
-
+}; 
 
 const handleCreateReport = async () => {
   console.log("🛠️ Creating report with the following data:");
@@ -141,9 +138,6 @@ const handleCreateReport = async () => {
   console.log("📎 Selected File:", newReportFile);
   console.log("🖼️ Selected Images:", newReportImages);
   console.log("👤 Selected User:", selectedUser);
-
-   
-
   if (newReportImages.length > 5) {
     alert("You can upload a maximum of 5 images.");
     return;
@@ -250,8 +244,6 @@ setUserId(item)
        })
        .catch((error) => console.error(error));
    }
-
- 
      //  fetching data 
      useEffect(() => {
        fetchUsers();
@@ -260,7 +252,6 @@ setUserId(item)
    // Logic part
  const npage = Math.ceil(userCount / limit);
  const pageNumbers = [];
- 
  if (npage <= 4) {
    for (let i = 1; i <= npage; i++) {
      pageNumbers.push(i);
@@ -274,27 +265,19 @@ setUserId(item)
      pageNumbers.push(currentpage - 1, currentpage, currentpage + 1, '...', npage);
    }
  }
- 
  const goToPrevPage = () => {
    if (currentpage > 1) setCurrentpage(currentpage - 1);
  };
- 
  const goToNextPage = () => {
    if (currentpage < npage) setCurrentpage(currentpage + 1);
  };
- 
-   
- 
   const handleSearchChange = (e) => {
      setSearchQuery(e.target.value);
    };
  
   
- 
- 
    return ( 
      <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900 overflow-x-hidden">
- 
        {/* side bar button */}
      <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
    <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
@@ -302,7 +285,6 @@ setUserId(item)
    </button>
    <h2 className="text-white text-xl font-semibold">Tracking App</h2>
    </div>
- 
      {/* Overlay */}
      {sidebarOpen && (
        <div
@@ -310,7 +292,6 @@ setUserId(item)
          onClick={() => setSidebarOpen(false)}
        ></div>
      )}
- 
      {/* Sidebar */}
      <div
        className={`fixed md:relative z-50 transform top-0 left-0 h-full w-64 transition-transform duration-300 ease-in-out bg-gray-800 shadow-lg ${
@@ -319,10 +300,7 @@ setUserId(item)
      >
         <Subsidebar />
      </div>
- 
       <div className="flex-1 p-3 flex flex-col overflow-y-auto max-h-screen">
- 
- 
    {/* Search Bar */}
    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 bg-gray-800 rounded-xl p-2 shadow-lg sticky top-[3.75rem] z-20 mb-2">
     <input
@@ -339,7 +317,6 @@ setUserId(item)
          Search
        </button>
      </div>
- 
     {/* Table Section */}
  <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 max-w-full">
        {loading ? (
@@ -388,15 +365,6 @@ setUserId(item)
        )}
      </div>
 
-
-
-
-
-
-
- 
-   
- 
 {/* addreport modal */}
 {showAddReportModal && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
@@ -413,7 +381,6 @@ setUserId(item)
   >
     ×
   </button>
-
   <h2 className="text-xl font-bold mb-4">Add New Report</h2>
       <form
         onSubmit={(e) => {
@@ -467,9 +434,7 @@ setUserId(item)
     }
   />
 </div>
-
-
-        <input
+  <input
   type="text"
   placeholder="Title"
   className="w-full p-2 border rounded"
@@ -507,8 +472,6 @@ setUserId(item)
     </label>
   </div>
 </div>
-
-
 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
   {newReportImages.map((img, index) => (
     <div
@@ -558,9 +521,6 @@ setUserId(item)
     </div>
   )}
 </div>
-
-
-
    <input
   type="date"
   className="w-full p-2 border rounded"
@@ -569,7 +529,6 @@ setUserId(item)
     setNewReport({ ...newReport, reportDate: e.target.value })
   }
 />
-
         <textarea
           placeholder="Notes"
           className="w-full p-2 border rounded"
@@ -606,8 +565,6 @@ setUserId(item)
             + Add More Fields
           </button>
         </div>
-
-
         <div className="flex justify-end gap-2">
           <button
             type="submit"
@@ -621,13 +578,9 @@ setUserId(item)
   </div>
 )}
 
-
-
-
 {reportModalOpen && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
     <div className="relative w-full max-w-6xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6">
-
       {/* Header with Title, Add Button and Close Button */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
         <h3 className="text-xl font-bold text-gray-800">
@@ -648,7 +601,6 @@ setUserId(item)
         + Add Report
       </button>
     )}
-
           {/* Close Button */}
           <button
             className="text-red-500 text-3xl font-bold"
@@ -663,8 +615,6 @@ setUserId(item)
           </button>
         </div>
       </div>
-
-
       {/* Content */}
       {!selectedCompany ? (
         selectedUserReports.length === 0 ? (
@@ -693,8 +643,6 @@ setUserId(item)
                 </button>
               );
             })}
-
-
           </div>
         )
       ) : (
@@ -721,8 +669,6 @@ setUserId(item)
   </svg>
   Back to report list
 </button>
-
-
            <div className="max-h-[calc(100vh-8rem)] overflow-y-auto px-2 sm:px-4 space-y-4">
 {companyReports.map((report, idx) => (
   <div key={report._id} className="border p-3 rounded-lg shadow bg-gray-50 space-y-4">
@@ -734,60 +680,44 @@ setUserId(item)
 
     {/* Company & Address */}
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    
         <div className="border px-2 py-2 rounded bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Company</p>
           <p className="text-gray-900">{report.companyName || 'N/A'}</p>
         </div>
-     
-     
         <div className="border px-2 py-2 rounded bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Address</p>
           <p className="text-gray-900">{report.address || 'N/A'}</p>
         </div>
-     
     </div>
-
     {/* Business Size & Report Time */}
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
- 
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
           <p className="text-gray-900">{report.businessSize || 'N/A'}</p>
         </div>
-      
-    
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
           <p className="text-gray-900">{report.reportTime || 'N/A'}</p>
         </div>
-    
     </div>
 
     {/* Report Date & Notes */}
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-     
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
           <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString() || 'N/A'}</p>
         </div>
-       
-     
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Notes</p>
           <p className="text-gray-900">{report.notes || 'N/A'}</p>
         </div>
-     
     </div>
-
-    
     {Object.entries(report).map(([key, value]) => {
       const exclude = [
         "_id", "userId", "__v", "companyName", "address", "businessSize",
-        "reportTime", "reportDate", "notes", "file", "images",
+        "reportTime", "reportDate", "notes", "file", "images","createdBy","createdAt",
       ];
      if (exclude.includes(key) || value === undefined || value === null || value === '') return null;
-
   // Handle customFields separately (skip its heading)
   if (key === "customFields" && typeof value === "object") {
     return Object.entries(value).map(([innerKey, innerValue]) => (
@@ -819,12 +749,9 @@ setUserId(item)
 ) : (
   <p className="text-gray-900">{String(value)}</p>
 )}
-
-
         </div>
       );
     })}
-
     {/* File */}
 <div className="border rounded px-2 py-2 bg-white">
   <p className="text-sm text-gray-700 font-extrabold">File</p>
@@ -842,8 +769,6 @@ setUserId(item)
     <p className="text-gray-900">No file</p>
   )}
 </div>
-
-
     {/* Images */}
   <div className="border rounded px-2 py-2 bg-white">
   <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
@@ -863,13 +788,9 @@ setUserId(item)
     <p className="text-gray-900">No images</p>
   )}
 </div>
-
   </div>
 ))}
-
-
 </div>
-
           </div>
         )
       )}
@@ -914,12 +835,7 @@ setUserId(item)
      </nav>
    </div>  
  </div>
-
-
    </div>
- 
-   
-   
    );
  };
  
