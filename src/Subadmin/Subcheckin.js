@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Subsidebar from './Subsidebar';
-import { GoogleMap, LoadScript, Marker, Polygon } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, Polygon, useJsApiLoader } from '@react-google-maps/api';
 
 import { Smartphone } from 'lucide-react';
  
@@ -24,7 +24,11 @@ export const  Subcheckin = () => {
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
 
-   
+
+  const { isLoaded } = useJsApiLoader({
+  googleMapsApiKey: 'AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE'
+});
+
       //  fetching data 
     useEffect(() => {
       fetchUsers();
@@ -170,6 +174,7 @@ const setTime = async () => {
  
     
   return (
+    
    <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900 overflow-x-hidden">       
           {/* side bar button */}
         <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
@@ -260,9 +265,9 @@ const setTime = async () => {
             </table>
           )}
         </div>
+
 {/* logs modal  */}
-<LoadScript googleMapsApiKey="AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE">
- {showLogsModal && (
+ {showLogsModal &&  (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
     <div className="relative w-full max-w-6xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
       {/* Header */}
@@ -371,7 +376,7 @@ const setTime = async () => {
 )}
 
       {/* location view  */}
-{showMapModal && selectedLocation && Array.isArray(selectedLocation) && (
+{showMapModal && selectedLocation && Array.isArray(selectedLocation) && isLoaded && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
     <div className="relative w-full max-w-4xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
       {/* Header */}
@@ -435,7 +440,7 @@ const setTime = async () => {
     </div>
   </div>
 )}
-</LoadScript>
+ 
 
 {/* view time modal  */}
 {showModal && (
@@ -512,6 +517,7 @@ const setTime = async () => {
       </div>
     </div>            
       </div>
+       
   )
 }
   

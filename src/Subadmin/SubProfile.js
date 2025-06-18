@@ -60,7 +60,6 @@ const SubProfile = () => {
   <div className="bg-gray-800 h-full w-full min-h-screen shadow-2xl p-6">
     <div className="flex flex-col items-center mb-6">
       <UserCircle className="w-20 h-20 text-white mb-2" />
-      <h2 className="text-3xl font-bold text-white">Sub-Admin Profile</h2>
     </div>
 
     {profile ? (

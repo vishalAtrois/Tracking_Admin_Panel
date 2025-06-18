@@ -80,13 +80,13 @@ const Subsidebar = () => {
 
       {/* Nav Links */}
       <ul className="nav-list">
-        <li><NavLink to="/Subemployees" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user"></i> Employees</NavLink></li>
         <li><NavLink to="/Subdashboard" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tachometer"></i> Dashboard</NavLink></li>
         <li><NavLink to="/Suballtasks" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tasks"></i> All Tasks</NavLink></li>
         <li><NavLink to="/Subreports" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard"></i> Daily Reports</NavLink></li>
         <li><NavLink to="/Subcheckin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note"></i> Work Hours</NavLink></li>
+        <li><NavLink to="/Subemployees" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user"></i> Employees</NavLink></li>
         <li><NavLink to="/Subnotification" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell"></i> Notifications</NavLink></li>
-
+         <li><NavLink to="/VoiceTasks" className={({ isActive }) => isActive ? "active-link" : ""}>     <i className="bi bi-list-task"></i> Voice Tasks</NavLink></li>
         {/* Settings Dropdown */}
         <li className="relative" ref={dropdownRef}>
           <div
