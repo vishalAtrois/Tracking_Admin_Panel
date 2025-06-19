@@ -273,9 +273,9 @@ const fetchUserReport = async (item) => {
 
       {/* Header */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
-        <h3 className="text-xl font-bold text-gray-800">
-          {selectedCompany ? `Reports for ${selectedCompany}` : "User Report List"}
-        </h3>
+             <h3 className="text-xl font-bold text-gray-800">
+  {selectedCompany ? companyReports[0]?.title || 'Report Title' : "User Report List"}
+</h3>
         <button
           className="text-red-500 text-3xl font-bold"
           onClick={() => {
