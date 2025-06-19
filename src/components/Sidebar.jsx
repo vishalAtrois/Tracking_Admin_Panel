@@ -77,8 +77,9 @@ const navigate=useNavigate()
       <li><NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tachometer"></i> Dashboard</NavLink></li>
       <li><NavLink to="/users" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user"></i> User</NavLink></li>
       <li><NavLink to="/companies" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-building"></i> Company</NavLink></li>
-      <li><NavLink to="/Logs" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note"></i> Logs</NavLink></li>
-      <li><NavLink to="/report" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard"></i> Reports</NavLink></li>
+      <li><NavLink to="/AdminNotification" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell"></i>send Notifications</NavLink></li>
+      <li><NavLink to="/report" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard"></i>Daily Reports</NavLink></li>
+      <li><NavLink to="/Logs" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note"></i> Work Hours</NavLink></li>
       <li><NavLink to="/notifications" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell"></i> Notifications</NavLink></li>
       <li><NavLink to="/about" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-info-circle"></i> About Us</NavLink></li>
     </ul>

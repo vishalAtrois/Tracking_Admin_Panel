@@ -25,6 +25,7 @@ import VoiceTasks from './Subadmin/VoiceTasks';
 import SubPrefrences from './Subadmin/SubPrefrences';
 import SubSendNotification from './Subadmin/SubSendNotification';
 import SubNotificationUser from './Subadmin/SubNotificationUser';
+import AdminNotification from './pages/AdminNotification';
  
  
 
@@ -41,6 +42,7 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/Logs" element={<Logs />} />
             <Route path="/Report" element= {<Report />} />
+            <Route path="/adminNotification" element= {<AdminNotification />} />
             <Route path='/register' element={<Register />} />
             <Route path="/Subdashboard" element={<Subdashboard />} />
             <Route path="/suballtasks" element={<Suballtasks />} />

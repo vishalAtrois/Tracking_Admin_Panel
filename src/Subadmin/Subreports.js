@@ -630,7 +630,7 @@ setUserId(item)
                     setLoadingReports(false);
                   }}
                 >
-                  <p className="font-semibold text-gray-800">{report.companyName}</p>
+                  <p className="font-semibold text-gray-800">{report.title}</p>
                   <p className="text-sm text-gray-600">Report: {latestDate}</p>
                 </button>
               );
