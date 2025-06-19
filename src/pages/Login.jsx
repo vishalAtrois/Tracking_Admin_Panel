@@ -161,9 +161,7 @@ const LoaderPrompt = () => (
         <button
           type="submit"
           className="w-full py-2 rounded-full bg-gray-900 text-white font-semibold transition duration-300 hover:opacity-90"
-        
        >
-          
           LOGIN
         </button>
 
@@ -184,7 +182,6 @@ const LoaderPrompt = () => (
   </div>
 
 )}
-
         <div className="text-center">
           <a href="#!" className="small text-muted me-2">Terms of use</a>
           <a href="#!" className="small text-muted">Privacy policy</a>
@@ -194,7 +191,6 @@ const LoaderPrompt = () => (
     </div>
 </div>
 </>
-
   );
 }
 

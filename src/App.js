@@ -23,8 +23,10 @@ import SubResetPassword from './Subadmin/SubResetPassword';
 import SubProfile from './Subadmin/SubProfile';
 import VoiceTasks from './Subadmin/VoiceTasks';
 import SubPrefrences from './Subadmin/SubPrefrences';
+import SubSendNotification from './Subadmin/SubSendNotification';
+import SubNotificationUser from './Subadmin/SubNotificationUser';
  
-
+ 
 
 function App() {
   return (
@@ -52,6 +54,8 @@ function App() {
             <Route path='/SubProfile' element={<SubProfile />} />
             <Route path='/VoiceTasks' element={<VoiceTasks />} />
             <Route path='/SubPrefrences' element={<SubPrefrences />} />
+            <Route path='/SubSendNotification' element={<SubSendNotification />} />
+              <Route path='/SubNotificationUser' element={<SubNotificationUser />} />
           </Routes>
     </Router>
   );
