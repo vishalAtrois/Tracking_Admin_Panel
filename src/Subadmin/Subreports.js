@@ -25,6 +25,7 @@ const [extraFields, setExtraFields] = useState([{ key: "", value: "" }]);
 const [isLoading, setIsLoading] = useState(false);
 
 
+
 const handleExtraFieldChange = (index, field, value) => {
   const updatedFields = [...extraFields];
   updatedFields[index][field] = value;
@@ -193,6 +194,7 @@ setUserId(item)
     );
     const result = await response.json();
     if (result.success && result.reportList) {
+      setSelectedUser(item);
       setSelectedUserReports(result.reportList);
       setReportModalOpen(true);
     } else {
@@ -236,6 +238,44 @@ setUserId(item)
        })
        .catch((error) => console.error(error));
    }
+
+// delete report 
+const deleteReport = async (reportId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token not found in localStorage");
+      return;
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      `https://tracking-backend-admin.vercel.app/v1/subAdmin/deleteReport?reportId=${reportId}`,
+      requestOptions
+    );
+
+    const result = await response.json();
+    if (result.success) {
+      alert("Report deleted successfully");
+      if (selectedUser) {
+        fetchUserReport(selectedUser); // Refresh report list
+      }
+    } else {
+      console.error("Failed to delete report", result);
+    }
+  } catch (error) {
+    console.error("Error deleting report:", error);
+  }
+};
+
      //  fetching data 
      useEffect(() => {
        fetchUsers();
@@ -381,59 +421,169 @@ setUserId(item)
         }}
         className="space-y-4"
       >
-        <input
-          type="text"
-          placeholder="Company Name"
-          className="w-full p-2 border rounded"
-          value={newReport.companyName}
-          onChange={(e) =>
-            setNewReport({ ...newReport, companyName: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Address"
-          className="w-full p-2 border rounded"
-          value={newReport.address}
-          onChange={(e) =>
-            setNewReport({ ...newReport, address: e.target.value })
-          }
-        />
-       <select
-  className="w-full p-2 border rounded bg-white text-gray-700"
-  value={newReport.businessSize}
-  onChange={(e) =>
-    setNewReport({ ...newReport, businessSize: e.target.value })
-  }
->
-  <option value="">Select Business Size</option>
-  <option value="Small Business">Small Business</option>
-  <option value="Medium Business">Medium Business</option>
-  <option value="Large Business">Large Business</option>
-</select>
-  <div className="relative w-full">
+        {/* Company Name (disabled + red icon) */}
+<div className="relative w-full mb-2">
+  <input
+    type="text"
+    placeholder="Company Name"
+    className="w-full p-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed"
+    value={newReport.companyName}
+    disabled
+    onChange={(e) =>
+      setNewReport({ ...newReport, companyName: e.target.value })
+    }
+  />
+  <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="red"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+      />
+    </svg>
+  </div>
+</div>
+
+{/* Address (disabled + red icon) */}
+<div className="relative w-full mb-2">
+  <input
+    type="text"
+    placeholder="Address"
+    className="w-full p-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed"
+    value={newReport.address}
+    disabled
+    onChange={(e) =>
+      setNewReport({ ...newReport, address: e.target.value })
+    }
+  />
+  <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="red"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+      />
+    </svg>
+  </div>
+</div>
+
+      <div className="relative w-full mb-2">
+  <select
+    disabled
+    className="w-full p-2 border rounded bg-gray-100 text-gray-700 cursor-not-allowed appearance-none"
+    value={newReport.businessSize}
+    onChange={(e) =>
+      setNewReport({ ...newReport, businessSize: e.target.value })
+    }
+  >
+    <option value="">Select Business Size</option>
+    <option value="Small Business">Small Business</option>
+    <option value="Medium Business">Medium Business</option>
+    <option value="Large Business">Large Business</option>
+  </select>
+
+  {/* Red icon (disabled indicator) */}
+  <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="red"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+      />
+    </svg>
+  </div>
+</div>
+
+ <div className="relative w-full mb-2">
+  {/* Placeholder shown only when reportTime is empty */}
   {!newReport.reportTime && (
-    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none z-10">
       select time
     </span>
   )}
+
   <input
     type="time"
-    className="w-full p-2 border rounded bg-transparent text-black"
+    disabled
+    className={`w-full p-2 border rounded text-black bg-gray-100 cursor-not-allowed ${
+      !newReport.reportTime ? 'text-transparent' : ''
+    }`}
     value={newReport.reportTime}
     onChange={(e) =>
       setNewReport({ ...newReport, reportTime: e.target.value })
     }
   />
+
+  {/* Red alert icon on the right */}
+  <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="red"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+      />
+    </svg>
+  </div>
 </div>
+
+<div className="relative w-full mb-2"> 
   <input
-  type="text"
-  placeholder="Title"
-  className="w-full p-2 border rounded"
-  value={newReport.title}
-  onChange={(e) => setNewReport({ ...newReport, title: e.target.value })}
-/>
-<div className="w-full">
+    type="text"
+    placeholder="Title"
+    className="w-full p-2 border rounded bg-gray-100 text-gray-700 cursor-not-allowed"
+    value={newReport.title}
+    disabled
+    onChange={(e) => setNewReport({ ...newReport, title: e.target.value })}
+  />
+  
+  {/* Red warning icon on right */}
+  <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="red"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+      />
+    </svg>
+  </div>
+</div>
+{/* Report File Upload (disabled + red icon) */}
+<div className="w-full relative mb-4">
   <label className="block mb-1 text-sm font-medium text-gray-700">
     Upload Report File (.pdf, .doc, .docx)
   </label>
@@ -442,18 +592,18 @@ setUserId(item)
       type="file"
       accept=".pdf,.doc,.docx"
       id="reportFileInput"
-      onChange={(e) => setNewReportFile(e.target.files[0])}
+      disabled
       className="hidden"
     />
     <label
       htmlFor="reportFileInput"
-      className="flex items-center justify-between px-4 py-2 bg-white border rounded cursor-pointer hover:bg-gray-100 transition"
+      className="flex items-center justify-between px-4 py-2 bg-gray-100 border rounded text-gray-500 cursor-not-allowed"
     >
-      <span className="text-gray-700">
+      <span>
         {newReportFile ? newReportFile.name : 'Choose File'}
       </span>
       <svg
-        className="w-5 h-5 text-blue-600"
+        className="w-5 h-5 text-red-500"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -464,99 +614,153 @@ setUserId(item)
     </label>
   </div>
 </div>
-<div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+
+{/* Report Image Upload (disabled) */}
+<div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
   {newReportImages.map((img, index) => (
     <div
       key={index}
-      className="relative group rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+      className="relative group rounded-lg overflow-hidden shadow-md bg-gray-100 opacity-50 pointer-events-none"
     >
-      <label htmlFor={`image-upload-${index}`}>
-        <img
-          src={URL.createObjectURL(img)}
-          alt={`preview-${index}`}
-          className="w-full h-40 object-cover rounded-lg transform group-hover:scale-105 transition-transform duration-300"
-        />
-      </label>
-      <input
-        type="file"
-        id={`image-upload-${index}`}
-        accept="image/*"
-        onChange={(e) => handleImageChange(e, index)}
-        className="absolute inset-0 opacity-0 cursor-pointer"
+      <img
+        src={URL.createObjectURL(img)}
+        alt={`preview-${index}`}
+        className="w-full h-40 object-cover rounded-lg"
       />
       <button
         type="button"
-        onClick={() => removeImage(index)}
-        className="absolute top-2 right-2 bg-white bg-opacity-70 rounded-full p-1 shadow-md hover:bg-red-500 hover:text-white transition-colors duration-300"
+        className="absolute top-2 right-2 bg-white bg-opacity-70 rounded-full p-1 shadow-md text-gray-400 cursor-not-allowed"
         aria-label="Remove image"
+        disabled
       >
         ✕
       </button>
     </div>
   ))}
-
+  
   {newReportImages.length < 5 && (
-    <div className="relative group rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center h-40 cursor-pointer hover:border-blue-500 transition-colors duration-300">
-      <label htmlFor={`image-upload-new`} className="flex flex-col items-center justify-center text-gray-500 hover:text-blue-500 select-none">
+    <div className="relative group rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center h-40 bg-gray-100 cursor-not-allowed opacity-60">
+      <div className="flex flex-col items-center text-gray-400 select-none">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
         </svg>
         <span>Add Image</span>
-      </label>
-      <input
-        type="file"
-        id={`image-upload-new`}
-        accept="image/*"
-        onChange={(e) => handleImageChange(e, newReportImages.length)}
-        className="absolute inset-0 opacity-0 cursor-pointer"
-      />
+      </div>
     </div>
   )}
 </div>
-   <input
-  type="date"
-  className="w-full p-2 border rounded"
-  value={newReport.reportDate}
-  onChange={(e) =>
-    setNewReport({ ...newReport, reportDate: e.target.value })
-  }
-/>
-        <textarea
-          placeholder="Notes"
-          className="w-full p-2 border rounded"
-          value={newReport.notes}
-          onChange={(e) =>
-            setNewReport({ ...newReport, notes: e.target.value })
-          }
-        />
+
+{/* Report Date (disabled + red icon) */}
+<div className="relative w-full mb-2">
+  <input
+    type="date"
+    className="w-full p-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed"
+    value={newReport.reportDate}
+    disabled
+    onChange={(e) =>
+      setNewReport({ ...newReport, reportDate: e.target.value })
+    }
+  />
+  <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="red"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+      />
+    </svg>
+  </div>
+</div>
+
+{/* Notes (disabled + red icon) */}
+<div className="relative w-full mb-2">
+  <textarea
+    placeholder="Notes"
+    className="w-full p-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed"
+    value={newReport.notes}
+    disabled
+    onChange={(e) =>
+      setNewReport({ ...newReport, notes: e.target.value })
+    }
+  />
+  <div className="absolute right-2 bottom-2 pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="red"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+      />
+    </svg>
+  </div>
+</div>
+
          {/* Extra Fields */}
-        <div className="space-y-2">
-          <h3 className="font-semibold">Additional Fields</h3>
-          {extraFields.map((field, index) => (
-            <div key={index} className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Field Name"
-                className="w-1/2 p-2 border rounded"
-                value={field.key}
-                onChange={(e) => handleExtraFieldChange(index, "key", e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Field Value"
-                className="w-1/2 p-2 border rounded"
-                value={field.value}
-                onChange={(e) => handleExtraFieldChange(index, "value", e.target.value)}
-              />
-            </div>
-          ))}
-          <button type="button"
-            onClick={addExtraField}
-            className="text-blue-600 hover:underline text-sm mt-1"
+      <div className="space-y-2">
+  <h3 className="font-semibold">Additional Fields</h3>
+  {extraFields.map((field, index) => (
+    <div key={index} className="flex gap-2 items-center relative">
+      {/* Field Name Input (Editable) */}
+      <input
+        type="text"
+        placeholder="Field Name"
+        className="w-1/2 p-2 border rounded"
+        value={field.key}
+        onChange={(e) => handleExtraFieldChange(index, "key", e.target.value)}
+      />
+
+      {/* Field Value Input (Disabled + Red Icon) */}
+      <div className="relative w-1/2">
+        <input
+          type="text"
+          placeholder="Field Value"
+          className="w-full p-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed"
+          value={field.value}
+          disabled
+          onChange={(e) => handleExtraFieldChange(index, "value", e.target.value)}
+        />
+        <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="red"
+            className="w-5 h-5"
           >
-            + Add More Fields
-          </button>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M18.364 5.636A9 9 0 015.636 18.364 9 9 0 0118.364 5.636zm-12.728 12.728L18.364 5.636"
+            />
+          </svg>
         </div>
+      </div>
+    </div>
+  ))}
+  
+  <button
+    type="button"
+    onClick={addExtraField}
+    className="text-blue-600 hover:underline text-sm mt-1"
+  >
+    + Add More Fields
+  </button>
+</div>
+
         <div className="flex justify-end gap-2">
           <button
             type="submit"
@@ -618,24 +822,36 @@ setUserId(item)
             className="space-y-2 overflow-y-auto pr-2"
             style={{ maxHeight: 'calc(90vh - 4rem)' }} // subtract header height approx
           >
-            {selectedUserReports.map((report) => {
-              const latestDate = new Date(report.reportDate).toLocaleDateString();
-              return (
-                <button
-                  key={report._id}
-                  className="w-full text-left p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
-                  onClick={() => {
-                  setSelectedCompany(report.companyName || "No Company");
-                    setLoadingReports(true);
-                    setCompanyReports([report]);
-                    setLoadingReports(false);
-                  }}
-                >
-                  <p className="font-semibold text-gray-800">{report.title}</p>
-                  <p className="text-sm text-gray-600">Report: {latestDate}</p>
-                </button>
-              );
-            })}
+                 {selectedUserReports.map((report) => {
+  const latestDate = new Date(report.reportDate).toLocaleDateString();
+  return (
+    <div
+      key={report._id}
+      className="w-full flex justify-between items-center p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
+    >
+      <div
+        className="flex-1 cursor-pointer"
+        onClick={() => {
+          setSelectedCompany(report.companyName);
+          setLoadingReports(true);
+          setCompanyReports([report]);
+          setLoadingReports(false);
+        }}
+      >
+        <p className="font-semibold text-gray-800">{report.title}</p>
+        <p className="text-sm text-gray-600">Report: {latestDate}</p>
+      </div>
+
+      <button
+        onClick={() => deleteReport(report._id)}
+        title="Delete Report"
+        className="ml-4 text-red-600 hover:text-red-800"
+      >
+        🗑️
+      </button>
+    </div>
+  );
+})}
           </div>
         )
       ) : (

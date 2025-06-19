@@ -23,6 +23,8 @@ export const  Subcheckin = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedCheckoutTime, setSelectedCheckoutTime] = useState("");
+
 
 
   const { isLoaded } = useJsApiLoader({
@@ -116,6 +118,7 @@ const setTime = async () => {
     const body = JSON.stringify({
        userId: selectedUser?.id,
       allowedCheckInTime: selectedTime,
+      allowedCheckOutTime: selectedCheckoutTime,
       date: selectedDate,
     });
 
@@ -135,6 +138,7 @@ const setTime = async () => {
       setShowModal(false); // Close modal after API call
           setSelectedDate("");
     setSelectedTime("");
+     setSelectedCheckoutTime(""); 
     setSelectedUser(null);
     } catch (error) {
       console.error("Error setting check-in time:", error);
@@ -291,6 +295,8 @@ const setTime = async () => {
     >
       &times;
     </button>
+   
+
   </div>
 </div>
 
@@ -445,20 +451,31 @@ const setTime = async () => {
         <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
             <h2 className="text-xl font-semibold mb-4">Set Check-in Time</h2>
-            <label className="block mb-2">Select Date</label>
+            <label className="block text-gray-700 font-semibold mb-1">Select Date</label>
             <input
               type="date"
               className="w-full p-2 border rounded mb-4"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
             />
-            <label className="block mb-2">Select Time</label>
+            <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-1">Check-in Time</label>
             <input
               type="time"
               className="w-full p-2 border rounded mb-4"
               value={selectedTime}
               onChange={(e) => setSelectedTime(e.target.value)}
             />
+            
+             
+  <label className="block text-gray-700 font-semibold mb-1">Check-out Time</label>
+  <input
+    type="time"
+    className="w-full border border-gray-300 rounded px-3 py-2"
+    value={selectedCheckoutTime}
+    onChange={(e) => setSelectedCheckoutTime(e.target.value)}
+  />
+</div>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowModal(false)}

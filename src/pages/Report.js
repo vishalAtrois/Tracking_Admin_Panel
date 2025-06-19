@@ -15,6 +15,8 @@ const [reportModalOpen, setReportModalOpen] = useState(false);
 const [selectedCompany, setSelectedCompany] = useState(null);  // stores selected company name
 const [companyReports, setCompanyReports] = useState([]);      // stores detailed reports of selected company
 const [loadingReports, setLoadingReports] = useState(false); 
+const [selectedUser, setSelectedUser] = useState(null);
+
   
  
 const fetchUserReport = async (item) => {
@@ -33,6 +35,7 @@ const fetchUserReport = async (item) => {
     );
     const result = await response.json();
     if (result.success && result.reportList) {
+      setSelectedUser(item);
       setSelectedUserReports(result.reportList);
       setReportModalOpen(true);
     } else {
@@ -43,10 +46,6 @@ const fetchUserReport = async (item) => {
   }
 };
 
-
-
- 
- 
    function fetchUsers() {
      const token = localStorage.getItem('token');
      setToken(token);
@@ -85,6 +84,46 @@ const fetchUserReport = async (item) => {
      useEffect(() => {
        fetchUsers();
      },[currentpage,searchQuery]);
+
+// delete report
+
+const deleteReport = async (reportId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token not found in localStorage");
+      return;
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      `https://tracking-backend-admin.vercel.app/v1/subAdmin/deleteReport?reportId=${reportId}`,
+      requestOptions
+    );
+
+    const result = await response.json();
+    if (result.success) {
+      alert("Report deleted successfully");
+      if (selectedUser) {
+        fetchUserReport(selectedUser); // Refresh report list
+      }
+    } else {
+      console.error("Failed to delete report", result);
+    }
+  } catch (error) {
+    console.error("Error deleting report:", error);
+  }
+};
+
+
   
    // Logic part
  const npage = Math.ceil(userCount / limit);
@@ -299,24 +338,37 @@ const fetchUserReport = async (item) => {
             className="space-y-2 overflow-y-auto pr-2"
             style={{ maxHeight: 'calc(90vh - 4rem)' }} // subtract header height approx
           >
-            {selectedUserReports.map((report) => {
-              const latestDate = new Date(report.reportDate).toLocaleDateString();
-              return (
-                <button
-                  key={report._id}
-                  className="w-full text-left p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
-                  onClick={() => {
-                    setSelectedCompany(report.companyName);
-                    setLoadingReports(true);
-                    setCompanyReports([report]);
-                    setLoadingReports(false);
-                  }}
-                >
-                  <p className="font-semibold text-gray-800">{report.companyName}</p>
-                  <p className="text-sm text-gray-600">Report: {latestDate}</p>
-                </button>
-              );
-            })}
+           {selectedUserReports.map((report) => {
+  const latestDate = new Date(report.reportDate).toLocaleDateString();
+  return (
+    <div
+      key={report._id}
+      className="w-full flex justify-between items-center p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
+    >
+      <div
+        className="flex-1 cursor-pointer"
+        onClick={() => {
+          setSelectedCompany(report.companyName);
+          setLoadingReports(true);
+          setCompanyReports([report]);
+          setLoadingReports(false);
+        }}
+      >
+        <p className="font-semibold text-gray-800">{report.title}</p>
+        <p className="text-sm text-gray-600">Report: {latestDate}</p>
+      </div>
+
+      <button
+        onClick={() => deleteReport(report._id)}
+        title="Delete Report"
+        className="ml-4 text-red-600 hover:text-red-800"
+      >
+        🗑️
+      </button>
+    </div>
+  );
+})}
+
 
 
           </div>
@@ -373,6 +425,7 @@ const fetchUserReport = async (item) => {
           <p className="text-gray-900">{report.reportTime}</p>
         </div>
       </div>
+      
 
       {/* Report Date & Notes */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -383,6 +436,10 @@ const fetchUserReport = async (item) => {
         <div className="border rounded px-2 py-2 bg-white">
           <p className="text-sm text-gray-700 font-extrabold">Notes</p>
           <p className="text-gray-900">{report.notes}</p>
+        </div>
+        <div className="border rounded px-2 py-2 bg-white">
+          <p className="text-sm text-gray-700 font-extrabold">Title</p>
+          <p className="text-gray-900">{report.title}</p>
         </div>
       </div>
 
@@ -422,24 +479,13 @@ const fetchUserReport = async (item) => {
     </div>
   ))}
 </div>
-
-          </div>
+ </div>
         )
       )}
     </div>
   </div>
 )}
-
-
-
-
-
-
- 
    </div>
- 
-   
-   
    );
  };
  
