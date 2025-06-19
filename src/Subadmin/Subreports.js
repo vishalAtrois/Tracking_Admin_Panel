@@ -13,7 +13,7 @@ const [currentpage, setCurrentpage] = useState(1);
 const limit = 20;
 const [selectedUserReports, setSelectedUserReports] = useState([]);
 const [reportModalOpen, setReportModalOpen] = useState(false);
-const [selectedCompany, setSelectedCompany] = useState(null);  // stores selected company name
+const [selectedReport, setSelectedReport] = useState(null);
 const [companyReports, setCompanyReports] = useState([]);      // stores detailed reports of selected company
 const [loadingReports, setLoadingReports] = useState(false);   // loading indicator for reports fetch
 const [showAddReportModal, setShowAddReportModal] = useState(false);
@@ -780,13 +780,13 @@ const deleteReport = async (reportId) => {
       {/* Header with Title, Add Button and Close Button */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
         <h3 className="text-xl font-bold text-gray-800">
-  {selectedCompany ? companyReports[0]?.title || 'Report Title' : "User Report List"}
+  {selectedReport ? [selectedReport][0]?.title || 'Report Title' : "User Report List"}
 </h3>
 
 
         <div className="flex items-center gap-4">
           {/* Add Report Button */}
-           {!selectedCompany && (
+           {![selectedReport] && (
       <button
         onClick={() => {
           setSelectedUser(userId);
@@ -803,8 +803,7 @@ const deleteReport = async (reportId) => {
             className="text-red-500 text-3xl font-bold"
             onClick={() => {
               setReportModalOpen(false);
-              setSelectedCompany(null);
-              setCompanyReports([]);
+               setSelectedReport(null);
             }}
             title="Close"
           >
@@ -813,7 +812,7 @@ const deleteReport = async (reportId) => {
         </div>
       </div>
       {/* Content */}
-      {!selectedCompany ? (
+      {!selectedReport  ? (
         selectedUserReports.length === 0 ? (
           <p className="text-gray-600 text-center">No reports found.</p>
         ) : (
@@ -832,13 +831,15 @@ const deleteReport = async (reportId) => {
       <div
         className="flex-1 cursor-pointer"
         onClick={() => {
-          setSelectedCompany(report.companyName);
+         setSelectedReport(report);
           setLoadingReports(true);
-          setCompanyReports([report]);
           setLoadingReports(false);
         }}
       >
-        <p className="font-semibold text-gray-800">{report.title}</p>
+        <p className="font-semibold text-gray-800">
+  {report.title?.trim() ? report.title : "Untitled Report"}
+</p>
+
         <p className="text-sm text-gray-600">Report: {latestDate}</p>
       </div>
 
@@ -858,13 +859,13 @@ const deleteReport = async (reportId) => {
         // Step 2: Show detailed reports for selected company
         loadingReports ? (
           <p className="text-center text-gray-600">Loading reports...</p>
-        ) : companyReports.length === 0 ? (
+        ) : !selectedReport ? (
           <p className="text-gray-600 text-center">No reports found for this company.</p>
         ) : (
           <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
             <button
   className="mb-4 inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold border border-blue-600 hover:border-blue-800 rounded-md px-3 py-1.5 transition-colors duration-300"
-  onClick={() => setSelectedCompany(null)}
+  onClick={() => setSelectedReport(null)}
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -879,7 +880,7 @@ const deleteReport = async (reportId) => {
   Back to report list
 </button>
            <div className="max-h-[calc(100vh-8rem)] overflow-y-auto px-2 sm:px-4 space-y-4">
-{companyReports.map((report, idx) => (
+{[selectedReport].map((report, idx) => (
   <div key={report._id} className="border p-3 rounded-lg shadow bg-gray-50 space-y-4">
     
     {/* Title */}
