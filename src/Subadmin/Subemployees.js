@@ -12,6 +12,9 @@ const [sidebarOpen, setSidebarOpen] = useState(false);
 const [searchQuery, setSearchQuery] = useState('');
 const [currentpage, setCurrentpage] = useState(1);
 const limit = 20;
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [confirmPromotion, setConfirmPromotion] = useState(false);
+  const [userId, setUserId] = useState()
    
   const [editedUser, setEditedUser] = useState({
     id: '',
@@ -83,6 +86,51 @@ const limit = 20;
 // setReportId(item.id)
 
 // }
+
+
+  const handlePromoteClick = () => {
+    setShowPrompt(true);
+  };
+
+  const confirmPromote = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please login.");
+      return;
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const raw = JSON.stringify({
+      targetUserId: userId
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch("https://tracking-backend-admin.vercel.app/v1/common/promotion", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("API Result:", result);
+        alert("User promoted successfully.");
+        setShowPrompt(false);
+        setConfirmPromotion(false);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+        alert("Something went wrong.");
+      });
+  };
+
+
+
+
     function fetchUsers() {
       const token = localStorage.getItem('token');
       setToken(token);
@@ -270,6 +318,18 @@ const limit = 20;
                         >
                           <i className="bi bi-trash-fill text-lg"></i>
                         </button>
+       <button
+  onClick={() => {
+    setUserId(item.id);
+    handlePromoteClick();
+  }}
+  className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
+  title="Promote User"
+>
+  <i className="bi bi-person-up text-lg"></i>
+</button>
+
+
                       </div>
                     </td>
                   </tr>
@@ -278,7 +338,60 @@ const limit = 20;
             </table>
           )}
         </div>
-    
+
+{/* promote user  */}
+      {showPrompt && (
+  <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-60 flex items-center justify-center px-4">
+    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative">
+      {/* Close icon */}
+      <button
+        onClick={() => setShowPrompt(false)}
+        className="absolute top-3 right-3 text-gray-400 hover:text-red-500"
+      >
+        <i className="bi bi-x-lg text-lg"></i>
+      </button>
+
+      {/* Title */}
+      <div className="flex items-center gap-3 mb-4">
+        <i className="bi bi-person-up text-blue-600 text-2xl"></i>
+        <h2 className="text-xl font-semibold text-gray-800">Promote to Sub Admin</h2>
+      </div>
+
+      {/* Checkbox */}
+      <label className="flex items-center gap-2 bg-gray-100 rounded p-3 mb-5">
+        <input
+          type="checkbox"
+          checked={confirmPromotion}
+          onChange={(e) => setConfirmPromotion(e.target.checked)}
+          className="accent-blue-600 w-5 h-5"
+        />
+        <span className="text-gray-700">I confirm to promote this user as Sub Admin.</span>
+      </label>
+
+      {/* Buttons */}
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setShowPrompt(false)}
+          className="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={confirmPromote}
+          disabled={!confirmPromotion}
+          className={`px-4 py-2 rounded-md text-white transition ${
+            confirmPromotion
+              ? 'bg-blue-600 hover:bg-blue-700'
+              : 'bg-blue-300 cursor-not-allowed'
+          }`}
+        >
+          Promote
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
       {/* Edit Prompt */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
