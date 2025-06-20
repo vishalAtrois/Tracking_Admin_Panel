@@ -11,9 +11,8 @@
    const [currentpage, setCurrentpage] = useState(1);
    const limit = 20;
    const [selectedUserReports, setSelectedUserReports] = useState([]);
-const [reportModalOpen, setReportModalOpen] = useState(false);
-const [selectedCompany, setSelectedCompany] = useState(null);  // stores selected company name
-const [companyReports, setCompanyReports] = useState([]);      // stores detailed reports of selected company
+   const [selectedReport, setSelectedReport] = useState(null);
+const [reportModalOpen, setReportModalOpen] = useState(false);     // stores detailed reports of selected company
 const [loadingReports, setLoadingReports] = useState(false); 
 const [selectedUser, setSelectedUser] = useState(null);
 
@@ -35,7 +34,7 @@ const fetchUserReport = async (item) => {
     );
     const result = await response.json();
     if (result.success && result.reportList) {
-      setSelectedUser(item);
+    setSelectedUser(item);
       setSelectedUserReports(result.reportList);
       setReportModalOpen(true);
     } else {
@@ -309,178 +308,154 @@ const deleteReport = async (reportId) => {
 {reportModalOpen && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
     <div className="relative w-full max-w-6xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6">
-
+      
       {/* Header */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
-             <h3 className="text-xl font-bold text-gray-800">
-  {selectedCompany ? companyReports[0]?.title || 'Report Title' : "User Report List"}
-</h3>
+        <h3 className="text-xl font-bold text-gray-800">
+          {selectedReport ? selectedReport.title || 'Report Title' : "User Report List"}
+        </h3>
         <button
           className="text-red-500 text-3xl font-bold"
-          onClick={() => {
-            setReportModalOpen(false);
-            setSelectedCompany(null);
-            setCompanyReports([]);
-          }}
+         onClick={() => {
+          setSelectedUser(null);
+          setReportModalOpen(false);
+        }}
           title="close"
         >
           &times;
         </button>
       </div>
 
-      {/* Content */}
-      {!selectedCompany ? (
+      {/* Step 1: Report List */}
+      {!selectedReport && (
         selectedUserReports.length === 0 ? (
           <p className="text-gray-600 text-center">No reports found.</p>
         ) : (
-          // Scrollable container only for buttons list
-          <div
-            className="space-y-2 overflow-y-auto pr-2"
-            style={{ maxHeight: 'calc(90vh - 4rem)' }} // subtract header height approx
+          <div className="space-y-2 overflow-y-auto pr-2" style={{ maxHeight: 'calc(90vh - 4rem)' }}>
+            {selectedUserReports.map((report) => {
+              const latestDate = new Date(report.reportDate).toLocaleDateString();
+              return (
+                <div key={report._id} className="w-full flex justify-between items-center p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300">
+                  <div
+                    className="flex-1 cursor-pointer"
+                    onClick={() => {
+                      setSelectedReport(report);
+                      setLoadingReports(true);
+                      setLoadingReports(false);
+                    }}
+                  >
+                    <p className="font-semibold text-gray-800">{report.title?.trim() || "Untitled Report"}</p>
+                    <p className="text-sm text-gray-600">Report: {latestDate}</p>
+                  </div>
+                  <button
+                    onClick={() => deleteReport(report._id)}
+                    title="Delete Report"
+                    className="ml-4 text-red-600 hover:text-red-800"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )
+      )}
+
+      {/* Step 2: Detailed Report View */}
+      {selectedReport && !loadingReports && (
+        <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
+          <button
+            className="mb-4 inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold border border-blue-600 hover:border-blue-800 rounded-md px-3 py-1.5"
+            onClick={() => setSelectedReport(null)}
           >
-           {selectedUserReports.map((report) => {
-  const latestDate = new Date(report.reportDate).toLocaleDateString();
-  return (
-    <div
-      key={report._id}
-      className="w-full flex justify-between items-center p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to report list
+          </button>
+
+          <div className="border p-3 rounded-lg shadow bg-gray-50 space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="border px-2 py-2 rounded bg-white">
+                <p className="text-sm text-gray-700 font-extrabold">Company</p>
+                <p className="text-gray-900">{selectedReport.companyName || 'N/A'}</p>
+              </div>
+              <div className="border px-2 py-2 rounded bg-white">
+                <p className="text-sm text-gray-700 font-extrabold">Address</p>
+                <p className="text-gray-900">{selectedReport.address || 'N/A'}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="border rounded px-2 py-2 bg-white">
+                <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
+                <p className="text-gray-900">{selectedReport.businessSize || 'N/A'}</p>
+              </div>
+              <div className="border rounded px-2 py-2 bg-white">
+                <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
+                <p className="text-gray-900">{selectedReport.reportTime || 'N/A'}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="border rounded px-2 py-2 bg-white">
+                <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
+                <p className="text-gray-900">{new Date(selectedReport.reportDate || 'N/A').toLocaleDateString()}</p>
+              </div>
+              <div className="border rounded px-2 py-2 bg-white break-words max-w-full">
+                <p className="text-sm text-gray-700 font-extrabold">Notes</p>
+                <p className="text-gray-900 whitespace-pre-wrap">{selectedReport.notes || 'N/A'}</p>
+              </div>
+              <div className="border rounded px-2 py-2 bg-white">
+                <p className="text-sm text-gray-700 font-extrabold">Title</p>
+                <p className="text-gray-900">{selectedReport.title || 'N/A'}</p>
+              </div>
+            </div>
+
+            {selectedReport.file?.url ? (
+  <div className="border rounded px-2 py-2 bg-white">
+    <p className="text-sm text-gray-700 font-extrabold">File</p>
+    <a
+      href={selectedReport.file.url}
+      download
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 underline break-all"
     >
-      <div
-        className="flex-1 cursor-pointer"
-        onClick={() => {
-          setSelectedCompany(report.companyName);
-          setLoadingReports(true);
-          setCompanyReports([report]);
-          setLoadingReports(false);
-        }}
-      >
-        <p className="font-semibold text-gray-800">{report.title}</p>
-        <p className="text-sm text-gray-600">Report: {latestDate}</p>
-      </div>
+      {decodeURIComponent(selectedReport.file.name)}
+    </a>
+  </div>
+) : (
+  <div className="border rounded px-2 py-2 bg-white">
+    <p className="text-sm text-gray-700 font-extrabold">File</p>
+    <p className="text-gray-900">No file</p>
+  </div>
+)}
 
-      <button
-        onClick={() => deleteReport(report._id)}
-        title="Delete Report"
-        className="ml-4 text-red-600 hover:text-red-800"
-      >
-        🗑️
-      </button>
+
+            {selectedReport.images?.length > 0 ? (
+  <div className="border rounded px-2 py-2 bg-white">
+    <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
+    <div className="flex gap-3 overflow-x-auto">
+      {selectedReport.images.map((imgUrl, index) => (
+        <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
+          <img
+            src={imgUrl}
+            alt={`Report Image ${index}`}
+            className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
+          />
+        </a>
+      ))}
     </div>
-  );
-})}
-
-
-
-          </div>
-        )
-      ) : (
-        // Step 2: Show detailed reports for selected company
-        loadingReports ? (
-          <p className="text-center text-gray-600">Loading reports...</p>
-        ) : companyReports.length === 0 ? (
-          <p className="text-gray-600 text-center">No reports found for this company.</p>
-        ) : (
-          <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
-            <button
-  className="mb-4 inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold border border-blue-600 hover:border-blue-800 rounded-md px-3 py-1.5 transition-colors duration-300"
-  onClick={() => setSelectedCompany(null)}
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-  </svg>
-  Back to company list
-</button>
-
-
-           <div className="max-h-[calc(100vh-8rem)] overflow-y-auto px-2 sm:px-4 space-y-4">
-  {companyReports.map((report, idx) => (
-    <div key={report._id} className="border p-3 rounded-lg shadow bg-gray-50 space-y-4">
-      {/* Company & Address */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="border px-2 py-2 rounded bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Company</p>
-          <p className="text-gray-900">{report.companyName}</p>
-        </div>
-        <div className="border px-2 py-2 rounded bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Address</p>
-          <p className="text-gray-900">{report.address}</p>
-        </div>
-      </div>
-
-      {/* Business Size & Report Time */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
-          <p className="text-gray-900">{report.businessSize}</p>
-        </div>
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
-          <p className="text-gray-900">{report.reportTime}</p>
-        </div>
-      </div>
-      
-
-      {/* Report Date & Notes */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
-          <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString()}</p>
-        </div>
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Notes</p>
-          <p className="text-gray-900">{report.notes}</p>
-        </div>
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Title</p>
-          <p className="text-gray-900">{report.title}</p>
-        </div>
-      </div>
-
-      {/* File */}
-      {report.file?.url && (
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">File</p>
-          <a
-            href={report.file.url}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline break-all"
-          >
-            {decodeURIComponent(report.file.name)}
-          </a>
-        </div>
-      )}
-
-      {/* Images */}
-      {report.images?.length > 0 && (
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
-          <div className="flex gap-3 overflow-x-auto">
-            {report.images.map((imgUrl, index) => (
-              <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
-                <img
-                  src={imgUrl}
-                  alt={`Report ${idx} Image ${index}`}
-                  className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
-                />
-              </a>
-            ))}
+  </div>
+) : (
+  <div className="border rounded px-2 py-2 bg-white">
+    <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
+    <p className="text-gray-600 italic">No images available</p>
+  </div>
+)}
           </div>
         </div>
-      )}
-    </div>
-  ))}
-</div>
- </div>
-        )
       )}
     </div>
   </div>

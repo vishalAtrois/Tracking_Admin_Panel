@@ -14,7 +14,7 @@ const limit = 20;
 const [selectedUserReports, setSelectedUserReports] = useState([]);
 const [reportModalOpen, setReportModalOpen] = useState(false);
 const [selectedReport, setSelectedReport] = useState(null);
-const [companyReports, setCompanyReports] = useState([]);      // stores detailed reports of selected company
+// const [companyReports, setCompanyReports] = useState([]);      // stores detailed reports of selected company
 const [loadingReports, setLoadingReports] = useState(false);   // loading indicator for reports fetch
 const [showAddReportModal, setShowAddReportModal] = useState(false);
 const [newReportFile, setNewReportFile] = useState(null);
@@ -36,25 +36,25 @@ const addExtraField = () => {
   setExtraFields([...extraFields, { key: "", value: "" }]);
 };
 
-const removeImage = (indexToRemove) => {
-  const updatedImages = newReportImages.filter((_, i) => i !== indexToRemove);
-  setNewReportImages(updatedImages);
-};
+// const removeImage = (indexToRemove) => {
+//   const updatedImages = newReportImages.filter((_, i) => i !== indexToRemove);
+//   setNewReportImages(updatedImages);
+// };
 
-const handleImageChange = (e, index) => {
-  const file = e.target.files[0]; // Only allow one image per box
-  if (!file) return;
+// const handleImageChange = (e, index) => {
+//   const file = e.target.files[0]; // Only allow one image per box
+//   if (!file) return;
 
-  const updatedImages = [...newReportImages];
+//   const updatedImages = [...newReportImages];
   
-  if (newReportImages.length >= 5) {
-    alert("You can upload up to 5 images only.");
-    return;
-  }
+//   if (newReportImages.length >= 5) {
+//     alert("You can upload up to 5 images only.");
+//     return;
+//   }
 
-  updatedImages[index] = file;
-  setNewReportImages(updatedImages);
-};
+//   updatedImages[index] = file;
+//   setNewReportImages(updatedImages);
+// };
 
 const [newReport, setNewReport] = useState({
   companyName: '',
@@ -860,7 +860,7 @@ const deleteReport = async (reportId) => {
         loadingReports ? (
           <p className="text-center text-gray-600">Loading reports...</p>
         ) : !selectedReport ? (
-          <p className="text-gray-600 text-center">No reports found for this company.</p>
+          <p className="text-gray-600 text-center">No reports found.</p>
         ) : (
           <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
             <button
@@ -916,15 +916,19 @@ const deleteReport = async (reportId) => {
           <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
           <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString() || 'N/A'}</p>
         </div>
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Notes</p>
-          <p className="text-gray-900">{report.notes || 'N/A'}</p>
-        </div>
+        <div className="border rounded px-2 py-2 bg-white break-words max-w-full">
+  <p className="text-sm text-gray-700 font-extrabold">Notes</p>
+  <p className="text-gray-900 whitespace-pre-wrap">{report.notes || 'N/A' }</p>
+</div>
+ <div className="border rounded px-2 py-2 bg-white">
+                <p className="text-sm text-gray-700 font-extrabold">Title</p>
+                <p className="text-gray-900">{selectedReport.title || 'N/A'}</p>
+              </div>
     </div>
     {Object.entries(report).map(([key, value]) => {
       const exclude = [
         "_id", "userId", "__v", "companyName", "address", "businessSize",
-        "reportTime", "reportDate", "notes", "file", "images","createdBy","createdAt","updatedBy"
+        "reportTime", "reportDate", "notes", "file", "images","createdBy","createdAt","updatedBy",'title',
       ];
      if (exclude.includes(key) || value === undefined || value === null || value === '') return null;
   // Handle customFields separately (skip its heading)
