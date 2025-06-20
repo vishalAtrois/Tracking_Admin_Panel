@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
  import { Smartphone } from "lucide-react";
 import Sidebar from '../components/Sidebar';
-import { GoogleMap, LoadScript, Marker, Polygon } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, Marker, Polygon } from '@react-google-maps/api';
 
 export const  Logs = () => {
 
@@ -18,7 +18,9 @@ const [logsData, setLogsData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null); // new state for map location
   const [showMapModal, setShowMapModal] = useState(false);
   
-
+const { isLoaded } = useJsApiLoader({
+  googleMapsApiKey: 'AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE'
+});
 
    
   
@@ -248,7 +250,7 @@ function GetReports(item) {
  
 
        
- <LoadScript googleMapsApiKey="AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE"> 
+  
     {showLogsModal && (
      <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
        <div className="relative w-full max-w-6xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
@@ -350,7 +352,7 @@ function GetReports(item) {
    
          {/* location view  */}
    
-   {showMapModal && selectedLocation && Array.isArray(selectedLocation) && (
+   {showMapModal && selectedLocation && Array.isArray(selectedLocation) && isLoaded && (
      <div className="fixed inset-0 z-50 bg-black bg-opacity-50 p-4 flex justify-center items-center">
        <div className="relative w-full max-w-4xl mx-auto my-20 bg-white rounded-xl shadow-xl border p-4 sm:p-6 max-h-[90vh] flex flex-col">
    
@@ -420,7 +422,7 @@ function GetReports(item) {
        </div>
      </div>
    )}
-   </LoadScript>
+ 
    
     
       {/* Pagination UI */}

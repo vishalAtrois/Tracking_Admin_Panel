@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Subsidebar from './Subsidebar';
-import { GoogleMap, LoadScript, Marker, Polygon, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, Marker, Polygon, useJsApiLoader } from '@react-google-maps/api';
 
 import { Smartphone } from 'lucide-react';
  
