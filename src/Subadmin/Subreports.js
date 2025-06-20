@@ -786,18 +786,19 @@ const deleteReport = async (reportId) => {
 
         <div className="flex items-center gap-4">
           {/* Add Report Button */}
-           {![selectedReport] && (
-      <button
-        onClick={() => {
-          setSelectedUser(userId);
-          setReportModalOpen(false);
-          setShowAddReportModal(true);
-        }}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
-        + Add Report
-      </button>
-    )}
+         {!selectedReport && (
+  <button
+    onClick={() => {
+      setSelectedUser(userId);
+      setReportModalOpen(false);
+      setShowAddReportModal(true);
+    }}
+    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+  >
+    + Add Report
+  </button>
+)}
+
           {/* Close Button */}
           <button
             className="text-red-500 text-3xl font-bold"
@@ -1053,4 +1054,3 @@ const deleteReport = async (reportId) => {
  };
  
  export default Subreports;
- 
