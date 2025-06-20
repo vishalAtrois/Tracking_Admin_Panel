@@ -23,6 +23,48 @@ const [userId,setUserId] = useState('')
 const [selectedUser, setSelectedUser] = useState(null);
 const [extraFields, setExtraFields] = useState([{ key: "", value: "" }]);
 const [isLoading, setIsLoading] = useState(false);
+const [getIdDate,setGetIdDate] = useState(null)
+const [reportDate,setReportDate] = useState(null)
+
+const fetchReportByDate = (date) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Token not found. Please login.");
+    return;
+  }
+
+  if (!date) {
+    fetchUserReport({ id: getIdDate });
+    return;
+  }
+
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${token}`);
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow"
+  };
+
+  fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getReportByDate?userId=${getIdDate}&date=${date}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log("Filtered reports:", result);
+      if (result.success && result.reportList) {
+        setSelectedUserReports(result.reportList);
+      } else {
+        setSelectedUserReports([]);
+      }
+    })
+    .catch((error) => console.error("API Error:", error));
+};
+
+
+// Call this function to trigger the API request
+ 
+
+
 
 
 
@@ -380,13 +422,17 @@ const deleteReport = async (reportId) => {
                  <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                  <td className="border-b border-gray-700 text-center">
                    <div className="flex justify-center gap-4">
-                        <button
-                          onClick={() =>  fetchUserReport(item)}
-                          className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
-                          title="Reports"
-                        >
-                          <i className="fa fa-clipboard text-lg"></i>
-                        </button>
+                       <button
+  onClick={() => {
+    fetchUserReport(item);
+    setGetIdDate(item.id);
+  }}
+  className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
+  title="Reports"
+>
+  <i className="fa fa-clipboard text-lg"></i>
+</button>
+
                        
                    </div>
                  </td>
@@ -777,6 +823,8 @@ const deleteReport = async (reportId) => {
 {reportModalOpen && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
     <div className="relative w-full max-w-6xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6">
+  
+
       {/* Header with Title, Add Button and Close Button */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
         <h3 className="text-xl font-bold text-gray-800">
@@ -812,6 +860,21 @@ const deleteReport = async (reportId) => {
           </button>
         </div>
       </div>
+             <input
+  type="date"
+  value={reportDate}
+  onChange={(e) => {
+    const selectedDate = e.target.value;
+    setReportDate(selectedDate);
+
+    if (selectedDate) {
+      fetchReportByDate(selectedDate); // pass the selected date directly
+    } else {
+      fetchUserReport({ id: getIdDate });
+    }
+  }}
+  className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+/>
       {/* Content */}
       {!selectedReport  ? (
         selectedUserReports.length === 0 ? (

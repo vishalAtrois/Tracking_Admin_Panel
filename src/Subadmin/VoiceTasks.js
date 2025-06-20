@@ -11,7 +11,46 @@ const VoiceTasks = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
-   
+  const [getIdDate,setGetIdDate] = useState(null)
+  const [taskDate,setTaskDate] = useState(null)
+  
+  const fetchTaskByDate = (date) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token not found. Please login.");
+      return;
+    }
+  
+    if (!date) {
+      fetchTasks({ id: getIdDate });
+      return;
+    }
+  
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+  
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+  
+    fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getReportByDate?userId=${getIdDate}&date=${date}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("Filtered reports:", result);
+        if (result.success && result.reportList) {
+  setTasks(result.reportList);
+} else {
+  setTasks([]); // fallback to empty array
+}
+
+      })
+      .catch((error) => console.error("API Error:", error));
+  }; 
+
+
+
 
   function fetchUsers() {
     const token = localStorage.getItem('token');
@@ -173,7 +212,9 @@ const VoiceTasks = () => {
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                     <td className="border-b border-gray-700 text-center">
                       <div className="flex justify-center gap-4">
-                        <button onClick={() => fetchTasks(item)} className="p-2 rounded-full hover:bg-green-100 text-green-500 hover:text-green-800 transition" title="View Tasks">
+                        <button onClick={() => {fetchTasks(item);
+                                               setGetIdDate(item.id);}
+                      } className="p-2 rounded-full hover:bg-green-100 text-green-500 hover:text-green-800 transition" title="View Tasks">
                           <i className="bi bi-list-task text-lg"></i>
                         </button>
                       </div>
@@ -234,6 +275,21 @@ const VoiceTasks = () => {
                   <i className="bi bi-x-lg text-2xl"></i>
                 </button>
               </div>
+                        <input
+  type="date"
+  value={taskDate}
+  onChange={(e) => {
+    const selectedDate = e.target.value;
+    setTaskDate(selectedDate);
+
+    if (selectedDate) {
+      fetchTaskByDate(selectedDate); // pass the selected date directly
+    } else {
+      fetchTasks({ id: getIdDate });
+    }
+  }}
+  className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+/>
               {tasks.length === 0 ? (
                 <p className="text-gray-400">No tasks found.</p>
               ) : (
