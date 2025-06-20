@@ -24,8 +24,34 @@ export const  Subcheckin = () => {
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedCheckoutTime, setSelectedCheckoutTime] = useState("");
+const [showSummaryModal, setShowSummaryModal] = useState(false);
+const [summaryData, setSummaryData] = useState('');
 
 
+const fetchWorkSummary = (activityId) => {
+  const token = localStorage.getItem("token");
+  if (!token || !activityId) {
+    console.error("Missing token or activity ID");
+    return;
+  }
+
+  fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getWorkSummary?employeeActivityId=${activityId}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+    redirect: "follow",
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      if (result.success && result.summary) {
+        setSummaryData(result.summary);
+        setShowSummaryModal(true);
+      }
+    })
+    .catch((err) => console.error("Error fetching summary:", err));
+};
+
+
+ 
 
   const { isLoaded } = useJsApiLoader({
   googleMapsApiKey: 'AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE'
@@ -35,39 +61,51 @@ export const  Subcheckin = () => {
     useEffect(() => {
       fetchUsers();
     },[currentpage,searchQuery]);
+   
  
-function GetReports(item) {
-  const token = localStorage.getItem('token');
+ 
+
+ function GetReports(item) {
+  const token = localStorage.getItem("token");
 
   fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getUserCheckInOutTimes?userId=${item.id}`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
-    redirect: "follow"
+    redirect: "follow",
   })
-    .then(res => res.json())
+    .then((res) => res.json())
     .then((response) => {
-      console.log("API Response for GetReports:", response); 
+      console.log("API Response for GetReports:", response);
 
       const { success, List } = response;
       if (!success || !List?.logs) return;
 
+      // ✅ Flatten logs by date → all timing entries
       const logs = Object.entries(List.logs).flatMap(([date, { timing = [], locations = [] }]) =>
-        (timing || []).map(entry => ({
+        timing.map((entry) => ({
+          _id: entry._id, // employeeActivityId
           date,
           checkInTime: entry.checkInTime,
           checkOutTime: entry.checkOutTime,
           alarmLogs: entry.alarmLogs || [],
-          location: locations.length > 0 ? locations : null, // attach full locations array or null
-          // Or you could use locations[0] if you want just the first location
+          location: locations.length > 0 ? locations : null,
         }))
       );
+
+      console.log("Mapped logs with activity IDs:", logs);
+
+     if (logs.length > 0) {
+  console.log("Logs available:", logs.length);
+}
+
 
       setLogsData(logs);
       setShowLogsModal(true);
       setSelectedLocation(null);
     })
-    .catch(err => console.error("Error fetching reports", err));
+    .catch((err) => console.error("Error fetching reports", err));
 }
+
 
    const mapContainerStyle = {
     height: '500px',
@@ -308,8 +346,8 @@ const setTime = async () => {
           <table className="min-w-full text-sm text-left border-collapse">
             <thead className="sticky top-0 z-10 bg-blue-200 text-blue-900 font-bold uppercase text-[13px] tracking-wider border-b-2 border-gray-500">
               <tr>
-                <th className="border-3 border-gray-500 px-4 py-3 text-center">Check-In</th>
-                <th className="border-3 border-gray-500 px-4 py-3 text-center">Check-Out</th>
+                <th className="border-3 border-gray-500 px-4 py-3 text-center">User Check-In</th>
+                <th className="border-3 border-gray-500 px-4 py-3 text-center">User Check-Out</th>
                 <th className="border-3 border-gray-500 px-4 py-3 text-center">Alarms</th>
                 <th className="border-3 border-gray-500 px-4 py-3 text-center">Location</th>
               </tr>
@@ -369,6 +407,14 @@ const setTime = async () => {
                       <span className="text-gray-400 italic">No location</span>
                     )}
                   </td>
+                 <td className="border-3 border-gray-500 px-4 py-3 text-center">
+  <button
+    className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+    onClick={() => fetchWorkSummary(log._id)}
+  >
+    View Work Summary
+  </button>
+</td>
                 </tr>
               ))}
             </tbody>
@@ -493,6 +539,95 @@ const setTime = async () => {
           </div>
         </div>
       )}
+
+{/* activity modal  */}
+{showSummaryModal && summaryData && (
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto flex justify-center items-center p-4">
+    <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 relative">
+
+      {/* Close Button */}
+      <button
+        onClick={() => setShowSummaryModal(false)}
+        className="absolute top-2 right-2 text-red-600 text-2xl font-bold"
+        title="Close"
+      >
+        &times;
+      </button>
+
+      <h2 className="text-xl font-bold text-gray-800 mb-4">Work Summary</h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Date</p>
+          <p className="text-gray-900">
+            {summaryData.date ? new Date(summaryData.date).toLocaleDateString() : 'N/A'}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Expected Hours</p>
+          <p className="text-gray-900">{summaryData.expectedWorkingHours || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Actual Hours</p>
+          <p className="text-gray-900">{summaryData.actualWorkingHours || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Underwork</p>
+          <p className="text-gray-900">{summaryData.underwork || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Overwork</p>
+          <p className="text-gray-900">{summaryData.overwork || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Late Check-in</p>
+          <p className="text-gray-900">{summaryData.lateCheckIn || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Early Check-out</p>
+          <p className="text-gray-900">{summaryData.earlyCheckOut || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Admin Check-in</p>
+          <p className="text-gray-900">
+            {summaryData.adminCheckIn ? new Date(summaryData.adminCheckIn).toLocaleTimeString() : 'N/A'}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Admin Check-out</p>
+          <p className="text-gray-900">
+            {summaryData.adminCheckOut ? new Date(summaryData.adminCheckOut).toLocaleTimeString() : 'N/A'}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">User Check-in</p>
+          <p className="text-gray-900">
+            {summaryData.userCheckIn ? new Date(summaryData.userCheckIn).toLocaleTimeString() : 'N/A'}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">User Check-out</p>
+          <p className="text-gray-900">
+            {summaryData.userCheckOut ? new Date(summaryData.userCheckOut).toLocaleTimeString() : 'N/A'}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
 
       {/* Pagination UI */}
       <div className="custom-pagination-container flex justify-center mt-2">

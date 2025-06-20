@@ -14,6 +14,8 @@ const VoiceTasks = () => {
   const [getIdDate,setGetIdDate] = useState(null)
   const [taskDate,setTaskDate] = useState(null)
   
+
+  
   const fetchTaskByDate = (date) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -99,10 +101,11 @@ const VoiceTasks = () => {
     fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getTask?userId=${userId.id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        if (result.success && Array.isArray(result.tasktList)) {
-          setTasks(result.tasktList);
-          setShowTaskModal(true);
-        } else {
+        if (result.success && Array.isArray(result.tasktList.tasks)) {
+          console.log("tasks response ",result)
+  setTasks(result.tasktList.tasks);
+  setShowTaskModal(true);
+} else {
           console.error("Unexpected task API response format:", result);
         }
       })
