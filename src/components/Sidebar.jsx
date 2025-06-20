@@ -5,6 +5,8 @@ import profilePhoto from '../assets/images/profilephoto.jpg';
  
 
 const Sidebar = () => {
+
+const [showLogoutModal, setShowLogoutModal] = useState(false);
 const navigate=useNavigate()
  
 
@@ -47,7 +49,7 @@ const navigate=useNavigate()
           alert("you are logged out ")
           localStorage.removeItem('token');
           localStorage.removeItem('user')
-          localStorage.removeItem('ruser')
+          localStorage.removeItem('rtoken')
           navigate('/'); 
         }else{
           console.error(result)
@@ -81,14 +83,16 @@ const navigate=useNavigate()
       <li><NavLink to="/report" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard"></i>Daily Reports</NavLink></li>
       <li><NavLink to="/Logs" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note"></i> Work Hours</NavLink></li>
       <li><NavLink to="/notifications" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell"></i> Notifications</NavLink></li>
-      <li><NavLink to="/about" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-info-circle"></i> About Us</NavLink></li>
+      {/* <li><NavLink to="/about" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-info-circle"></i> About Us</NavLink></li> */}
     </ul>
 
    {/* Logout Button */}
    <div className="logout-section">
         <button
           className="logout-button"
-          onClick={() =>  Logout()}
+         onClick={() => {
+                    setShowLogoutModal(true);
+                  }}
         >
           <i className="fa fa-sign-out"></i> Logout
         </button>
@@ -97,7 +101,28 @@ const navigate=useNavigate()
       
    
       {/* Logout Modal */}
-  
+   {showLogoutModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-start justify-center z-50 pt-20">
+          <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800">Confirm Logout</h2>
+            <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-600 transition text-white"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={Logout}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
   </div>
   );
 };
