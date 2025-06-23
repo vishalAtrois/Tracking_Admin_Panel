@@ -542,89 +542,191 @@ const setTime = async () => {
 
 {/* activity modal  */}
 {showSummaryModal && summaryData && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto flex justify-center items-center p-4">
-    <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 relative">
-
+<div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto flex justify-center items-center p-4">
+<div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 relative">
+ 
       {/* Close Button */}
-      <button
+<button
+
         onClick={() => setShowSummaryModal(false)}
+
         className="absolute top-2 right-2 text-red-600 text-2xl font-bold"
+
         title="Close"
-      >
-        &times;
-      </button>
-
+>
+&times;
+</button>
+ 
       <h2 className="text-xl font-bold text-gray-800 mb-4">Work Summary</h2>
+ 
+      {/* Convert minutes to hours & minutes */}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">Date</p>
-          <p className="text-gray-900">
-            {summaryData.date ? new Date(summaryData.date).toLocaleDateString() : 'N/A'}
-          </p>
-        </div>
+      {(() => {
 
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">Expected Hours</p>
-          <p className="text-gray-900">{summaryData.expectedWorkingHours || 'N/A'}</p>
-        </div>
+        const convertMinutesToTime = (minuteString) => {
 
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">Actual Hours</p>
-          <p className="text-gray-900">{summaryData.actualWorkingHours || 'N/A'}</p>
-        </div>
+          const totalMinutes = parseFloat(minuteString);
 
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">Underwork</p>
-          <p className="text-gray-900">{summaryData.underwork || 'N/A'}</p>
-        </div>
+          if (isNaN(totalMinutes)) return 'N/A';
+ 
+          const hours = Math.floor(totalMinutes / 60);
 
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">Overwork</p>
-          <p className="text-gray-900">{summaryData.overwork || 'N/A'}</p>
-        </div>
+          const minutes = Math.floor(totalMinutes % 60);
 
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">Late Check-in</p>
-          <p className="text-gray-900">{summaryData.lateCheckIn || 'N/A'}</p>
-        </div>
+          const seconds = Math.floor(((totalMinutes % 1) * 60));
+ 
+          let result = '';
 
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">Early Check-out</p>
-          <p className="text-gray-900">{summaryData.earlyCheckOut || 'N/A'}</p>
-        </div>
+          if (hours > 0) result += `${hours} hour${hours > 1 ? 's' : ''} `;
 
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">Admin Check-in</p>
-          <p className="text-gray-900">
-            {summaryData.adminCheckIn ? new Date(summaryData.adminCheckIn).toLocaleTimeString() : 'N/A'}
-          </p>
-        </div>
+          if (minutes > 0) result += `${minutes} minute${minutes > 1 ? 's' : ''} `;
 
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">Admin Check-out</p>
-          <p className="text-gray-900">
-            {summaryData.adminCheckOut ? new Date(summaryData.adminCheckOut).toLocaleTimeString() : 'N/A'}
-          </p>
-        </div>
+          if (seconds > 0) result += `${seconds} second${seconds > 1 ? 's' : ''}`;
+ 
+          return result.trim() || '0 minutes';
 
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">User Check-in</p>
-          <p className="text-gray-900">
-            {summaryData.userCheckIn ? new Date(summaryData.userCheckIn).toLocaleTimeString() : 'N/A'}
-          </p>
-        </div>
+        };
+ 
+        return (
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<p className="text-sm text-gray-500 font-semibold">Date</p>
+<p className="text-gray-900">
 
-        <div>
-          <p className="text-sm text-gray-500 font-semibold">User Check-out</p>
-          <p className="text-gray-900">
-            {summaryData.userCheckOut ? new Date(summaryData.userCheckOut).toLocaleTimeString() : 'N/A'}
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
+                {summaryData.date ? new Date(summaryData.date).toLocaleDateString() : 'N/A'}
+</p>
+</div>
+ 
+            <div>
+<p className="text-sm text-gray-500 font-semibold">Expected Duration</p>
+<p className="text-gray-900">
+
+                {summaryData.expectedWorkingHours
+
+                  ? convertMinutesToTime(parseFloat(summaryData.expectedWorkingHours) * 60)
+
+                  : 'N/A'}
+</p>
+</div>
+ 
+            <div>
+<p className="text-sm text-gray-500 font-semibold">Actual Duration</p>
+<p className="text-gray-900">
+
+                {summaryData.actualWorkingHours
+
+                  ? convertMinutesToTime(parseFloat(summaryData.actualWorkingHours) * 60)
+
+                  : 'N/A'}
+</p>
+</div>
+ 
+            <div>
+<p className="text-sm text-gray-500 font-semibold">Underwork</p>
+<p className="text-gray-900">
+
+                {summaryData.underwork
+
+                  ? convertMinutesToTime(parseFloat(summaryData.underwork) * 60)
+
+                  : 'N/A'}
+</p>
+</div>
+ 
+            <div>
+<p className="text-sm text-gray-500 font-semibold">Overwork</p>
+<p className="text-gray-900">
+
+                {summaryData.overwork
+
+                  ? convertMinutesToTime(parseFloat(summaryData.overwork) * 60)
+
+                  : 'N/A'}
+</p>
+</div>
+ 
+            <div>
+<p className="text-sm text-gray-500 font-semibold">Late Check-in</p>
+<p className="text-gray-900">
+
+                {summaryData.lateCheckIn
+
+                  ? convertMinutesToTime(parseFloat(summaryData.lateCheckIn) * 60)
+
+                  : 'N/A'}
+</p>
+</div>
+ 
+            <div>
+<p className="text-sm text-gray-500 font-semibold">Early Check-out</p>
+<p className="text-gray-900">
+
+                {summaryData.earlyCheckOut
+
+                  ? convertMinutesToTime(parseFloat(summaryData.earlyCheckOut) * 60)
+
+                  : 'N/A'}
+</p>
+</div>
+ 
+            <div>
+<p className="text-sm text-gray-500 font-semibold">Admin Check-in</p>
+<p className="text-gray-900">
+
+                {summaryData.adminCheckIn
+
+                  ? new Date(summaryData.adminCheckIn).toLocaleTimeString()
+
+                  : 'N/A'}
+</p>
+</div>
+ 
+            <div>
+<p className="text-sm text-gray-500 font-semibold">Admin Check-out</p>
+<p className="text-gray-900">
+
+                {summaryData.adminCheckOut
+
+                  ? new Date(summaryData.adminCheckOut).toLocaleTimeString()
+
+                  : 'N/A'}
+</p>
+</div>
+ 
+            <div>
+<p className="text-sm text-gray-500 font-semibold">User Check-in</p>
+<p className="text-gray-900">
+
+                {summaryData.userCheckIn
+
+                  ? new Date(summaryData.userCheckIn).toLocaleTimeString()
+
+                  : 'N/A'}
+</p>
+</div>
+ 
+            <div>
+<p className="text-sm text-gray-500 font-semibold">User Check-out</p>
+<p className="text-gray-900">
+
+                {summaryData.userCheckOut
+
+                  ? new Date(summaryData.userCheckOut).toLocaleTimeString()
+
+                  : 'N/A'}
+</p>
+</div>
+</div>
+
+        );
+
+      })()}
+</div>
+</div>
+
 )}
+
+ 
 
 
 
