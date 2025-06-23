@@ -272,7 +272,7 @@ const setTime = async () => {
          <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
               <thead className="bg-gray-700">
                 <tr>
-                  {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Logs'].map((heading) => (
+                  {['Sr.no', 'Name', 'Email',  'Company Name', 'Open Logs'].map((heading) => (
                     <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
                   {heading}
                 </th>
@@ -285,7 +285,6 @@ const setTime = async () => {
                     <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
-                    <td className="border-b border-r border-gray-700 text-center">{item.phoneNumber}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                     <td className="border-b border-gray-700 text-center">
                       <div className="flex justify-center gap-4">
@@ -293,10 +292,10 @@ const setTime = async () => {
                           onClick={() => {GetReports(item)
                              setSelectedUser(item)
                           }}
-                          className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
+                        className="w-full sm:w-64 text-left p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
                           title="Logs"
-                        >
-                          <i className="fa fa-sticky-note text-lg"></i>
+                        > Open logs for {item.fullName}
+                          {/* <i className="fa fa-sticky-note text-lg"></i> */}
                         </button>
                  
                       </div>
@@ -350,6 +349,7 @@ const setTime = async () => {
                 <th className="border-3 border-gray-500 px-4 py-3 text-center">User Check-Out</th>
                 <th className="border-3 border-gray-500 px-4 py-3 text-center">Alarms</th>
                 <th className="border-3 border-gray-500 px-4 py-3 text-center">Location</th>
+                 <th className="border-3 border-gray-500 px-4 py-3 text-center">Work Summary</th>
               </tr>
             </thead>
             <tbody className="text-gray-800 font-medium">
@@ -412,7 +412,7 @@ const setTime = async () => {
     className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
     onClick={() => fetchWorkSummary(log._id)}
   >
-    View Work Summary
+    View more data
   </button>
 </td>
                 </tr>
