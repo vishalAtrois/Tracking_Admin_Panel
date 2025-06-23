@@ -22,9 +22,13 @@ const [logsData, setLogsData] = useState([]);
   
   
   const fetchWorkSummary = (activityId) => {
-    const token = localStorage.getItem("token");
-    if (!token || !activityId) {
-      console.error("Missing token or activity ID");
+    const token = localStorage.getItem("Admintoken");
+    if (!token ) {
+      console.error("Missing token ");
+      return;
+    }
+      if ( !activityId) {
+      console.error("Missing   activity ID");
       return;
     }
   
@@ -76,6 +80,7 @@ function GetReports(item) {
 
       const logs = Object.entries(List.logs).flatMap(([date, { timing = [], locations = [] }]) =>
         (timing || []).map(entry => ({
+            _id: entry._id,
           date,
           checkInTime: entry.checkInTime,
           checkOutTime: entry.checkOutTime,
@@ -292,7 +297,7 @@ function GetReports(item) {
          </div>
    
          {/* Logs table */}
-        {logsData.length > 0 ? (
+           {logsData.length > 0 ? (
                 <div className="overflow-y-auto rounded-lg shadow-lg border-2 border-gray-500"
                      style={{ maxHeight: 'calc(90vh - 5rem)' }} // adjust to leave space for header + padding
                 >
