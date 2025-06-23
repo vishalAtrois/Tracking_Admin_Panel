@@ -149,7 +149,7 @@ function fetchCompany() {
           </div>
           {/* Companies Card */}
           <div
-            onClick={() => navigate('/Suballtasks')}
+            onClick={() => navigate('/VoiceTasks')}
             className="bg-gradient-to-br from-indigo-600 to-indigo-900 hover:from-indigo-700 hover:to-indigo-950 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
           >
             <div className="flex justify-between items-center">
