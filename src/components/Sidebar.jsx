@@ -46,7 +46,6 @@ const navigate=useNavigate()
       .then((result) => {
         console.log(result);
         if(result.success == true){
-          alert("you are logged out ")
           localStorage.removeItem('Admintoken');
           localStorage.removeItem('user')
           localStorage.removeItem('rtoken')
