@@ -323,7 +323,7 @@ const setTime = async () => {
       className="px-4 py-2 text-sm font-medium rounded bg-blue-100 text-blue-600 hover:bg-blue-200 transition"
       title="Add Check-in Time"
     >
-      + Add Check-in Time
+      + Add Check-in Check-out Time
     </button>
     <button
       className="text-red-500 text-3xl font-bold leading-none"
@@ -496,7 +496,7 @@ const setTime = async () => {
 {showModal && (
         <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-            <h2 className="text-xl font-semibold mb-4">Set Check-in Time</h2>
+            <h2 className="text-xl font-semibold mb-4">Set Check-in Check-out Time</h2>
             <label className="block text-gray-700 font-semibold mb-1">Select Date</label>
             <input
               type="date"
