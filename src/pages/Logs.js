@@ -210,7 +210,7 @@ function GetReports(item) {
            <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
               <thead className="bg-gray-700">
                 <tr>
-                  {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Logs'].map((heading) => (
+                  {['Sr.no', 'Name', 'Email', 'Company Name', 'Open Logs'].map((heading) => (
                     <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
                   {heading}
                 </th>
@@ -223,7 +223,6 @@ function GetReports(item) {
                     <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
-                    <td className="border-b border-r border-gray-700 text-center">{item.phoneNumber}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                     <td className="border-b border-gray-700 text-center">
                       <div className="flex justify-center gap-4">
@@ -232,8 +231,8 @@ function GetReports(item) {
                           onClick={() => GetReports(item)}
                           className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
                           title="Logs"
-                        >
-                          <i className="fa fa-sticky-note"></i>
+                        >Open reports for {item.fullName}
+                          {/* <i className="fa fa-sticky-note"></i> */}
                         </button>
  
                       </div>

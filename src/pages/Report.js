@@ -273,7 +273,6 @@ const deleteReport = async (reportId) => {
                  <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
                  <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
                  <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
-                 <td className="border-b border-r border-gray-700 text-center">{item.phoneNumber}</td>
                  <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                  <td className="border-b border-gray-700 text-center">
                    <div className="flex justify-center gap-4">
@@ -284,8 +283,8 @@ const deleteReport = async (reportId) => {
   }}
   className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
   title="Reports"
->
-  <i className="fa fa-clipboard text-lg"></i>
+>Open reports for {item.fullName} 
+  {/* <i className="fa fa-clipboard text-lg"></i> */}
 </button>
                    </div>
                  </td>
