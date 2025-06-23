@@ -13,7 +13,7 @@ const Subdashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const [taskChartData, setTaskChartData] = useState([]);
-    
+    const [totalTasks, setTotalTasks] = useState(0)
   
  useEffect(() => {
     Get()
@@ -54,6 +54,35 @@ const Subdashboard = () => {
       })
       .catch((error) => console.error(error));
   }
+
+
+  function fetchTaskCount (){
+
+    const token = localStorage.getItem('token')
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+    
+    fetch("https://tracking-backend-admin.vercel.app/v1/subAdmin/taskCount", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if(result.success === true){
+          console.log("fetchTaskcount result",result);
+          setTotalTasks(result.totalTasks)
+          
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
+useEffect(()=>{fetchTaskCount()},[])
+  
+
 
 function fetchCompany() {
   // ✅ Manual hardcoded task data
@@ -156,7 +185,7 @@ function fetchCompany() {
               <div>
                 <h3 className="text-lg sm:text-xl font-semibold mb-2">Total tasks</h3>
                 <p className="text-3xl sm:text-4xl font-bold">
-                  {loading ? '...' : companyCount}
+                  {loading ? '...' : totalTasks}
                 </p>
               </div>
               <i className="fa fa-building text-4xl sm:text-5xl opacity-80" />
