@@ -81,7 +81,7 @@ const Subsidebar = () => {
       {/* Nav Links */}
       <ul className="nav-list">
         <li><NavLink to="/Subdashboard" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tachometer text-lg"></i> Dashboard</NavLink></li>
-        <li><NavLink to="/Suballtasks" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tasks text-lg"></i> All Tasks</NavLink></li>
+        {/* <li><NavLink to="/Suballtasks" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tasks text-lg"></i> All Tasks</NavLink></li> */}
         <li><NavLink to="/Subreports" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard text-lg"></i> Daily Reports</NavLink></li>
         <li><NavLink to="/Subcheckin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note text-lg"></i> Work Hours</NavLink></li>
         <li><NavLink to="/Subemployees" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user text-lg"></i> Employees</NavLink></li>

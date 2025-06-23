@@ -17,14 +17,39 @@ export const  Logs = () => {
 const [logsData, setLogsData] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null); // new state for map location
   const [showMapModal, setShowMapModal] = useState(false);
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
+  const [summaryData, setSummaryData] = useState('');
   
+  
+  const fetchWorkSummary = (activityId) => {
+    const token = localStorage.getItem("token");
+    if (!token || !activityId) {
+      console.error("Missing token or activity ID");
+      return;
+    }
+  
+    fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getWorkSummary?employeeActivityId=${activityId}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+      redirect: "follow",
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.success && result.summary) {
+          setSummaryData(result.summary);
+          setShowSummaryModal(true);
+        }
+      })
+      .catch((err) => console.error("Error fetching summary:", err));
+  };
+
+
+
+
 const { isLoaded } = useJsApiLoader({
   googleMapsApiKey: 'AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE'
 });
-
-   
   
-   
       //  fetching data 
     useEffect(() => {
       fetchUsers();
@@ -231,7 +256,7 @@ function GetReports(item) {
                           onClick={() => GetReports(item)}
                           className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
                           title="Logs"
-                        >Open reports for {item.fullName}
+                        >Open logs for {item.fullName}
                           {/* <i className="fa fa-sticky-note"></i> */}
                         </button>
  
@@ -267,82 +292,91 @@ function GetReports(item) {
          </div>
    
          {/* Logs table */}
-         {logsData.length > 0 ? (
-           <div className="overflow-y-auto rounded-lg shadow-lg border-2 border-gray-500"
-                style={{ maxHeight: 'calc(90vh - 5rem)' }} // adjust to leave space for header + padding
-           >
-             <table className="min-w-full text-sm text-left border-collapse">
-               <thead className="sticky top-0 z-10 bg-blue-200 text-blue-900 font-bold uppercase text-[13px] tracking-wider border-b-2 border-gray-500">
-                 <tr>
-                   <th className="border-3 border-gray-500  text-center">Check-In</th>
-                   <th className="border-3 border-gray-500  text-center">Check-Out</th>
-                   <th className="border-3 border-gray-500  text-center">Alarms</th>
-                   <th className="border-3 border-gray-500  text-center">Location</th>
-                 </tr>
-               </thead>
-               <tbody className="text-gray-800 font-medium">
-                 {logsData.map((log, index) => (
-                   <tr
-                     key={index}
-                     className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
-                   >
-                     <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                       {new Date(log.checkInTime).toLocaleString()}
-                     </td>
-                     <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                       {new Date(log.checkOutTime).toLocaleString()}
-                     </td>
-                     <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                       {log.alarmLogs && log.alarmLogs.length > 0 ? (
-                         <div className="flex justify-center gap-3 flex-wrap">
-                           {log.alarmLogs.slice(0, 3).map((alarm) => (
-                             <span
-                               key={alarm._id}
-                               title={`Turned off by ${alarm.turnedOffBy} at ${new Date(
-                                 alarm.time
-                               ).toLocaleTimeString()}`}
-                               className="inline-block"
-                             >
-                               <Smartphone
-                                 size={24}
-                                 strokeWidth={2.5}
-                                 className={`rounded-full p-1 shadow-sm ${
-                                   alarm.turnedOffBy === "user"
-                                     ? "text-green-700 bg-green-100"
-                                     : "text-red-700 bg-red-100"
-                                 }`}
-                               />
-                             </span>
-                           ))}
-                         </div>
-                       ) : (
-                         <span className="text-gray-400 italic">No alarms</span>
-                       )}
-                     </td>
-                     <td className="border-3 border-gray-500 px-4 py-3 text-center">
-                       {log.location ? (
-                         <button
-                           onClick={() => {
-                             setSelectedLocation(log.location);
-                             setShowLogsModal(false);
-                             setShowMapModal(true);
-                           }}
-                           className="px-2 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
-                         >
-                           Show Location
-                         </button>
-                       ) : (
-                         <span className="text-gray-400 italic">No location</span>
-                       )}
-                     </td>
-                   </tr>
-                 ))}
-               </tbody>
-             </table>
-           </div>
-         ) : (
-           <p className="text-gray-600 italic mt-4 text-center">No logs found.</p>
-         )}
+        {logsData.length > 0 ? (
+                <div className="overflow-y-auto rounded-lg shadow-lg border-2 border-gray-500"
+                     style={{ maxHeight: 'calc(90vh - 5rem)' }} // adjust to leave space for header + padding
+                >
+                  <table className="min-w-full text-sm text-left border-collapse">
+                    <thead className="sticky top-0 z-10 bg-blue-200 text-blue-900 font-bold uppercase text-[13px] tracking-wider border-b-2 border-gray-500">
+                      <tr>
+                        <th className="border-3 border-gray-500 px-4 py-3 text-center">User Check-In</th>
+                        <th className="border-3 border-gray-500 px-4 py-3 text-center">User Check-Out</th>
+                        <th className="border-3 border-gray-500 px-4 py-3 text-center">Alarms</th>
+                        <th className="border-3 border-gray-500 px-4 py-3 text-center">Location</th>
+                         <th className="border-3 border-gray-500 px-4 py-3 text-center">Work Summary</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-gray-800 font-medium">
+                      {logsData.map((log, index) => (
+                        <tr
+                          key={index}
+                          className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
+                        >
+                          <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                            {new Date(log.checkInTime).toLocaleString()}
+                          </td>
+                          <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                            {new Date(log.checkOutTime).toLocaleString()}
+                          </td>
+                          <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                            {log.alarmLogs && log.alarmLogs.length > 0 ? (
+                              <div className="flex justify-center gap-3 flex-wrap">
+                                {log.alarmLogs.slice(0, 3).map((alarm) => (
+                                  <span
+                                    key={alarm._id}
+                                    title={`Turned off by ${alarm.turnedOffBy} at ${new Date(
+                                      alarm.time
+                                    ).toLocaleTimeString()}`}
+                                    className="inline-block"
+                                  >
+                                    <Smartphone
+                                      size={24}
+                                      strokeWidth={2.5}
+                                      className={`rounded-full p-1 shadow-sm ${
+                                        alarm.turnedOffBy === "user"
+                                          ? "text-green-700 bg-green-100"
+                                          : "text-red-700 bg-red-100"
+                                      }`}
+                                    />
+                                  </span>
+                                ))}
+                              </div>
+                            ) : (
+                              <span className="text-gray-400 italic">No alarms</span>
+                            )}
+                          </td>
+                          <td className="border-3 border-gray-500 px-4 py-3 text-center">
+                            {log.location ? (
+                              <button
+                                onClick={() => {
+                                  setSelectedLocation(log.location);
+                                  setShowLogsModal(false);
+                                  setShowMapModal(true);
+                                }}
+                                className="px-2 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
+                              >
+                                Show Location
+                              </button>
+                            ) : (
+                              <span className="text-gray-400 italic">No location</span>
+                            )}
+                          </td>
+                         <td className="border-3 border-gray-500 px-4 py-3 text-center">
+          <button
+            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+            onClick={() => fetchWorkSummary(log._id)}
+          >
+            View more data
+          </button>
+        </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p className="text-gray-600 italic mt-4 text-center">No logs found.</p>
+              )}
        </div>
      </div>
    )}
@@ -422,6 +456,92 @@ function GetReports(item) {
      </div>
    )}
  
+ {/* activity modal */}
+
+ {showSummaryModal && summaryData && (
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto flex justify-center items-center p-4">
+    <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 relative">
+
+      {/* Close Button */}
+      <button
+        onClick={() => setShowSummaryModal(false)}
+        className="absolute top-2 right-2 text-red-600 text-2xl font-bold"
+        title="Close"
+      >
+        &times;
+      </button>
+
+      <h2 className="text-xl font-bold text-gray-800 mb-4">Work Summary</h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Date</p>
+          <p className="text-gray-900">
+            {summaryData.date ? new Date(summaryData.date).toLocaleDateString() : 'N/A'}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Expected Hours</p>
+          <p className="text-gray-900">{summaryData.expectedWorkingHours || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Actual Hours</p>
+          <p className="text-gray-900">{summaryData.actualWorkingHours || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Underwork</p>
+          <p className="text-gray-900">{summaryData.underwork || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Overwork</p>
+          <p className="text-gray-900">{summaryData.overwork || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Late Check-in</p>
+          <p className="text-gray-900">{summaryData.lateCheckIn || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Early Check-out</p>
+          <p className="text-gray-900">{summaryData.earlyCheckOut || 'N/A'}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Admin Check-in</p>
+          <p className="text-gray-900">
+            {summaryData.adminCheckIn ? new Date(summaryData.adminCheckIn).toLocaleTimeString() : 'N/A'}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">Admin Check-out</p>
+          <p className="text-gray-900">
+            {summaryData.adminCheckOut ? new Date(summaryData.adminCheckOut).toLocaleTimeString() : 'N/A'}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">User Check-in</p>
+          <p className="text-gray-900">
+            {summaryData.userCheckIn ? new Date(summaryData.userCheckIn).toLocaleTimeString() : 'N/A'}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-semibold">User Check-out</p>
+          <p className="text-gray-900">
+            {summaryData.userCheckOut ? new Date(summaryData.userCheckOut).toLocaleTimeString() : 'N/A'}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
    
     
       {/* Pagination UI */}

@@ -15,6 +15,9 @@ const limit = 20;
   const [showPrompt, setShowPrompt] = useState(false);
   const [confirmPromotion, setConfirmPromotion] = useState(false);
   const [userId, setUserId] = useState()
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('')
+
    
   const [editedUser, setEditedUser] = useState({
     id: '',
@@ -104,7 +107,8 @@ const limit = 20;
     myHeaders.append("Authorization", `Bearer ${token}`);
 
     const raw = JSON.stringify({
-      targetUserId: userId
+      targetUserId: userId,
+      rawPassword:password,
     });
 
     const requestOptions = {
@@ -117,7 +121,7 @@ const limit = 20;
     fetch("https://tracking-backend-admin.vercel.app/v1/common/promotion", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log("API Result:", result);
+        console.log("promotion api result:", result);
         alert("User promoted successfully.");
         setShowPrompt(false);
         setConfirmPromotion(false);
@@ -322,14 +326,13 @@ const limit = 20;
   onClick={() => {
     setUserId(item.id);
     handlePromoteClick();
+    setEmail(item.email)
   }}
   className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
   title="Promote User"
 >
   <i className="bi bi-person-up text-lg"></i>
 </button>
-
-
                       </div>
                     </td>
                   </tr>
@@ -340,7 +343,7 @@ const limit = 20;
         </div>
 
 {/* promote user  */}
-      {showPrompt && (
+     {showPrompt && (
   <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-60 flex items-center justify-center px-4">
     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative">
       {/* Close icon */}
@@ -357,7 +360,30 @@ const limit = 20;
         <h2 className="text-xl font-semibold text-gray-800">Promote to Sub Admin</h2>
       </div>
 
-      {/* Checkbox */}
+      {/* Email (non-editable) */}
+      <div className="mb-5">
+        <label className="block text-gray-700 font-medium mb-1">User Email</label>
+        <input
+          type="text"
+          value={email}
+          readOnly
+          className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 text-gray-500 cursor-not-allowed"
+        />
+      </div>
+
+      {/* Password input */}
+      <div className="mb-5">
+        <label className="block text-gray-700 font-medium mb-1">Set Password for this user.</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter password"
+        />
+      </div>
+
+      {/* Confirmation Checkbox */}
       <label className="flex items-center gap-2 bg-gray-100 rounded p-3 mb-5">
         <input
           type="checkbox"
@@ -368,7 +394,7 @@ const limit = 20;
         <span className="text-gray-700">I confirm to promote this user as Sub Admin.</span>
       </label>
 
-      {/* Buttons */}
+      {/* Action Buttons */}
       <div className="flex justify-end gap-3">
         <button
           onClick={() => setShowPrompt(false)}
