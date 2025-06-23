@@ -19,7 +19,7 @@ const [getIdDate,setGetIdDate] = useState(null)
 const [reportDate,setReportDate] = useState(null)
 
 const fetchReportByDate = (date) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("Admintoken");
   if (!token) {
     console.error("Token not found. Please login.");
     return;
@@ -58,7 +58,7 @@ const fetchReportByDate = (date) => {
   
  
 const fetchUserReport = async (item) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('Admintoken');
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
 
@@ -85,7 +85,7 @@ const fetchUserReport = async (item) => {
 };
 
    function fetchUsers() {
-     const token = localStorage.getItem('token');
+     const token = localStorage.getItem('Admintoken');
      setToken(token);
      const myHeaders = new Headers();
      myHeaders.append("Authorization", `Bearer ${token}`);
@@ -127,7 +127,7 @@ const fetchUserReport = async (item) => {
 
 const deleteReport = async (reportId) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("Admintoken");
     if (!token) {
       console.error("Token not found in localStorage");
       return;

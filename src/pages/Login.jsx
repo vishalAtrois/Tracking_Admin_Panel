@@ -47,7 +47,11 @@ function Login() {
         .then((result) => {
               setLoading(false);
           if (result.success === true) {
-            localStorage.setItem("token", result.token.access.token);
+                if (values.userType === "subAdmin") {
+        localStorage.setItem("token", result.token.access.token); // Subadmin token
+      } else {
+        localStorage.setItem("Admintoken", result.token.access.token); // Admin token
+      }
             localStorage.setItem("rtoken", result.token.refresh.token);
             localStorage.setItem("user", JSON.stringify(result.user));
             console.log('login response',result)

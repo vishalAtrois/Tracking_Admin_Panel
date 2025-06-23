@@ -35,7 +35,7 @@ const { isLoaded } = useJsApiLoader({
 
 
 function GetReports(item) {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('Admintoken');
 
   fetch(`https://tracking-backend-admin.vercel.app/v1/admin/getUserCheckInOutTimes?userId=${item.id}`, {
     method: "GET",
@@ -77,7 +77,7 @@ function GetReports(item) {
 
   
     function fetchUsers() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('Admintoken');
       setToken(token);
       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${token}`);

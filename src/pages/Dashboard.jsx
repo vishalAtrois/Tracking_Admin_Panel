@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   function fetchUsers (){
 
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('Admintoken')
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${token}`);
 
@@ -38,7 +38,7 @@ const Dashboard = () => {
   }
 
   function fetchCompany(){
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('Admintoken')
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${token}`);
 

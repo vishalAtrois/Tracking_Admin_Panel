@@ -20,7 +20,7 @@ const AdminNotification = () => {
   const limit = 20;
 
   const fetchUsers = () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('Admintoken');
     setToken(token);
     const myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${token}`);
@@ -61,7 +61,7 @@ const AdminNotification = () => {
       return;
     }
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("Admintoken");
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     const myHeaders = new Headers();

@@ -56,44 +56,41 @@ const Subdashboard = () => {
   }
 
 function fetchCompany() {
-  const token = localStorage.getItem('token');
-  const myHeaders = new Headers();
-  myHeaders.append("Authorization", `Bearer ${token}`);
+  // ✅ Manual hardcoded task data
+  const manualTasks = [
+    { status: 'active' },
+    { status: 'completed' },
+    { status: 'pending' },
+    { status: 'active' },
+    { status: 'completed' },
+    { status: 'completed' },
+    { status: 'pending' },
+    { status: 'active' },
+  ];
 
-  const requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow"
-  };
+  // ✅ Count each status
+  let active = 0;
+  let completed = 0;
+  let pending = 0;
 
-  fetch("https://mocki.io/v1/c9f560f0-7037-4e50-968b-4cccc8b56b2f", requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      console.log('tasks ', result);
+  manualTasks.forEach(task => {
+    if (task.status === 'active') active++;
+    else if (task.status === 'completed') completed++;
+    else if (task.status === 'pending') pending++;
+  });
 
-      // Count active, completed and pending
-      const tasks = result;
-      let active = 0;
-      let completed = 0;
-      let pending = 0;
+  // ✅ Set pie chart data
+  setTaskChartData([
+    { name: 'Active', value: active },
+    { name: 'Completed', value: completed },
+    { name: 'Pending', value: pending },
+  ]);
 
-      tasks.forEach(task => {
-        if (task.status === 'active') active++;
-        else if (task.status === 'completed') completed++;
-        else if (task.status === 'pending') pending++;
-      });
-
-      setTaskChartData([
-        { name: 'Active', value: active },
-        { name: 'Completed', value: completed },
-        { name: 'Pending', value: pending },  // Added pending here
-      ]);
-
-      setCompanyCount(tasks.length);
-      setLoading(false);
-    })
-    .catch((error) => console.error(error));
+  // ✅ Set task count
+  setCompanyCount(manualTasks.length);
+  setLoading(false);
 }
+
 
 
   useEffect(() => {

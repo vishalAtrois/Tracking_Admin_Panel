@@ -37,7 +37,7 @@ const Companies = () => {
     }));
   };
   const saveNewCompany = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('Admintoken');
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${token}`);
     myHeaders.append("Content-Type", "application/json");
@@ -96,7 +96,7 @@ const Companies = () => {
   };
 
   const saveEditedCompany = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('Admintoken');
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${token}`);
     myHeaders.append("Content-Type", "application/json");
@@ -125,7 +125,7 @@ const Companies = () => {
   };
 
   function fetchCompany() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('Admintoken');
     const myHeaders = new Headers();
     setToken(token);
     myHeaders.append("Authorization", `Bearer ${token}`);

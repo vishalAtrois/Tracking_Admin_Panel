@@ -50,7 +50,7 @@ const handleEditChange = (e) => {
 
 // Save updated user
 const saveEditedUser = async () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('Admintoken');
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${token}`);
   myHeaders.append("Content-Type", "application/json");
@@ -84,7 +84,7 @@ const saveEditedUser = async () => {
   },[currentpage,searchQuery]);
 
   function fetchUsers() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('Admintoken');
     setToken(token);
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${token}`);
@@ -123,7 +123,7 @@ const url = searchQuery
   };
 
   const confirmPromote = () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("Admintoken");
     if (!token) {
       alert("Please login.");
       return;
