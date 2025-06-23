@@ -260,7 +260,7 @@ const deleteReport = async (reportId) => {
        <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
            <thead className="bg-gray-700">
              <tr>
-               {['Sr.no', 'Name', 'Email', 'Company Name', 'Reports'].map((heading) => (
+               {['Sr.no', 'Name', 'Email', 'Company Name', 'Open Reports'].map((heading) => (
                  <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
                   {heading}
                 </th>
