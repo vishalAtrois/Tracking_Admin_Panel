@@ -292,7 +292,7 @@ const setTime = async () => {
                           onClick={() => {GetReports(item)
                              setSelectedUser(item)
                           }}
-                        className="w-full sm:w-64 text-left p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
+                        className="w-full sm:w-64 text-center p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
                           title="Logs"
                         > Open logs for {item.fullName}
                           {/* <i className="fa fa-sticky-note text-lg"></i> */}

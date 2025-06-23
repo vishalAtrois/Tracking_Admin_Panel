@@ -426,7 +426,7 @@ const deleteReport = async (reportId) => {
       fetchUserReport(item);
       setGetIdDate(item.id);
     }}
-    className="w-full sm:w-64 text-left p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
+    className="w-full sm:w-64 text-center p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
     title="Reports"
   >
     Open reports for {item.fullName}
