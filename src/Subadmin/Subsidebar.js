@@ -82,12 +82,12 @@ const Subsidebar = () => {
       <ul className="nav-list">
         <li><NavLink to="/Subdashboard" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tachometer text-lg"></i> Dashboard</NavLink></li>
         {/* <li><NavLink to="/VoiceTasks" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tasks text-lg"></i> All Tasks</NavLink></li> */}
+        <li><NavLink to="/VoiceTasks" className={({ isActive }) => isActive ? "active-link" : ""}><i className="bi bi-list-task text-lg"></i> Voice Tasks</NavLink></li>
         <li><NavLink to="/Subreports" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard text-lg"></i> Daily Reports</NavLink></li>
         <li><NavLink to="/Subcheckin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note text-lg"></i> Work Hours</NavLink></li>
         <li><NavLink to="/Subemployees" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user text-lg"></i> Employees</NavLink></li>
        <li><NavLink to="/SubNotificationUser" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i>Send Notifications </NavLink></li>
         <li><NavLink to="/Subnotification" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i> Notifications</NavLink></li>
-        <li><NavLink to="/VoiceTasks" className={({ isActive }) => isActive ? "active-link" : ""}><i className="bi bi-list-task text-lg"></i> Voice Tasks</NavLink></li>
         <li><NavLink to="/Subprefrences" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-cogs text-lg"></i> Preferences </NavLink></li>
           {/* <li><NavLink to="/SubSendNotification" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i>  Notifications </NavLink></li> */}
         {/* Settings Dropdown */}
