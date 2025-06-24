@@ -672,26 +672,20 @@ const setTime = async () => {
             <div>
 <p className="text-sm text-gray-500 font-semibold">Admin Check-in</p>
 <p className="text-gray-900">
-
-                {summaryData.adminCheckIn
-
-                  ? new Date(summaryData.adminCheckIn).toLocaleTimeString()
-
-                  : 'N/A'}
-</p>
+    {summaryData.adminCheckIn
+      ? summaryData.adminCheckOut.replace('.000Z', '')
+      : 'N/A'}
+  </p>
 </div>
- 
-            <div>
-<p className="text-sm text-gray-500 font-semibold">Admin Check-out</p>
-<p className="text-gray-900">
-
-                {summaryData.adminCheckOut
-
-                  ? new Date(summaryData.adminCheckOut).toLocaleTimeString()
-
-                  : 'N/A'}
-</p>
+ <div>
+  <p className="text-sm text-gray-500 font-semibold">Admin Check-in</p>
+  <p className="text-gray-900">
+    {summaryData.adminCheckOut
+      ? summaryData.adminCheckIn.replace('.000Z', '')
+      : 'N/A'}
+  </p>
 </div>
+
  
             <div>
 <p className="text-sm text-gray-500 font-semibold">User Check-in</p>
