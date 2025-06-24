@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import {  Tooltip, ResponsiveContainer,  Cell, Pie, PieChart } from 'recharts';
 import Subsidebar from './Subsidebar';
+import { method } from 'lodash';
  
  
 
@@ -9,11 +10,11 @@ const Subdashboard = () => {
  
  const [loading,setLoading]=useState(true) 
   const [userCount, setUserCount] = useState(0);
-  const [companyCount, setCompanyCount] = useState(0);
     const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const [taskChartData, setTaskChartData] = useState([]);
     const [totalTasks, setTotalTasks] = useState(0)
+    const [taskChartData, setTaskChartData] = useState([]);
+
   
  useEffect(() => {
     Get()
@@ -29,6 +30,40 @@ const Subdashboard = () => {
     setMyData(ud)
     setToken(token)
   }
+
+function fetchTask() {
+  const token = localStorage.getItem('token');
+  const myHeaders = new Headers();
+  myHeaders.append('Authorization', `Bearer ${token}`);
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: 'follow',
+  };
+
+  fetch('https://tracking-backend-admin.vercel.app/v1/common/getTaskStatusStats', requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.success === true && Array.isArray(result.stats)) {
+        console.log("task data for graph response ", result);
+
+        // 🔁 Transform to chart format
+        const formatted = result.stats.map(stat => ({
+          name: stat.status.charAt(0).toUpperCase() + stat.status.slice(1), // Capitalize
+          value: stat.count
+        }));
+
+        setTaskChartData(formatted); // ⬅️ Save it to your state
+      }
+    })
+    .catch((error) =>
+      console.log("error while getting the task graph data ", error)
+    );
+}
+
+
+useEffect(()=>{fetchTask()},[])
 
   function fetchUsers (){
 
@@ -84,47 +119,12 @@ useEffect(()=>{fetchTaskCount()},[])
   
 
 
-function fetchCompany() {
-  // ✅ Manual hardcoded task data
-  const manualTasks = [
-    { status: 'active' },
-    { status: 'completed' },
-    { status: 'pending' },
-    { status: 'active' },
-    { status: 'completed' },
-    { status: 'completed' },
-    { status: 'pending' },
-    { status: 'active' },
-  ];
-
-  // ✅ Count each status
-  let active = 0;
-  let completed = 0;
-  let pending = 0;
-
-  manualTasks.forEach(task => {
-    if (task.status === 'active') active++;
-    else if (task.status === 'completed') completed++;
-    else if (task.status === 'pending') pending++;
-  });
-
-  // ✅ Set pie chart data
-  setTaskChartData([
-    { name: 'Active', value: active },
-    { name: 'Completed', value: completed },
-    { name: 'Pending', value: pending },
-  ]);
-
-  // ✅ Set task count
-  setCompanyCount(manualTasks.length);
-  setLoading(false);
-}
-
+ 
 
 
   useEffect(() => {
     fetchUsers();
-    fetchCompany()
+     
   }, []);
 
   return (
@@ -216,9 +216,12 @@ function fetchCompany() {
         >
           {taskChartData.map((entry, index) => {
             const COLORS = {
+              Accepted: '#10b981',
               Active: '#22c55e',
               Completed: '#3b82f6',
-              Pending: '#f59e0b',
+              Deleted: '#ef4444',
+              Progress: '#f97316',
+              Seen: '#a855f7',
             };
             return (
               <Cell key={`cell-${index}`} fill={COLORS[entry.name] || '#8884d8'} />
@@ -235,13 +238,16 @@ function fetchCompany() {
       </PieChart>
     </ResponsiveContainer>
 
-    {/* Custom legend below the chart */}
-    <div className="flex justify-center mt-4 space-x-6">
+    {/* ✅ Custom Legend */}
+    <div className="flex flex-wrap justify-center mt-4 gap-4">
       {taskChartData.map(({ name }, index) => {
         const COLORS = {
+          Accepted: '#10b981',
           Active: '#22c55e',
           Completed: '#3b82f6',
-          Pending: '#f59e0b',
+          Deleted: '#ef4444',
+          Progress: '#f97316',
+          Seen: '#a855f7',
         };
         return (
           <div key={index} className="flex items-center space-x-2 text-white text-sm font-medium">
