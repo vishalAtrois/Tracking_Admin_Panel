@@ -48,18 +48,23 @@ function fetchTask() {
       if (result.success === true && Array.isArray(result.stats)) {
         console.log("task data for graph response ", result);
 
-        // 🔁 Transform to chart format
-        const formatted = result.stats.map(stat => ({
-          name: stat.status.charAt(0).toUpperCase() + stat.status.slice(1), // Capitalize
+        // ✅ Filter out 'active' and 'deleted'
+        const filteredStats = result.stats.filter(stat =>
+          stat.status !== 'active' && stat.status !== 'deleted'
+        );
+
+        // ✅ Format for chart
+        const formatted = filteredStats.map(stat => ({
+          name: stat.status.charAt(0).toUpperCase() + stat.status.slice(1),
           value: stat.count
         }));
 
-        setTaskChartData(formatted); // ⬅️ Save it to your state
+        setTaskChartData(formatted);
       }
     })
-    .catch((error) =>
-      console.log("error while getting the task graph data ", error)
-    );
+    .catch((error) => {
+      console.log("error while getting the task graph data ", error);
+    });
 }
 
 

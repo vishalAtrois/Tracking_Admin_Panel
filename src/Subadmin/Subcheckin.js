@@ -657,7 +657,7 @@ const setTime = async () => {
 </p>
 </div>
  
-            <div>
+            {/* <div>
 <p className="text-sm text-gray-500 font-semibold">Early Check-out</p>
 <p className="text-gray-900">
 
@@ -667,7 +667,7 @@ const setTime = async () => {
 
                   : 'N/A'}
 </p>
-</div>
+</div> */}
  
             <div>
 <p className="text-sm text-gray-500 font-semibold">Admin Check-in</p>
