@@ -25,6 +25,22 @@ const [extraFields, setExtraFields] = useState([{ key: "", value: "" }]);
 const [isLoading, setIsLoading] = useState(false);
 const [getIdDate,setGetIdDate] = useState(null)
 const [reportDate,setReportDate] = useState(null)
+const [companyName,setCompanyName] = useState('')
+
+
+
+
+useEffect(() => {
+  if (selectedUser?.companyName) {
+    setCompanyName(selectedUser.companyName);
+    setNewReport((prev) => ({
+      ...prev,
+      companyName: selectedUser.companyName,
+    }));
+  }
+}, [selectedUser]);
+
+
 
 const fetchReportByDate = (date) => {
   const token = localStorage.getItem("token");
@@ -99,7 +115,7 @@ const addExtraField = () => {
 // };
 
 const [newReport, setNewReport] = useState({
-  companyName: '',
+  companyName:  '',
   address: '',
   businessSize: '',
   reportTime: '',
@@ -222,6 +238,8 @@ const handleCloseAddReportModal = () => {
 };
 const fetchUserReport = async (item) => {
   const token = localStorage.getItem('token');
+  //  const user = JSON.parse(localStorage.getItem("user"));
+  //    setCompanyName(user?.companyName)
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
 setUserId(item)
@@ -236,6 +254,7 @@ setUserId(item)
     );
     const result = await response.json();
     if (result.success && result.reportList) {
+      console.log('fetchreport api ',result)
       setSelectedUser(item);
       setSelectedUserReports(result.reportList);
       setReportModalOpen(true);
@@ -467,16 +486,15 @@ const deleteReport = async (reportId) => {
       >
         {/* Company Name (disabled + red icon) */}
 <div className="relative w-full mb-2">
-  <input
-    type="text"
-    placeholder="Company Name"
-    className="w-full p-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed"
-    value={newReport.companyName}
-    disabled
-    onChange={(e) =>
-      setNewReport({ ...newReport, companyName: e.target.value })
-    }
-  />
+<input
+  type="text"
+  placeholder="Company Name"
+  className="w-full p-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed"
+  value={newReport.companyName || ''} // fallback to empty string
+  disabled
+/>
+
+
   <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
     <svg
       xmlns="http://www.w3.org/2000/svg"
