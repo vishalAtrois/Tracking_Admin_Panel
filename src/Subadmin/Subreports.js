@@ -840,35 +840,33 @@ const deleteReport = async (reportId) => {
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
     <div className="relative w-full max-w-6xl mx-auto bg-white rounded-xl shadow-xl border p-4 sm:p-6">
   
-
       {/* Header with Title, Add Button and Close Button */}
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
         <h3 className="text-xl font-bold text-gray-800">
-  {selectedReport ? [selectedReport][0]?.title || 'Report Title' : "User Report List"}
-</h3>
-
+          {selectedReport ? (selectedReport?.title || 'Report Title') : "User Report List"}
+        </h3>
 
         <div className="flex items-center gap-4">
           {/* Add Report Button */}
-         {!selectedReport && (
-  <button
-    onClick={() => {
-      setSelectedUser(userId);
-      setReportModalOpen(false);
-      setShowAddReportModal(true);
-    }}
-    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-  >
-    + Add Report
-  </button>
-)}
+          {!selectedReport && (
+            <button
+              onClick={() => {
+                setSelectedUser(userId);
+                setReportModalOpen(false);
+                setShowAddReportModal(true);
+              }}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            >
+              + Add Report
+            </button>
+          )}
 
           {/* Close Button */}
           <button
             className="text-red-500 text-3xl font-bold"
             onClick={() => {
               setReportModalOpen(false);
-               setSelectedReport(null);
+              setSelectedReport(null);
             }}
             title="Close"
           >
@@ -876,67 +874,69 @@ const deleteReport = async (reportId) => {
           </button>
         </div>
       </div>
-             <input
-  type="date"
-  value={reportDate}
-  onChange={(e) => {
-    const selectedDate = e.target.value;
-    setReportDate(selectedDate);
 
-    if (selectedDate) {
-      fetchReportByDate(selectedDate); // pass the selected date directly
-    } else {
-      fetchUserReport({ id: getIdDate });
-    }
-  }}
-  className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
-/>
+      <input
+        type="date"
+        value={reportDate}
+        onChange={(e) => {
+          const selectedDate = e.target.value;
+          setReportDate(selectedDate);
+
+          if (selectedDate) {
+            fetchReportByDate(selectedDate);
+          } else {
+            fetchUserReport({ id: getIdDate });
+          }
+        }}
+        className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+      />
+
       {/* Content */}
-      {!selectedReport  ? (
+      {!selectedReport ? (
         selectedUserReports.length === 0 ? (
           <p className="text-gray-600 text-center">No reports found.</p>
         ) : (
-          // Scrollable container only for buttons list
           <div
             className="space-y-2 overflow-y-auto pr-2"
-            style={{ maxHeight: 'calc(90vh - 4rem)' }} // subtract header height approx
+            style={{ maxHeight: 'calc(90vh - 4rem)' }}
           >
-                 {selectedUserReports.map((report) => {
-  const latestDate = new Date(report.reportDate).toLocaleDateString();
-  return (
-    <div
-      key={report._id}
-      className="w-full flex justify-between items-center p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
-    >
-      <div
-        className="flex-1 cursor-pointer"
-        onClick={() => {
-         setSelectedReport(report);
-          setLoadingReports(true);
-          setLoadingReports(false);
-        }}
-      >
-        <p className="font-semibold text-gray-800">
-  {report.title?.trim() ? report.title : "Untitled Report"}
-</p>
+            {selectedUserReports.map((report) => {
+              const date = new Date(report.reportDate);
+              const isValidDate = report.reportDate && date.toISOString() !== "1970-01-01T00:00:00.000Z";
+              const latestDate = isValidDate ? date.toLocaleDateString() : " N/A ";
 
-        <p className="text-sm text-gray-600">Report: {latestDate}</p>
-      </div>
+              return (
+                <div
+                  key={report._id}
+                  className="w-full flex justify-between items-center p-3 rounded-lg bg-gray-100 hover:bg-gray-200 border border-gray-300"
+                >
+                  <div
+                    className="flex-1 cursor-pointer"
+                    onClick={() => {
+                      setSelectedReport(report);
+                      setLoadingReports(true);
+                      setLoadingReports(false);
+                    }}
+                  >
+                    <p className="font-semibold text-gray-800">
+                      {report.title?.trim() ? report.title : "Untitled Report"}
+                    </p>
+                    <p className="text-sm text-gray-600">Report: {latestDate}</p>
+                  </div>
 
-      <button
-        onClick={() => deleteReport(report._id)}
-        title="Delete Report"
-        className="ml-4 text-red-600 hover:text-red-800"
-      >
-        🗑️
-      </button>
-    </div>
-  );
-})}
+                  <button
+                    onClick={() => deleteReport(report._id)}
+                    title="Delete Report"
+                    className="ml-4 text-red-600 hover:text-red-800"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              );
+            })}
           </div>
         )
       ) : (
-        // Step 2: Show detailed reports for selected company
         loadingReports ? (
           <p className="text-center text-gray-600">Loading reports...</p>
         ) : !selectedReport ? (
@@ -944,152 +944,150 @@ const deleteReport = async (reportId) => {
         ) : (
           <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
             <button
-  className="mb-4 inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold border border-blue-600 hover:border-blue-800 rounded-md px-3 py-1.5 transition-colors duration-300"
-  onClick={() => setSelectedReport(null)}
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-  </svg>
-  Back to report list
-</button>
-           <div className="max-h-[calc(100vh-8rem)] overflow-y-auto px-2 sm:px-4 space-y-4">
-{[selectedReport].map((report, idx) => (
-  <div key={report._id} className="border p-3 rounded-lg shadow bg-gray-50 space-y-4">
-    
-    {/* Title */}
-    {/* <div className="text-lg font-bold text-gray-800 border-b pb-1">
-      Report 
-    </div> */}
+              className="mb-4 inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold border border-blue-600 hover:border-blue-800 rounded-md px-3 py-1.5 transition-colors duration-300"
+              onClick={() => setSelectedReport(null)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to report list
+            </button>
 
-    {/* Company & Address */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="border px-2 py-2 rounded bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Company</p>
-          <p className="text-gray-900">{report.companyName || 'N/A'}</p>
-        </div>
-        <div className="border px-2 py-2 rounded bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Address</p>
-          <p className="text-gray-900">{report.address || 'N/A'}</p>
-        </div>
-    </div>
-    {/* Business Size & Report Time */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
-          <p className="text-gray-900">{report.businessSize || 'N/A'}</p>
-        </div>
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
-          <p className="text-gray-900">{report.reportTime || 'N/A'}</p>
-        </div>
-    </div>
-    {/* Report Date & Notes */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
-          <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString() || 'N/A'}</p>
-        </div>
-        <div className="border rounded px-2 py-2 bg-white break-words max-w-full">
-  <p className="text-sm text-gray-700 font-extrabold">Notes</p>
-  <p className="text-gray-900 whitespace-pre-wrap">{report.notes || 'N/A' }</p>
-</div>
- <div className="border rounded px-2 py-2 bg-white">
-                <p className="text-sm text-gray-700 font-extrabold">Title</p>
-                <p className="text-gray-900">{selectedReport.title || 'N/A'}</p>
-              </div>
-    </div>
-    {Object.entries(report).map(([key, value]) => {
-      const exclude = [
-        "_id", "userId", "__v", "companyName", "address", "businessSize",
-        "reportTime", "reportDate", "notes", "file", "images","createdBy","createdAt","updatedBy",'title',
-      ];
-     if (exclude.includes(key) || value === undefined || value === null || value === '') return null;
-  // Handle customFields separately (skip its heading)
-  if (key === "customFields" && typeof value === "object") {
-    return Object.entries(value).map(([innerKey, innerValue]) => (
-      <div key={`custom-${innerKey}`} className="border rounded px-2 py-2 bg-white">
-        <p className="text-sm text-gray-700 font-extrabold capitalize">
-          {innerKey.replace(/([A-Z])/g, ' $1')}
-        </p>
-        <p className="text-gray-900">{String(innerValue)}</p>
-      </div>
-    ));
-  }
-      return (
-        <div key={key} className="border rounded px-2 py-2 bg-white">
-          <p className="text-sm text-gray-700 font-extrabold capitalize">
-            {key.replace(/([A-Z])/g, ' $1')}
-          </p>
-   {typeof value === 'object' && !Array.isArray(value) ? (
-  Object.entries(value).map(([innerKey, innerValue]) => (
-    <div
-      key={`${key}-${innerKey}`}
-      className="border rounded px-2 py-2 bg-white mt-2"
-    >
-      <p className="text-sm text-gray-700 font-extrabold capitalize">
-        {innerKey.replace(/([A-Z])/g, ' $1')}
-      </p>
-      <p className="text-gray-900">{String(innerValue)}</p>
-    </div>
-  ))
-) : (
-  <p className="text-gray-900">{String(value)}</p>
-)}
-        </div>
-      );
-    })}
-    {/* File */}
-<div className="border rounded px-2 py-2 bg-white">
-  <p className="text-sm text-gray-700 font-extrabold">File</p>
-  {report.file?.url ? (
-    <a
-      href={report.file.url}
-      download
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-600 underline break-all"
-    >
-      {decodeURIComponent(report.file.name)}
-    </a>
-  ) : (
-    <p className="text-gray-900">No file</p>
-  )}
-</div>
-    {/* Images */}
-  <div className="border rounded px-2 py-2 bg-white">
-  <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
-  {Array.isArray(report.images) && report.images.length > 0 ? (
-    <div className="flex gap-3 overflow-x-auto">
-      {report.images.map((imgUrl, index) => (
-        <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
-          <img
-            src={imgUrl}
-            alt={`Report Image ${index + 1}`}
-            className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
-          />
-        </a>
-      ))}
-    </div>
-  ) : (
-    <p className="text-gray-900">No images</p>
-  )}
-</div>
-  </div>
-))}
-</div>
-       </div>
+            <div className="max-h-[calc(100vh-8rem)] overflow-y-auto px-2 sm:px-4 space-y-4">
+              {[selectedReport].map((report, idx) => (
+                <div key={report._id} className="border p-3 rounded-lg shadow bg-gray-50 space-y-4">
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="border px-2 py-2 rounded bg-white">
+                      <p className="text-sm text-gray-700 font-extrabold">Company</p>
+                      <p className="text-gray-900">{report.companyName || 'N/A'}</p>
+                    </div>
+                    <div className="border px-2 py-2 rounded bg-white">
+                      <p className="text-sm text-gray-700 font-extrabold">Address</p>
+                      <p className="text-gray-900">{report.address || 'N/A'}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="border rounded px-2 py-2 bg-white">
+                      <p className="text-sm text-gray-700 font-extrabold">Business Size</p>
+                      <p className="text-gray-900">{report.businessSize || 'N/A'}</p>
+                    </div>
+                    <div className="border rounded px-2 py-2 bg-white">
+                      <p className="text-sm text-gray-700 font-extrabold">Report Time</p>
+                      <p className="text-gray-900">{report.reportTime || 'N/A'}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="border rounded px-2 py-2 bg-white">
+                      <p className="text-sm text-gray-700 font-extrabold">Report Date</p>
+                      <p className="text-gray-900">{new Date(report.reportDate).toLocaleDateString() || 'N/A'}</p>
+                    </div>
+                    <div className="border rounded px-2 py-2 bg-white break-words max-w-full">
+                      <p className="text-sm text-gray-700 font-extrabold">Notes</p>
+                      <p className="text-gray-900 whitespace-pre-wrap">{report.notes || 'N/A'}</p>
+                    </div>
+                    <div className="border rounded px-2 py-2 bg-white">
+                      <p className="text-sm text-gray-700 font-extrabold">Title</p>
+                      <p className="text-gray-900">{selectedReport.title || 'N/A'}</p>
+                    </div>
+                  </div>
+
+                  {Object.entries(report).map(([key, value]) => {
+                    const exclude = [
+                      "_id", "userId", "__v", "companyName", "address", "businessSize",
+                      "reportTime", "reportDate", "notes", "file", "images", "createdBy", "createdAt", "updatedBy", "title",
+                    ];
+                    if (exclude.includes(key) || value === undefined || value === null || value === '') return null;
+
+                    if (key === "customFields" && typeof value === "object") {
+                      return Object.entries(value).map(([innerKey, innerValue]) => (
+                        <div key={`custom-${innerKey}`} className="border rounded px-2 py-2 bg-white">
+                          <p className="text-sm text-gray-700 font-extrabold capitalize">
+                            {innerKey.replace(/([A-Z])/g, ' $1')}
+                          </p>
+                          <p className="text-gray-900">{String(innerValue)}</p>
+                        </div>
+                      ));
+                    }
+
+                    return (
+                      <div key={key} className="border rounded px-2 py-2 bg-white">
+                        <p className="text-sm text-gray-700 font-extrabold capitalize">
+                          {key.replace(/([A-Z])/g, ' $1')}
+                        </p>
+                        {typeof value === 'object' && !Array.isArray(value) ? (
+                          Object.entries(value).map(([innerKey, innerValue]) => (
+                            <div
+                              key={`${key}-${innerKey}`}
+                              className="border rounded px-2 py-2 bg-white mt-2"
+                            >
+                              <p className="text-sm text-gray-700 font-extrabold capitalize">
+                                {innerKey.replace(/([A-Z])/g, ' $1')}
+                              </p>
+                              <p className="text-gray-900">{String(innerValue)}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-gray-900">{String(value)}</p>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  <div className="border rounded px-2 py-2 bg-white">
+                    <p className="text-sm text-gray-700 font-extrabold">File</p>
+                    {report.file?.url ? (
+                      <a
+                        href={report.file.url}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 underline break-all"
+                      >
+                        {decodeURIComponent(report.file.name)}
+                      </a>
+                    ) : (
+                      <p className="text-gray-900">No file</p>
+                    )}
+                  </div>
+
+                  <div className="border rounded px-2 py-2 bg-white">
+                    <p className="text-sm text-gray-700 font-extrabold mb-2">Images</p>
+                    {Array.isArray(report.images) && report.images.length > 0 ? (
+                      <div className="flex gap-3 overflow-x-auto">
+                        {report.images.map((imgUrl, index) => (
+                          <a key={index} href={imgUrl} target="_blank" rel="noopener noreferrer">
+                            <img
+                              src={imgUrl}
+                              alt={`Report Image ${index + 1}`}
+                              className="h-24 w-24 object-cover rounded border hover:scale-105 transition-transform"
+                            />
+                          </a>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-gray-900">No images</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         )
       )}
     </div>
   </div>
 )}
+
 
 {/* Pagination UI */}
    <div className="custom-pagination-container flex justify-center mt-2">
