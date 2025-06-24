@@ -563,30 +563,25 @@ const setTime = async () => {
 
       {(() => {
 
-        const convertMinutesToTime = (minuteString) => {
+       const convertMinutesToTime = (minuteString, excludeSeconds = false) => {
+  const totalMinutes = parseFloat(minuteString);
+  if (isNaN(totalMinutes)) return 'N/A';
 
-          const totalMinutes = parseFloat(minuteString);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = Math.floor(totalMinutes % 60);
+  const seconds = Math.floor(((totalMinutes % 1) * 60));
 
-          if (isNaN(totalMinutes)) return 'N/A';
- 
-          const hours = Math.floor(totalMinutes / 60);
+  let result = '';
+  if (hours > 0) result += `${hours} hour${hours > 1 ? 's' : ''} `;
+  if (minutes > 0) result += `${minutes} minute${minutes > 1 ? 's' : ''} `;
 
-          const minutes = Math.floor(totalMinutes % 60);
+  // ✅ Only include seconds if `excludeSeconds` is false
+  if (!excludeSeconds && seconds > 0)
+    result += `${seconds} second${seconds > 1 ? 's' : ''}`;
 
-          const seconds = Math.floor(((totalMinutes % 1) * 60));
- 
-          let result = '';
+  return result.trim() || '0 minutes';
+};
 
-          if (hours > 0) result += `${hours} hour${hours > 1 ? 's' : ''} `;
-
-          if (minutes > 0) result += `${minutes} minute${minutes > 1 ? 's' : ''} `;
-
-          if (seconds > 0) result += `${seconds} second${seconds > 1 ? 's' : ''}`;
- 
-          return result.trim() || '0 minutes';
-
-        };
- 
         return (
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <div>
@@ -597,16 +592,13 @@ const setTime = async () => {
 </p>
 </div>
  
-            <div>
-<p className="text-sm text-gray-500 font-semibold">Expected Duration</p>
-<p className="text-gray-900">
-
-                {summaryData.expectedWorkingHours
-
-                  ? convertMinutesToTime(parseFloat(summaryData.expectedWorkingHours) * 60)
-
-                  : 'N/A'}
-</p>
+      <div>
+  <p className="text-sm text-gray-500 font-semibold">Expected Duration</p>
+  <p className="text-gray-900">
+    {summaryData.expectedWorkingHours
+      ? convertMinutesToTime(parseFloat(summaryData.expectedWorkingHours) * 60, true)
+      : 'N/A'}
+  </p>
 </div>
  
             <div>
@@ -621,16 +613,13 @@ const setTime = async () => {
 </p>
 </div>
  
-            <div>
-<p className="text-sm text-gray-500 font-semibold">Underwork</p>
-<p className="text-gray-900">
-
-                {summaryData.underwork
-
-                  ? convertMinutesToTime(parseFloat(summaryData.underwork) * 60)
-
-                  : 'N/A'}
-</p>
+   <div>
+  <p className="text-sm text-gray-500 font-semibold">Underwork</p>
+  <p className="text-gray-900">
+    {summaryData.underwork
+      ? convertMinutesToTime(parseFloat(summaryData.underwork) * 60, true)
+      : 'N/A'}
+  </p>
 </div>
  
             <div>
@@ -669,14 +658,6 @@ const setTime = async () => {
 </p>
 </div> */}
  
-            <div>
-<p className="text-sm text-gray-500 font-semibold">Admin Check-out</p>
-<p className="text-gray-900">
-    {summaryData.adminCheckIn
-      ? summaryData.adminCheckOut.replace('.000Z', '')
-      : 'N/A'}
-  </p>
-</div>
  <div>
   <p className="text-sm text-gray-500 font-semibold">Admin Check-in</p>
   <p className="text-gray-900">
@@ -685,8 +666,6 @@ const setTime = async () => {
       : 'N/A'}
   </p>
 </div>
-
- 
             <div>
 <p className="text-sm text-gray-500 font-semibold">User Check-in</p>
 <p className="text-gray-900">
@@ -698,6 +677,16 @@ const setTime = async () => {
                   : 'N/A'}
 </p>
 </div>
+            <div>
+<p className="text-sm text-gray-500 font-semibold">Admin Check-out</p>
+<p className="text-gray-900">
+    {summaryData.adminCheckIn
+      ? summaryData.adminCheckOut.replace('.000Z', '')
+      : 'N/A'}
+  </p>
+</div>
+
+ 
  
             <div>
 <p className="text-sm text-gray-500 font-semibold">User Check-out</p>
