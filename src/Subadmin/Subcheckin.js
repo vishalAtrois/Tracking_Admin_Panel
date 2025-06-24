@@ -670,7 +670,7 @@ const setTime = async () => {
 </div> */}
  
             <div>
-<p className="text-sm text-gray-500 font-semibold">Admin Check-in</p>
+<p className="text-sm text-gray-500 font-semibold">Admin Check-out</p>
 <p className="text-gray-900">
     {summaryData.adminCheckIn
       ? summaryData.adminCheckOut.replace('.000Z', '')
