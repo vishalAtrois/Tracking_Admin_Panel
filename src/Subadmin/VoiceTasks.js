@@ -18,8 +18,8 @@ const VoiceTasks = () => {
   
   const fetchTaskByDate = (userId, date) => {
   const token = localStorage.getItem("token");
-  if (!token || !userId) {
-    console.error("Missing token or userId.");
+  if (!token || !userId || !date) {
+    console.error("Missing token or userId. or date ");
     return;
   }
 
@@ -32,15 +32,15 @@ const VoiceTasks = () => {
     redirect: "follow"
   };
 
-  fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getReportByDate?userId=${userId}&date=${date}`, requestOptions)
+  fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getTaskByDate?userId=${userId}&date=${date}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log("userid task", userId);
       console.log("Filtered voicetask:", result);
       console.log("date", date);
 
-      if (result.success && result.reportList) {
-        setTasks(result.reportList);
+      if (result.success && result.tasktList) {
+        setTasks(result.tasktList);
       } else {
         setTasks([]);
       }
