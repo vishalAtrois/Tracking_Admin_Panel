@@ -16,41 +16,37 @@ const VoiceTasks = () => {
   
 
   
-  const fetchTaskByDate = (date) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token not found. Please login.");
-      return;
-    }
-  
-    if (!date) {
-      fetchTasks({ id: getIdDate });
-      return;
-    }
-  
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${token}`);
-  
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow"
-    };
-  
-    fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getReportByDate?userId=${getIdDate}&date=${date}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("Filtered reports:", result);
-        if (result.success && result.reportList) {
-  setTasks(result.reportList);
-} else {
-  setTasks([]); // fallback to empty array
-}
+  const fetchTaskByDate = (userId, date) => {
+  const token = localStorage.getItem("token");
+  if (!token || !userId) {
+    console.error("Missing token or userId.");
+    return;
+  }
 
-      })
-      .catch((error) => console.error("API Error:", error));
-  }; 
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${token}`);
 
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow"
+  };
+
+  fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getReportByDate?userId=${userId}&date=${date}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log("userid task", userId);
+      console.log("Filtered voicetask:", result);
+      console.log("date", date);
+
+      if (result.success && result.reportList) {
+        setTasks(result.reportList);
+      } else {
+        setTasks([]);
+      }
+    })
+    .catch((error) => console.error("API Error:", error));
+};
 
 
 
@@ -101,11 +97,12 @@ const VoiceTasks = () => {
     fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getTask?userId=${userId.id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        if (result.success && Array.isArray(result.tasktList.tasks)) {
-          console.log("tasks response ",result)
-  setTasks(result.tasktList.tasks);
+ if (result.success && Array.isArray(result.tasktList)) {
+  console.log("tasks response ", result);
+  setTasks(result.tasktList);
   setShowTaskModal(true);
-} else {
+}
+ else {
           console.error("Unexpected task API response format:", result);
         }
       })
@@ -215,8 +212,9 @@ const VoiceTasks = () => {
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                     <td className="border-b border-gray-700 text-center">
                       <div className="flex justify-center gap-4">
-                        <button onClick={() => {fetchTasks(item);
-                                               setGetIdDate(item.id);}
+                        <button onClick={() => {setGetIdDate(item.id);
+                          fetchTasks(item);
+                        }
                       } className="p-2 rounded-full hover:bg-green-100 text-green-500 hover:text-green-800 transition" title="View Tasks">
                           <i className="bi bi-list-task text-lg"></i>
                         </button>
@@ -278,21 +276,23 @@ const VoiceTasks = () => {
                   <i className="bi bi-x-lg text-2xl"></i>
                 </button>
               </div>
-                        <input
+  <input
   type="date"
-  value={taskDate}
+  value={taskDate || ""}
   onChange={(e) => {
-    const selectedDate = e.target.value;
-    setTaskDate(selectedDate);
+  const selectedDate = e.target.value;
+  setTaskDate(selectedDate);
 
-    if (selectedDate) {
-      fetchTaskByDate(selectedDate); // pass the selected date directly
-    } else {
-      fetchTasks({ id: getIdDate });
-    }
-  }}
+  if (selectedDate) {
+    fetchTaskByDate(getIdDate, selectedDate); // ✅ Explicitly pass latest userId
+  } else {
+    fetchTasks({ id: getIdDate });
+  }
+}}
   className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
 />
+
+
               {tasks.length === 0 ? (
                 <p className="text-gray-400">No tasks found.</p>
               ) : (
