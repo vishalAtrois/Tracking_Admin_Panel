@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Subsidebar.css';
 import { FaCog } from 'react-icons/fa';
-import profilePhoto from '../assets/images/profilephoto.jpg';
 
 const Subsidebar = () => {
   const [showDropdown, setShowDropdown] = useState(false);

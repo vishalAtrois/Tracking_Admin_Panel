@@ -278,7 +278,7 @@ setUserId(item)
        redirect: "follow"
      };
  const url = searchQuery
-     ?`https://tracking-backend-admin.vercel.app/v1/admin/searchUser?query=${searchQuery}&page=${currentpage}&limit=${limit}`
+  ?`https://tracking-backend-admin.vercel.app/v1/subAdmin/searchUser?query=${searchQuery}&page=${currentpage}&limit=${limit}`
      :`https://tracking-backend-admin.vercel.app/v1/subAdmin/fetchUserList?page=${currentpage}&limit=${limit}&sortBy=created:desc`
      fetch(url,requestOptions)
      .then((response) => response.json())
