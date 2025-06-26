@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Subsidebar from './Subsidebar';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 export const Subemployees = () => {
 
@@ -17,6 +18,21 @@ const limit = 20;
   const [userId, setUserId] = useState()
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('')
+    const [showPassword, setShowPassword] = useState(false);
+    const [passwordError, setPasswordError] = useState('');
+
+const passReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
+
+const handlePasswordChange = (e) => {
+  const value = e.target.value;
+  setPassword(value);
+
+  if (!passReg.test(value)) {
+    setPasswordError('Must be 7+ characters, include 1 letter, 1 number, 1 special (@$!%*?&)');
+  } else {
+    setPasswordError('');
+  }
+};
 
    
   const [editedUser, setEditedUser] = useState({
@@ -372,16 +388,31 @@ const limit = 20;
       </div>
 
       {/* Password input */}
-      <div className="mb-5">
-        <label className="block text-gray-700 font-medium mb-1">Set Password for this user.</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter password"
-        />
-      </div>
+    <div className="mb-5">
+  <label className="block text-gray-700 font-medium mb-1">
+    Set Password for this user.
+  </label>
+
+  <div className="relative">
+    <input
+      type={showPassword ? 'text' : 'password'}
+      value={password}
+      onChange={handlePasswordChange}
+      className={`w-full border ${passwordError ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+      placeholder="Enter password"
+    />
+    <span
+      onClick={() => setShowPassword((prev) => !prev)}
+      className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-600 cursor-pointer"
+    >
+      {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+    </span>
+  </div>
+
+  {passwordError && (
+    <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+  )}
+</div>
 
       {/* Confirmation Checkbox */}
       <label className="flex items-center gap-2 bg-gray-100 rounded p-3 mb-5">
