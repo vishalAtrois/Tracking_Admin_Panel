@@ -28,6 +28,7 @@ import SubNotificationUser from './Subadmin/SubNotificationUser';
 import AdminNotification from './pages/AdminNotification';
 import SubProtected from './Subadmin/SubProtedted';
 import AdminProtected from './pages/AdminProtected';
+import Prefrences from './pages/Prefrences';
  
  
 
@@ -46,15 +47,16 @@ function App() {
             <Route path="/Report" element= {<Report />} />
             <Route path="/adminNotification" element= {<AdminNotification />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/Prefrences' element={<Prefrences />} />
             <Route path="/Subdashboard" element={<SubProtected><Subdashboard /></SubProtected>} />
             <Route path="/suballtasks" element={<SubProtected><Suballtasks /></SubProtected>} />
             <Route path="/Subreports" element={<SubProtected> <Subreports /></SubProtected>} />
             <Route path='/Subemployees' element={<SubProtected> <Subemployees /></SubProtected>} />
             <Route path='/Subcheckin' element={<SubProtected> <Subcheckin /></SubProtected>} />
             <Route path='/Subnotification' element={<SubProtected> <Subnotification /></SubProtected>} />
-            <Route path='/SubForgotPassword' element={<SubProtected> <SubForgotPassword /></SubProtected>} />
-            <Route path='/SubVerifyOtp' element={<SubProtected> <SubVerifyOtp /></SubProtected>} />
-            <Route path='/ResetPassword' element={<SubProtected> <SubResetPassword /></SubProtected>} />
+            <Route path='/SubForgotPassword' element={ <SubForgotPassword />} />
+            <Route path='/SubVerifyOtp' element={  <SubVerifyOtp /> } />
+            <Route path='/ResetPassword' element={  <SubResetPassword /> } />
             <Route path='/SubProfile' element={<SubProtected> <SubProfile /></SubProtected>} />
             <Route path='/VoiceTasks' element={<SubProtected> <VoiceTasks /></SubProtected>} />
             <Route path='/SubPrefrences' element={<SubProtected> <SubPrefrences /></SubProtected>} />
