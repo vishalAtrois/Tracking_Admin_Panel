@@ -9,7 +9,6 @@ import AboutUs from './pages/AboutUs';
 import Notifications from './pages/Notification'; // if you have this
 import './App.css';
 import 'font-awesome/css/font-awesome.min.css';
-import Login from './pages/Login';
 import { Suballtasks } from './Subadmin/Suballtasks';
 import  Subreports  from './Subadmin/Subreports';
 import { Subemployees } from './Subadmin/Subemployees';
@@ -23,12 +22,15 @@ import SubResetPassword from './Subadmin/SubResetPassword';
 import SubProfile from './Subadmin/SubProfile';
 import VoiceTasks from './Subadmin/VoiceTasks';
 import SubPrefrences from './Subadmin/SubPrefrences';
-import SubSendNotification from './Subadmin/SubSendNotification';
 import SubNotificationUser from './Subadmin/SubNotificationUser';
 import AdminNotification from './pages/AdminNotification';
 import SubProtected from './Subadmin/SubProtedted';
 import AdminProtected from './pages/AdminProtected';
 import Prefrences from './pages/Prefrences';
+import SubAdminPreferences from './Subadmin/SubAdminPreferences';
+import  Login  from './pages/Login'
+ 
+ 
  
  
 
@@ -60,8 +62,8 @@ function App() {
             <Route path='/SubProfile' element={<SubProtected> <SubProfile /></SubProtected>} />
             <Route path='/VoiceTasks' element={<SubProtected> <VoiceTasks /></SubProtected>} />
             <Route path='/SubPrefrences' element={<SubProtected> <SubPrefrences /></SubProtected>} />
-            <Route path='/SubSendNotification' element={<SubProtected> <SubSendNotification /></SubProtected>} />
-              <Route path='/SubNotificationUser' element={<SubProtected> <SubNotificationUser /></SubProtected>} />
+            <Route path='/SubNotificationUser' element={<SubProtected> <SubNotificationUser /></SubProtected>} />
+            <Route path='/SubPreferenceAdmin' element={<SubProtected> <SubAdminPreferences /></SubProtected>} />
           </Routes>
     </Router>
   );

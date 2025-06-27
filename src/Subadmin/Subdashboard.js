@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {  Tooltip, ResponsiveContainer,  Cell, Pie, PieChart } from 'recharts';
 import Subsidebar from './Subsidebar';
-import { method } from 'lodash';
+ 
  
  
 
@@ -47,18 +47,13 @@ function fetchTask() {
     .then((result) => {
       if (result.success === true && Array.isArray(result.stats)) {
         console.log("task data for graph response ", result);
-
-        // ✅ Filter out 'active' and 'deleted'
         const filteredStats = result.stats.filter(stat =>
           stat.status !== 'active' && stat.status !== 'deleted'
         );
-
-        // ✅ Format for chart
         const formatted = filteredStats.map(stat => ({
           name: stat.status.charAt(0).toUpperCase() + stat.status.slice(1),
           value: stat.count
         }));
-
         setTaskChartData(formatted);
       }
     })
@@ -120,16 +115,9 @@ useEffect(()=>{fetchTask()},[])
       .catch((error) => console.error(error));
   }
 
-useEffect(()=>{fetchTaskCount()},[])
-  
-
-
- 
-
-
   useEffect(() => {
     fetchUsers();
-     
+    fetchTaskCount()
   }, []);
 
   return (

@@ -1,26 +1,70 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Subsidebar from './Subsidebar';
- 
-const notifications = [
-  { id: 1, message: "Your account has been successfully updated.", date: "2025-04-20" },
-  { id: 2, message: "New messages from your team.", date: "2025-04-19" },
-  { id: 3, message: "A new version of your app is available.", date: "2025-04-18" },
-  { id: 4, message: "Your password was changed successfully.", date: "2025-04-17" },
-  { id: 5, message: "You have a new notification regarding your recent activity.", date: "2025-04-16" },
-];
+
 
 const Subnotification = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(null)
+  const [token, setToken] = useState(null)
+
+
+  const getUserInfo = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const tokenn = localStorage.getItem('token');
+
+  if (user && tokenn) {
+    setUserId(user.id); // or user._id depending on structure
+    setToken(tokenn);
+    console.log("got token", tokenn);
+    console.log("got userId", user.id);
+  } else {
+    console.warn("User or token not found in localStorage");
+  }
+};
+
+  useEffect(()=>{getUserInfo();},[])
+
+  useEffect(()=>{
+const timer = setTimeout(()=>{fetchNotifications()},2000)
+return () => clearTimeout(timer) 
+  },[userId, token])
+
+  const fetchNotifications = () => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${token}`);
+
+    fetch(`https://tracking-backend-admin.vercel.app/v1/common/getNotification?userId=${userId}`, {
+      method: 'GET',
+      headers: myHeaders,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!userId || !token){
+          console.log('userid not found ')
+        }
+        console.log('Notifications:', data);
+        setNotifications(data.notificationData || []);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching notifications:', error);
+        setLoading(false);
+      });
+  };
+
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">
-      {/* side bar icon */}
-    <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4">
-  <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
-    <i className="bi bi-list text-3xl"></i>
-  </button>
-  <h2 className="text-white text-xl font-semibold">Tracking App</h2>
-</div>
-      {/* Overlay */}
+      {/* Sidebar toggle */}
+      <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4">
+        <button onClick={() => setSidebarOpen(true)} className="text-white">
+          <i className="bi bi-list text-3xl"></i>
+        </button>
+        <h2 className="text-white text-xl font-semibold">Tracking App</h2>
+      </div>
+
+      {/* Sidebar overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
@@ -36,20 +80,24 @@ const Subnotification = () => {
       >
         <Subsidebar />
       </div>
-      <div className="flex-1 p-6 overflow-y-auto">
-        <div className="p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Notifications</h2>
-      <ul className="space-y-4">
-        {notifications.map((notification) => (
-          <li key={notification.id} className="p-4 bg-white rounded shadow-md flex justify-between">
-            <div>
-              <p className="text-gray-700">{notification.message}</p>
-              <small className="text-gray-500">{notification.date}</small>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+
+      {/* Main content */}
+      <div className="flex-1 p-4 overflow-y-auto text-white">
+        <h2 className="text-2xl font-bold mb-4">User Notifications</h2>
+        {loading ? (
+          <p className="text-blue-400">Loading notifications...</p>
+        ) : notifications.length === 0 ? (
+          <p className="text-gray-400">No notifications found.</p>
+        ) : (
+          <ul className="space-y-3">
+            {notifications.map((note, idx) => (
+              <li key={idx} className="bg-gray-800 p-3 rounded shadow">
+                <p className="font-semibold">{note.title || 'Untitled'}</p>
+                <p className="text-sm text-gray-400">{note.message || 'No message'}</p>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

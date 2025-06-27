@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';  
 import './Sidebar.css';
-import profilePhoto from '../assets/images/profilephoto.jpg';
  
 
 const Sidebar = () => {
@@ -65,14 +64,12 @@ const navigate=useNavigate()
     <div className="sidebar">
     
 
-    {/* User Profile Section */}
-    {/* <div className="profile-section"> */}
-      {/* <img className="profile-img" src={profilePhoto} alt="Profile" /> */}
+    
       <div className="profile-info">
         <div className="profile-name">{myData?.fullName}</div>
         <div className="profile-role">Admin</div>
       </div>
-    {/* </div> */}
+    
 
     <ul className="nav-list">
       <li><NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tachometer"></i> Dashboard</NavLink></li>
@@ -82,9 +79,7 @@ const navigate=useNavigate()
       <li><NavLink to="/report" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard"></i>Daily Reports</NavLink></li>
       <li><NavLink to="/Logs" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note"></i> Work Hours</NavLink></li>
       <li><NavLink to="/notifications" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell"></i> Notifications</NavLink></li>
-            {/* <li><NavLink to="/Prefrences" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-cogs text-lg"></i> Preferences </NavLink></li> */}
-      {/* <li><NavLink to="/about" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-info-circle"></i> About Us</NavLink></li> */}
-    </ul>
+   </ul>
 
    {/* Logout Button */}
    <div className="logout-section">

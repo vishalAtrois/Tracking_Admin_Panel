@@ -18,12 +18,6 @@
     
   }
   
-  /* .logo img {
-    width: 100px; 
-    height: 75px;  
-    border-radius: 50px;
-  }
-   */
   
   .profile-section {
     display: flex;
@@ -90,14 +84,14 @@
     background-color: #dc2626;
   }
   .nav-list li a {
-    font-size: 18px; /* Increase font size */
+    font-size: 18px; 
     display: flex;
     align-items: center;
     gap: 10px;
   }
   
   .nav-list li a i {
-    font-size: 20px; /* Increase icon size */
+    font-size: 20px;  
   }
   
   .active-link {

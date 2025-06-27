@@ -88,6 +88,7 @@ const Subsidebar = () => {
        <li><NavLink to="/SubNotificationUser" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i>Send Notifications </NavLink></li>
         <li><NavLink to="/Subnotification" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i> Notifications</NavLink></li>
         <li><NavLink to="/Subprefrences" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-cogs text-lg"></i> Preferences </NavLink></li>
+        <li><NavLink to="/SubPreferenceAdmin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-cogs text-lg"></i>Set Preferences For Subadmin </NavLink></li>
           {/* <li><NavLink to="/SubSendNotification" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i>  Notifications </NavLink></li> */}
         {/* Settings Dropdown */}
         <li className="relative" ref={dropdownRef}>
