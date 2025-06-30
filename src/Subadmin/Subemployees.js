@@ -177,7 +177,6 @@ const handlePasswordChange = (e) => {
               setUserCount(result.searchedUSer.totalResults);
               setLoading(false)
             } else {
-              console.log("Fetch  user List response:", result);
               setUsersData(result.UserList.results); // <-- correct field for paginated list
               setUserCount(result.UserList.totalResults);
               setLoading(false)

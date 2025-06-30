@@ -132,12 +132,11 @@ const fetchWorkSummary = (activityId) => {
         .then((result) => {
           if (result.success === true) {
             if (searchQuery) {
-              setUsersData(result.searchedUSer.data); // <-- correct field for search
+              setUsersData(result.searchedUSer.data); 
               setUserCount(result.searchedUSer.totalResults);
               setLoading(false)
             } else {
-              console.log("Fetch  user List response:", result);
-              setUsersData(result.UserList.results); // <-- correct field for paginated list
+              setUsersData(result.UserList.results); 
               setUserCount(result.UserList.totalResults);
               setLoading(false)
             }

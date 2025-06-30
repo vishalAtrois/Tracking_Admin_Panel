@@ -61,7 +61,6 @@ const SubAdminPreferences = () => {
             setUsersData(result.searchedUSer?.data || []);
             setUserCount(result.searchedUSer?.totalResults || 0);
           } else {
-            console.log('fetch subadmin',result)
             setUsersData(result.UserList?.results || []);
             setUserCount(result.UserList?.totalResults || 0);
           }
