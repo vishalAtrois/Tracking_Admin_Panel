@@ -50,7 +50,6 @@ const Dashboard = () => {
     fetch("https://tracking-backend-admin.vercel.app/v1/admin/fetchCompanyList?page=1&limit=10&sortBy=createdAt:desc", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if(result.success === true){
           setCompanyCount(result.UserList.totalResults)
           setLoading(false)
