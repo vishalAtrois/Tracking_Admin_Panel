@@ -29,7 +29,6 @@ function Login() {
   const passReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
   const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  // ✅ Fetch FCM token when component mounts
   useEffect(() => {
     requestForToken();
   }, []);
@@ -45,7 +44,6 @@ function Login() {
         });
 
         if (token) {
-          console.log("✅ FCM Token:", token);
           setFCMToken(token);
           return token;
         } else {
@@ -115,9 +113,6 @@ function Login() {
           localStorage.setItem(tokenKey, result.token.access.token);
           localStorage.setItem("rtoken", result.token.refresh.token);
           localStorage.setItem("user", JSON.stringify(result.user));
-
-          console.log("Login Success:", result);
-
           if (values.userType === "subAdmin") {
             navigate("/Subdashboard");
           } else {

@@ -47,9 +47,6 @@ const [logsData, setLogsData] = useState([]);
       .catch((err) => console.error("Error fetching summary:", err));
   };
 
-
-
-
 const { isLoaded } = useJsApiLoader({
   googleMapsApiKey: 'AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE'
 });
@@ -58,10 +55,6 @@ const { isLoaded } = useJsApiLoader({
     useEffect(() => {
       fetchUsers();
     },[currentpage,searchQuery]);
-
- 
-
-
 
 function GetReports(item) {
   const token = localStorage.getItem('Admintoken');
@@ -72,9 +65,7 @@ function GetReports(item) {
     redirect: "follow"
   })
     .then(res => res.json())
-    .then((response) => {
-      console.log("API Response for GetReports:", response); 
-
+    .then((response) => { 
       const { success, List } = response;
       if (!success || !List?.logs) return;
 
@@ -85,8 +76,7 @@ function GetReports(item) {
           checkInTime: entry.checkInTime,
           checkOutTime: entry.checkOutTime,
           alarmLogs: entry.alarmLogs || [],
-          location: locations.length > 0 ? locations : null, // attach full locations array or null
-          // Or you could use locations[0] if you want just the first location
+          location: locations.length > 0 ? locations : null,
         }))
       );
 
@@ -125,13 +115,11 @@ function GetReports(item) {
         .then((result) => {
           if (result.success === true) {
             if (searchQuery) {
-              console.log("Search API response:", result);
-              setUsersData(result.searchedUSer.data); // <-- correct field for search
+              setUsersData(result.searchedUSer.data);  
               setUserCount(result.searchedUSer.totalResults);
               setLoading(false)
             } else {
-              console.log("Fetch  user List response:", result);
-              setUsersData(result.UserList.results); // <-- correct field for paginated list
+              setUsersData(result.UserList.results);  
               setUserCount(result.UserList.totalResults);
               setLoading(false)
             }

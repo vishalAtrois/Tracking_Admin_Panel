@@ -1,6 +1,5 @@
 import react, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
-import { FaIndustry } from 'react-icons/fa6';
 
 const Companies = () => {
   const [data, setData] = useState([]);
@@ -51,7 +50,6 @@ const Companies = () => {
   
       const result = await response.json();
       if (result.success) {
-        console.log("added company",result)
         alert("Company added successfully");
         setShowAddModal(false);
         fetchCompany(); // Refresh the list
@@ -148,7 +146,6 @@ const Companies = () => {
             setData(result.searchedCompany.data);
             setCompanyCount(result.searchedCompany.totalResults);
           } else {
-            console.log(result,"fetch companies")
             setData(result.UserList.results);
             setCompanyCount(result.UserList.totalResults);
           }

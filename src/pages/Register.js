@@ -14,8 +14,6 @@ useEffect(() => {
     .then((res) => res.json())
     .then((data) => {
       if (Array.isArray(data.companyList)) {
-              // const names = data.companyList.map((company) => company.name);
-        // Map names and remove duplicates using Set
         const uniqueNames = [
           ...new Set(data.companyList.map((company) => company.name.trim()))
         ];

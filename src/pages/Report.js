@@ -42,7 +42,6 @@ const fetchReportByDate = (date) => {
   fetch(`https://tracking-backend-admin.vercel.app/v1/admin/getReportByDate?userId=${getIdDate}&date=${date}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      console.log("Filtered reports:", result);
       if (result.success && result.reportList) {
         setSelectedUserReports(result.reportList);
       } else {
@@ -51,11 +50,6 @@ const fetchReportByDate = (date) => {
     })
     .catch((error) => console.error("API Error:", error));
 };
-
-
-
-
-  
  
 const fetchUserReport = async (item) => {
   const token = localStorage.getItem('Admintoken');
@@ -103,13 +97,11 @@ const fetchUserReport = async (item) => {
        .then((result) => {
          if (result.success === true) {
            if (searchQuery) {
-             console.log("Search API response:", result);
-             setUsersData(result.searchedUSer.data); // <-- correct field for search
+             setUsersData(result.searchedUSer.data);  
              setUserCount(result.searchedUSer.totalResults);
              setLoading(false)
            } else {
-             console.log("Fetch  user List response:", result);
-             setUsersData(result.UserList.results); // <-- correct field for paginated list
+             setUsersData(result.UserList.results); 
              setUserCount(result.UserList.totalResults);
              setLoading(false)
            }
@@ -151,7 +143,7 @@ const deleteReport = async (reportId) => {
     if (result.success) {
       alert("Report deleted successfully");
       if (selectedUser) {
-        fetchUserReport(selectedUser); // Refresh report list
+        fetchUserReport(selectedUser);  
       }
     } else {
       console.error("Failed to delete report", result);

@@ -28,7 +28,6 @@ const Dashboard = () => {
       .then((response) => response.json())
       .then((result) => {
         if(result.success === true){
-          console.log(result.UserList);
           setUserCount(result.UserList.totalResults)
           setLoading(false)
           
@@ -53,7 +52,6 @@ const Dashboard = () => {
       .then((result) => {
         console.log(result);
         if(result.success === true){
-          console.log(result);
           setCompanyCount(result.UserList.totalResults)
           setLoading(false)
         }

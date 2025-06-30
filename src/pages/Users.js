@@ -71,7 +71,6 @@ const saveEditedUser = async () => {
       alert("User updated successfully");
       setShowEditModal(false);
       fetchUsers();
-      console.log(result, "editing user ")
     } else {
       alert("Update failed: " + result.message);
     }
@@ -104,13 +103,12 @@ const url = searchQuery
       .then((result) => {
         if (result.success === true) {
           if (searchQuery) {
-            console.log("Search API response:", result);
-            setUsersData(result.searchedUSer.data); // <-- correct field for search
+            setUsersData(result.searchedUSer.data); 
             setUserCount(result.searchedUSer.totalResults);
             setLoading(false)
           } else {
             console.log("Fetch  user List response:", result);
-            setUsersData(result.UserList.results); // <-- correct field for paginated list
+            setUsersData(result.UserList.results); 
             setUserCount(result.UserList.totalResults);
             setLoading(false)
           }
@@ -150,7 +148,6 @@ const url = searchQuery
     fetch("https://tracking-backend-admin.vercel.app/v1/common/promotion", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log("API Result:", result);
         alert("User promoted successfully.");
         setShowPrompt(false);
         setConfirmPromotion(false);
