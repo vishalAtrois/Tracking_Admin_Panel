@@ -104,7 +104,7 @@ fetch("https://tracking-backend-admin.vercel.app/v1/common/markNotificationAsRea
 
       {/* Main content */}
       <div className="flex-1 p-4 overflow-y-auto text-white">
-        <h2 className="text-2xl font-bold mb-4">User Notifications</h2>
+        <h2 className="text-2xl font-bold mb-4"> Notifications</h2>
         {loading ? (
           <p className="text-blue-400">Loading notifications...</p>
         ) : notifications.length === 0 ? (
