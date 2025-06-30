@@ -20,6 +20,7 @@ const limit = 20;
   const [email, setEmail] = useState('')
     const [showPassword, setShowPassword] = useState(false);
     const [passwordError, setPasswordError] = useState('');
+    const [checkPermission, setCheckPermission] = useState('')
 
 const passReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
 
@@ -108,7 +109,11 @@ const handlePasswordChange = (e) => {
 
 
   const handlePromoteClick = () => {
+      if (checkPermission.adminRole === true) {
     setShowPrompt(true);
+  } else {
+    alert('Sorry, you are not allowed to set admin.');
+  }
   };
 
   const confirmPromote = () => {
@@ -153,6 +158,8 @@ const handlePasswordChange = (e) => {
 
     function fetchUsers() {
       const token = localStorage.getItem('token');
+      const permissions = JSON.parse(localStorage.getItem('permissions'))
+      setCheckPermission(permissions)
       setToken(token);
       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${token}`);
@@ -246,6 +253,7 @@ const handlePasswordChange = (e) => {
       setShowDeleteModal(true)
       setSi(item.id)
   }
+  
   
   
     

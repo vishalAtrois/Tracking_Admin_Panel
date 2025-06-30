@@ -80,11 +80,28 @@ const SubAdminPreferences = () => {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
+const handleSetPermissionClick = (userId) => {
+  setSelectedUserId(userId);
+  setPermissionModal(true);
 
-  const handleSetPermissionClick = (userId) => {
-    setSelectedUserId(userId);
-    setPermissionModal(true);
-  };
+  // Load existing permissions from localStorage using the correct key
+  const storedPermissions = localStorage.getItem(`adminpermissions-${userId}`);
+  if (storedPermissions) {
+    setPermissions(JSON.parse(storedPermissions));
+  } else {
+    // Reset to default if none saved
+    setPermissions({
+      trackHistory: true,
+      adminRole: false,
+      createAddress: true,
+      createReports: false,
+      viewContacts: true,
+      createGroups: true,
+      createNotes: true
+    });
+  }
+};
+
 
   const confirmSetPermissions = () => {
     if (!selectedUserId) return;
@@ -109,6 +126,7 @@ const SubAdminPreferences = () => {
       .then((response) => response.text())
       .then((result) => {
         console.log("Permission set result:", result);
+        localStorage.setItem(`adminpermissions-${selectedUserId}`, JSON.stringify(permissions)); // Save to localStorage
         setPermissionModal(false);
         setSelectedUserId(null);
       })
@@ -190,7 +208,7 @@ const SubAdminPreferences = () => {
         <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
           <thead className="bg-gray-700">
             <tr>
-              {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Actions'].map((heading) => (
+              {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Set Preferences'].map((heading) => (
                 <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
                   {heading}
                 </th>

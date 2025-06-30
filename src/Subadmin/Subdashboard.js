@@ -16,20 +16,7 @@ const Subdashboard = () => {
     const [taskChartData, setTaskChartData] = useState([]);
 
   
- useEffect(() => {
-    Get()
-  }, [])
-
-  const [myData, setMyData] =  useState(null)
-  const [token, setToken] = useState('')
-
-  function Get() {
-    const data = localStorage.getItem('user')
-    const token = localStorage.getItem('rtoken')
-    const ud = JSON.parse(data)
-    setMyData(ud)
-    setToken(token)
-  }
+ 
 
 function fetchTask() {
   const token = localStorage.getItem('token');
@@ -62,8 +49,28 @@ function fetchTask() {
     });
 }
 
+const fetchSubadminPreference = async () => {
+      const requestOptions = {
+        method: "GET",
+        redirect: "follow"
+      };
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+      try {
+        const response = await fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getMyPermissions?userId=${storedUser.id}`, requestOptions);
+        const result = await response.json();
+        if (result.success) {
+        localStorage.setItem("permissions", JSON.stringify(result.permissions.permissions))
+        console.log('result of permissions ',result)
+        }
+      } catch (error) {
+        console.log('check subadmin api error ', error);
+      }
+    };
 
-useEffect(()=>{fetchTask()},[])
+
+useEffect(()=>{fetchTask()
+  fetchSubadminPreference()
+},[])
 
   function fetchUsers (){
 
