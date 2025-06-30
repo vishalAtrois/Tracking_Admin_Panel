@@ -33,7 +33,6 @@ function fetchTask() {
     .then((response) => response.json())
     .then((result) => {
       if (result.success === true && Array.isArray(result.stats)) {
-        console.log("task data for graph response ", result);
         const filteredStats = result.stats.filter(stat =>
           stat.status !== 'active' && stat.status !== 'deleted'
         );
@@ -60,7 +59,6 @@ const fetchSubadminPreference = async () => {
         const result = await response.json();
         if (result.success) {
         localStorage.setItem("permissions", JSON.stringify(result.permissions.permissions))
-        console.log('result of permissions ',result)
         }
       } catch (error) {
         console.log('check subadmin api error ', error);
@@ -88,7 +86,6 @@ useEffect(()=>{fetchTask()
       .then((response) => response.json())
       .then((result) => {
         if(result.success === true){
-          console.log(result.UserList);
           setUserCount(result.UserList.totalResults)
           setLoading(false)
           
@@ -114,7 +111,6 @@ useEffect(()=>{fetchTask()
       .then((response) => response.json())
       .then((result) => {
         if(result.success === true){
-          console.log("fetchTaskcount result",result);
           setTotalTasks(result.totalTasks)
           
         }

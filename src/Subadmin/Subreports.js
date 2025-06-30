@@ -66,7 +66,6 @@ const fetchReportByDate = (date) => {
   fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getReportByDate?userId=${getIdDate}&date=${date}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      console.log("Filtered reports:", result);
       if (result.success && result.reportList) {
         setSelectedUserReports(result.reportList);
       } else {
@@ -75,13 +74,6 @@ const fetchReportByDate = (date) => {
     })
     .catch((error) => console.error("API Error:", error));
 };
-
-
-// Call this function to trigger the API request
- 
-
-
-
 
 
 const handleExtraFieldChange = (index, field, value) => {
@@ -146,7 +138,7 @@ const AddReport = async (id, reportData, file, images, extraFields) => {
 // ✅ Add only extra field keys with empty values
 extraFields.forEach(({ key }) => {
   if (key) {
-    formData.append(key, ""); // Send empty string for value
+    formData.append(key, "");  
   }
 });
   try {
@@ -184,11 +176,6 @@ extraFields.forEach(({ key }) => {
 }; 
 
 const handleCreateReport = async () => {
-  console.log("🛠️ Creating report with the following data:");
-  console.log("🧾 Report Data:", newReport);
-  console.log("📎 Selected File:", newReportFile);
-  console.log("🖼️ Selected Images:", newReportImages);
-  console.log("👤 Selected User:", selectedUser);
   if (newReportImages.length > 5) {
     alert("You can upload a maximum of 5 images.");
     return;
@@ -199,12 +186,11 @@ const handleCreateReport = async () => {
     return;
   }
 
-  setIsLoading(true); // Start loader
+  setIsLoading(true); 
   await AddReport(selectedUser.id, newReport, newReportFile, newReportImages,extraFields);
-  setIsLoading(false); // Stop loader
+  setIsLoading(false);  
 
-  handleCloseAddReportModal(); // This will also reset the form
-  // Reset form and state after success
+  handleCloseAddReportModal();
   setShowAddReportModal(false);
   setNewReport({
     companyName: '',
@@ -238,8 +224,6 @@ const handleCloseAddReportModal = () => {
 };
 const fetchUserReport = async (item) => {
   const token = localStorage.getItem('token');
-  //  const user = JSON.parse(localStorage.getItem("user"));
-  //    setCompanyName(user?.companyName)
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
 setUserId(item)
@@ -254,7 +238,6 @@ setUserId(item)
     );
     const result = await response.json();
     if (result.success && result.reportList) {
-      console.log('fetchreport api ',result)
       setSelectedUser(item);
       setSelectedUserReports(result.reportList);
       setReportModalOpen(true);
@@ -285,13 +268,12 @@ setUserId(item)
        .then((result) => {
          if (result.success === true) {
            if (searchQuery) {
-             console.log("Search API response:", result);
-             setUsersData(result.searchedUSer.data); // <-- correct field for search
+             setUsersData(result.searchedUSer.data);  
              setUserCount(result.searchedUSer.totalResults);
              setLoading(false)
            } else {
              console.log("Fetch  user List response:", result);
-             setUsersData(result.UserList.results); // <-- correct field for paginated list
+             setUsersData(result.UserList.results); 
              setUserCount(result.UserList.totalResults);
              setLoading(false)
            }

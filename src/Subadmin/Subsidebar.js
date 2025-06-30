@@ -50,7 +50,6 @@ const Subsidebar = () => {
     fetch("https://tracking-backend-admin.vercel.app/v1/subAdmin/logoutSubAdmin", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.success === true) {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
@@ -69,9 +68,7 @@ const Subsidebar = () => {
 
   return (
     <div className="sidebar">
-      {/* User Profile Section */}
       <div className="profile-section">
-        {/* <img className="profile-img" src={profilePhoto} alt="Profile" /> */}
         <div className="profile-info">
           <div className="profile-name">{myData?.fullName || "Sub Admin"}</div>
           <div className="profile-role">Sub Admin</div>
@@ -81,7 +78,6 @@ const Subsidebar = () => {
       {/* Nav Links */}
       <ul className="nav-list">
         <li><NavLink to="/Subdashboard" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tachometer text-lg"></i> Dashboard</NavLink></li>
-        {/* <li><NavLink to="/VoiceTasks" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tasks text-lg"></i> All Tasks</NavLink></li> */}
         <li><NavLink to="/VoiceTasks" className={({ isActive }) => isActive ? "active-link" : ""}><i className="bi bi-list-task text-lg"></i> Voice Tasks</NavLink></li>
         <li><NavLink to="/Subreports" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard text-lg"></i> Daily Reports</NavLink></li>
         <li><NavLink to="/Subcheckin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note text-lg"></i> Work Hours</NavLink></li>
@@ -90,7 +86,6 @@ const Subsidebar = () => {
         <li><NavLink to="/Subnotification" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i> Notifications</NavLink></li>
         <li><NavLink to="/Subprefrences" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-cogs text-lg"></i> Preferences </NavLink></li>
         <li><NavLink to="/SubPreferenceAdmin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-cogs text-lg"></i> Subadmins </NavLink></li>
-          {/* <li><NavLink to="/SubSendNotification" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i>  Notifications </NavLink></li> */}
         {/* Settings Dropdown */}
         <li className="relative" ref={dropdownRef}>
           <div

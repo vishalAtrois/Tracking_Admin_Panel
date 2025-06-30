@@ -41,18 +41,16 @@ const handlePasswordChange = (e) => {
     fullName: '',
     email: '',
     phoneNumber: '',
-    // companyName: ''
   });
   const [showEditModal, setShowEditModal] = useState(false);
    const [showDeleteModal, setShowDeleteModal] = useState(false);
-  // Trigger edit
+  
   const handleEditClick = (user) => {
     setEditedUser({
       id: user.id,
       fullName: user.fullName,
       email: user.email,
       phoneNumber: user.phoneNumber,
-      // companyName: user.companyName
     });
     setShowEditModal(true);
   };
@@ -87,7 +85,6 @@ const handlePasswordChange = (e) => {
         alert("User updated successfully");
         setShowEditModal(false);
         fetchUsers();
-        console.log(result, "editing user ")
       } else {
         alert("Update failed: " + result.message);
       }
@@ -142,7 +139,6 @@ const handlePasswordChange = (e) => {
     fetch("https://tracking-backend-admin.vercel.app/v1/common/promotion", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log("promotion api result:", result);
         alert("User promoted successfully.");
         setShowPrompt(false);
         setConfirmPromotion(false);
@@ -177,7 +173,6 @@ const handlePasswordChange = (e) => {
         .then((result) => {
           if (result.success === true) {
             if (searchQuery) {
-              console.log("Search API response:", result);
               setUsersData(result.searchedUSer.data); // <-- correct field for search
               setUserCount(result.searchedUSer.totalResults);
               setLoading(false)

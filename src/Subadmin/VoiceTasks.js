@@ -35,10 +35,6 @@ const VoiceTasks = () => {
   fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getTaskByDate?userId=${userId}&date=${date}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      console.log("userid task", userId);
-      console.log("Filtered voicetask:", result);
-      console.log("date", date);
-
       if (result.success && result.tasktList) {
         setTasks(result.tasktList);
       } else {
@@ -98,7 +94,6 @@ const VoiceTasks = () => {
       .then((response) => response.json())
       .then((result) => {
  if (result.success && Array.isArray(result.tasktList)) {
-  console.log("tasks response ", result);
   setTasks(result.tasktList);
   setShowTaskModal(true);
 }

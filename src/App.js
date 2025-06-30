@@ -6,10 +6,9 @@ import Users from './pages/Users';
 import  Register  from "./pages/Register";
 import Companies from './pages/Companies';
 import AboutUs from './pages/AboutUs';
-import Notifications from './pages/Notification'; // if you have this
+import Notifications from './pages/Notification'; 
 import './App.css';
 import 'font-awesome/css/font-awesome.min.css';
-import { Suballtasks } from './Subadmin/Suballtasks';
 import  Subreports  from './Subadmin/Subreports';
 import { Subemployees } from './Subadmin/Subemployees';
 import Subdashboard from './Subadmin/Subdashboard';
@@ -51,7 +50,6 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/Prefrences' element={<Prefrences />} />
             <Route path="/Subdashboard" element={<SubProtected><Subdashboard /></SubProtected>} />
-            <Route path="/suballtasks" element={<SubProtected><Suballtasks /></SubProtected>} />
             <Route path="/Subreports" element={<SubProtected> <Subreports /></SubProtected>} />
             <Route path='/Subemployees' element={<SubProtected> <Subemployees /></SubProtected>} />
             <Route path='/Subcheckin' element={<SubProtected> <Subcheckin /></SubProtected>} />

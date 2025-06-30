@@ -17,8 +17,6 @@ const Subnotification = () => {
   if (user && tokenn) {
     setUserId(user.id); // or user._id depending on structure
     setToken(tokenn);
-    console.log("got token", tokenn);
-    console.log("got userId", user.id);
   } else {
     console.warn("User or token not found in localStorage");
   }
@@ -44,7 +42,6 @@ return () => clearTimeout(timer)
         if (!userId || !token){
           console.log('userid not found ')
         }
-        console.log('Notifications:', data);
         setNotifications(data.notificationData || []);
         setLoading(false);
       })

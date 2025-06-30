@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { UserCircle, Mail, Phone, Building2, BadgeCheck } from 'lucide-react';
+import { Mail, Phone, Building2, BadgeCheck } from 'lucide-react';
 import Subsidebar from './Subsidebar';
 
 const SubProfile = () => {

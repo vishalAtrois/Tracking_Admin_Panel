@@ -46,14 +46,9 @@ const [email, setEmail] = useState(location.state?.email || '');
   try {
     const response = await fetch(url, { method: 'GET', redirect: 'follow' });
     const result = await response.json();
-
-    console.log('OTP Verify result:', result); // DEBUG
-    console.log('response.ok:', response.ok); // DEBUG
-
+    
    if (response.ok) { 
-  console.log('Before navigate'); // <--- Add this
   navigate('/ResetPassword');
-  console.log('After navigate'); // <--- Add this
 }
 else {
       setMessage(result?.message || 'OTP Verification Failed');

@@ -125,7 +125,6 @@ const handleSetPermissionClick = (userId) => {
     fetch("https://tracking-backend-admin.vercel.app/v1/subAdmin/setAdminPermission", requestOptions)
       .then((response) => response.text())
       .then((result) => {
-        console.log("Permission set result:", result);
         localStorage.setItem(`adminpermissions-${selectedUserId}`, JSON.stringify(permissions)); // Save to localStorage
         setPermissionModal(false);
         setSelectedUserId(null);

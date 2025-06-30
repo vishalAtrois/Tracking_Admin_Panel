@@ -132,7 +132,6 @@ const fetchWorkSummary = (activityId) => {
         .then((result) => {
           if (result.success === true) {
             if (searchQuery) {
-              console.log("Search API response:", result);
               setUsersData(result.searchedUSer.data); // <-- correct field for search
               setUserCount(result.searchedUSer.totalResults);
               setLoading(false)
@@ -172,7 +171,6 @@ const setTime = async () => {
       );
 
       const result = await response.json();
-      console.log("Check-in time response:", result);
       setShowModal(false); // Close modal after API call
           setSelectedDate("");
     setSelectedTime("");

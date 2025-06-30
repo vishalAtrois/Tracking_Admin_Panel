@@ -32,7 +32,6 @@ const SubForgotPassword = () => {
   );
 
   const result = await response.json();  
-  console.log('Forgot password response:', result);
 
   if (response.ok && result.token) {
     localStorage.setItem('subForgotPasswordToken', result.token);  
