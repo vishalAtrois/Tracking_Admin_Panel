@@ -107,7 +107,6 @@ const url = searchQuery
             setUserCount(result.searchedUSer.totalResults);
             setLoading(false)
           } else {
-            console.log("Fetch  user List response:", result);
             setUsersData(result.UserList.results); 
             setUserCount(result.UserList.totalResults);
             setLoading(false)
