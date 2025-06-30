@@ -24,10 +24,15 @@ const Subnotification = () => {
 
   useEffect(()=>{getUserInfo();},[])
 
-  useEffect(()=>{
-const timer = setTimeout(()=>{fetchNotifications()},2000)
-return () => clearTimeout(timer) 
-  },[userId, token])
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    fetchNotifications();
+    markReadNotification();
+  }, 2000);
+
+  return () => clearTimeout(timer);
+}, [userId, token]);
+
 
   const fetchNotifications = () => {
     const myHeaders = new Headers();
@@ -50,6 +55,25 @@ return () => clearTimeout(timer)
         setLoading(false);
       });
   };
+     const markReadNotification = () => {
+const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", `Bearer ${token}`);
+
+const raw = JSON.stringify({
+  "userId": userId
+});
+const requestOptions = {
+  method: "PUT",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://tracking-backend-admin.vercel.app/v1/common/markNotificationAsRead", requestOptions)
+  .then((response) => response.json())
+  .catch((error) => console.error(error));
+      }
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900">

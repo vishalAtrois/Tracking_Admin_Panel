@@ -291,7 +291,7 @@ const handleSetPermissionClick = (userId) => {
                       onChange={() => setPermissions(prev => ({ ...prev, [key]: !prev[key] }))}
                     />
                   </div>
-                ))}
+                ))} 
               </div>
               <div className="flex justify-end gap-4">
                 <button

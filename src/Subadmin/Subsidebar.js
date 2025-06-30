@@ -10,6 +10,48 @@ const Subsidebar = () => {
   const [token, setToken] = useState('');
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+   const [userId, setUserId] = useState(null)
+   const [tokennn, setTokennn] =useState(null)
+   const [readNotification, setReadNotification] = useState(null)
+
+  const getUserInfo = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const tokenn = localStorage.getItem('token');
+
+  if (user && tokenn) {
+    setUserId(user.id); // or user._id depending on structure
+    setTokennn(tokenn);
+  } else {
+    console.warn("User or token not found in localStorage");
+  }
+};
+useEffect(()=>{getUserInfo();},[])
+    useEffect(()=>{
+  const timer = setTimeout(()=>{fetchNotifications()},2000)
+  return () => clearTimeout(timer) 
+    },[userId, token])
+  
+    const fetchNotifications = () => {
+      const myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${tokennn}`);
+  
+      fetch(`https://tracking-backend-admin.vercel.app/v1/common/getNotification?userId=${userId}`, {
+        method: 'GET',
+        headers: myHeaders,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (!userId || !token){
+            console.log('userid not found ')
+          }
+          const unreadCount = data.notificationData.filter(item => item.read === false).length;
+setReadNotification(unreadCount)
+        })
+        .catch((error) => {
+          console.error('Error fetching notifications:', error);
+           
+        });
+    };
 
   useEffect(() => {
     const data = localStorage.getItem('user');
@@ -83,7 +125,18 @@ const Subsidebar = () => {
         <li><NavLink to="/Subcheckin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note text-lg"></i> Work Hours</NavLink></li>
         <li><NavLink to="/Subemployees" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user text-lg"></i> Employees</NavLink></li>
        <li><NavLink to="/SubNotificationUser" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i>Send Notifications </NavLink></li>
-        <li><NavLink to="/Subnotification" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i> Notifications</NavLink></li>
+<li>
+  <NavLink to="/Subnotification" className={({ isActive }) => isActive ? "active-link" : ""}>
+    <i className="fa fa-bell text-lg"></i>
+    Notifications
+    {readNotification > 0 && (
+      <span className="ml-1 bg-red-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full">
+        {readNotification}
+      </span>
+    )}
+  </NavLink>
+</li>
+
         <li><NavLink to="/Subprefrences" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-cogs text-lg"></i> Preferences </NavLink></li>
         <li><NavLink to="/SubPreferenceAdmin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-cogs text-lg"></i> Subadmins </NavLink></li>
         {/* Settings Dropdown */}
