@@ -208,6 +208,7 @@ const setTime = async () => {
     setSelectedTime("");
      setSelectedCheckoutTime(""); 
     setSelectedUser(null);
+    setPin(['', '', '', '', '', ''])
     } catch (error) {
       console.error("Error setting check-in time:", error);
     }
