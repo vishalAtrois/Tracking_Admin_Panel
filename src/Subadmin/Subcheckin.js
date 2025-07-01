@@ -28,6 +28,38 @@ const [showSummaryModal, setShowSummaryModal] = useState(false);
 const [summaryData, setSummaryData] = useState('');
 
 
+const [pin, setPin] = useState(['', '', '', '', '', '']);
+const fullPin = pin.join('');
+
+const handlePinChange = (e, index) => {
+  const value = e.target.value.replace(/\D/, ''); // Only digits
+  if (!value) return;
+
+  const newPin = [...pin];
+  newPin[index] = value;
+  setPin(newPin);
+
+  // Move to next input
+  const next = document.getElementById(`pin-${index + 1}`);
+  if (next) next.focus();
+};
+
+const handlePinKeyDown = (e, index) => {
+  if (e.key === 'Backspace') {
+    const newPin = [...pin];
+    if (pin[index]) {
+      newPin[index] = '';
+      setPin(newPin);
+    } else if (index > 0) {
+      const prev = document.getElementById(`pin-${index - 1}`);
+      newPin[index - 1] = '';
+      setPin(newPin);
+      if (prev) prev.focus();
+    }
+  }
+};
+
+
 const fetchWorkSummary = (activityId) => {
   const token = localStorage.getItem("token");
   if (!token || !activityId) {
@@ -156,6 +188,7 @@ const setTime = async () => {
       allowedCheckInTime: selectedTime,
       allowedCheckOutTime: selectedCheckoutTime,
       date: selectedDate,
+      passcode:fullPin,
     });
 
     try {
@@ -491,51 +524,72 @@ const setTime = async () => {
 )}
 {/* view time modal  */}
 {showModal && (
-        <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-            <h2 className="text-xl font-semibold mb-4">Set Check-in Check-out Time</h2>
-            <label className="block text-gray-700 font-semibold mb-1">Select Date</label>
+  <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+      <h2 className="text-xl font-semibold mb-4">Set Check-in Check-out Time</h2>
+
+      <label className="block text-gray-700 font-semibold mb-1">Select Date</label>
+      <input
+        type="date"
+        className="w-full p-2 border rounded mb-4"
+        value={selectedDate}
+        onChange={(e) => setSelectedDate(e.target.value)}
+      />
+
+      <div className="mb-4">
+        <label className="block text-gray-700 font-semibold mb-1">Check-in Time</label>
+        <input
+          type="time"
+          className="w-full p-2 border rounded mb-4"
+          value={selectedTime}
+          onChange={(e) => setSelectedTime(e.target.value)}
+        />
+
+        <label className="block text-gray-700 font-semibold mb-1">Check-out Time</label>
+        <input
+          type="time"
+          className="w-full border border-gray-300 rounded px-3 py-2"
+          value={selectedCheckoutTime}
+          onChange={(e) => setSelectedCheckoutTime(e.target.value)}
+        />
+      </div>
+
+      {/* 6-digit PIN Input */}
+      <div className="mb-4">
+        <label className="block text-gray-700 font-semibold mb-2">Enter 6-digit PIN</label>
+        <div className="flex justify-between gap-2">
+          {[...Array(6)].map((_, i) => (
             <input
-              type="date"
-              className="w-full p-2 border rounded mb-4"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
+              key={i}
+              id={`pin-${i}`}
+              type="text"
+              maxLength={1}
+              value={pin[i] || ''}
+              onChange={(e) => handlePinChange(e, i)}
+              onKeyDown={(e) => handlePinKeyDown(e, i)}
+              className="w-10 h-12 text-center border rounded text-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <div className="mb-4">
-            <label className="block text-gray-700 font-semibold mb-1">Check-in Time</label>
-            <input
-              type="time"
-              className="w-full p-2 border rounded mb-4"
-              value={selectedTime}
-              onChange={(e) => setSelectedTime(e.target.value)}
-            />
-            
-             
-  <label className="block text-gray-700 font-semibold mb-1">Check-out Time</label>
-  <input
-    type="time"
-    className="w-full border border-gray-300 rounded px-3 py-2"
-    value={selectedCheckoutTime}
-    onChange={(e) => setSelectedCheckoutTime(e.target.value)}
-  />
-</div>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={setTime}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
-      )}
+      </div>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setShowModal(false)}
+          className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={setTime}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
 {/* activity modal  */}
 {showSummaryModal && summaryData && (
