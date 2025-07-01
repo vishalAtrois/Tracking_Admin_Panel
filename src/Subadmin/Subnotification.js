@@ -8,7 +8,8 @@ const Subnotification = () => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null)
   const [token, setToken] = useState(null)
-
+  const [notificationId, setNotificationId] = useState(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const getUserInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -32,6 +33,33 @@ const Subnotification = () => {
 
   return () => clearTimeout(timer);
 }, [userId, token]);
+
+const deleteNotification = () =>{
+  const myHeaders = new Headers();
+myHeaders.append("Authorization", `Bearer ${token}`);
+
+const requestOptions = {
+  method: "DELETE",
+  headers: myHeaders,
+  redirect: "follow"
+};
+fetch(`https://tracking-backend-admin.vercel.app/v1/common/deleteNotification?notificationId=${notificationId}`, requestOptions)
+  .then((response) => response.json())
+  .then((result) => {
+    if (result.success == true) {
+      setShowDeleteModal(false)
+      fetchNotifications();
+    }
+  })
+  .catch((error) => console.error(error));
+}
+
+const handleDeleteNotification = (item) =>{
+setNotificationId(item)
+setShowDeleteModal(true)
+}
+
+
 
 
   const fetchNotifications = () => {
@@ -110,15 +138,52 @@ fetch("https://tracking-backend-admin.vercel.app/v1/common/markNotificationAsRea
         ) : notifications.length === 0 ? (
           <p className="text-gray-400">No notifications found.</p>
         ) : (
-          <ul className="space-y-3">
-            {notifications.map((note, idx) => (
-              <li key={idx} className="bg-gray-800 p-3 rounded shadow">
-                <p className="font-semibold">{note.title || 'Untitled'}</p>
-                <p className="text-sm text-gray-400">{note.message || 'No message'}</p>
-              </li>
-            ))}
-          </ul>
+        <ul className="space-y-3">
+  {notifications.map((note, idx) => (
+    <li
+      key={idx}
+      className="bg-gray-800 p-3 rounded shadow flex justify-between items-start"
+    >
+      <div>
+        <p className="font-semibold">{note.title || 'Untitled'}</p>
+        <p className="text-sm text-gray-400">{note.message || 'No message'}</p>
+      </div>
+
+      <button
+        onClick={() => handleDeleteNotification(note._id)}
+        className="text-red-400 hover:text-red-600 ml-4"
+        title="Delete Notification"
+      >
+        <i className="fa fa-trash"></i>
+      </button>
+    </li>
+  ))}
+</ul>
+
         )}
+         {/* Confirm Delete Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-1 bg-black bg-opacity-75 flex items-start justify-center z-50 pt-20">
+          <div className="bg-white rounded-lg p-6 w-128 shadow-lg">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800">Confirm Delete</h2>
+            <p className="text-gray-600 mb-6">Are you sure you want to Delete this Notification?</p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-600 transition text-white text-sm sm:text-base"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => deleteNotification()}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm sm:text-base"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );
