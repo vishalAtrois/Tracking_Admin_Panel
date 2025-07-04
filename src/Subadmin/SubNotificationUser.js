@@ -75,7 +75,7 @@ const SubNotificationUser = () => {
       receiverUserType: "User",
       title,
       message,
-      notificationType: "chat",
+      notificationType: "notification",
     });
 
     const requestOptions = {
