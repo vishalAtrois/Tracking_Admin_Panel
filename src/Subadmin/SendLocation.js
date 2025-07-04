@@ -295,10 +295,10 @@ useEffect(() => {
 
 
      {showMapModal && isLoaded && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex justify-center items-center">
+  <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-60 flex justify-center items-center">
     <div className="bg-white p-4 rounded-xl w-full max-w-3xl h-[600px] flex flex-col">
       <div className="flex justify-between items-center mb-2">
-        <h2 className="text-lg font-semibold">Select Area on Map</h2>
+        <h2 className="text-lg font-semibold">Select Area on Map (Click on map to draw/select the area for user.) </h2>
         <button
           className="text-red-600 font-bold text-xl"
           onClick={() => {
