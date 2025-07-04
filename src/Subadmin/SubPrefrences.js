@@ -228,7 +228,7 @@ const SubPrefrences = () => {
       );
 
       const result = await response.json();
-      if (result.success) {
+      if (result.success == true) {
         console.log("Permissions updated on server:", result);
         alert('Permissions updated successfully')
         setShowPermissionModal(false);
