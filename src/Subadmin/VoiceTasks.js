@@ -203,7 +203,7 @@ const VoiceTasks = () => {
                   <tr key={item.id || index} className="bg-white">
                    <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
        <td className="border-b border-r border-gray-700 text-center">
-  <div className="flex items-center justify-center sm:justify-start gap-2 py-2 flex-wrap sm:flex-nowrap text-left">
+  <div className="flex items-center justify-center sm:justify-start gap-2 py-2 pl-6 flex-wrap sm:flex-nowrap text-left">
     <img
       src={item.image || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
       className="w-10 h-10 object-cover rounded-full"
