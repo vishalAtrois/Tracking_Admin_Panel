@@ -22,7 +22,6 @@ const [newReportImages, setNewReportImages] = useState([]);
 const [userId,setUserId] = useState('')
 const [selectedUser, setSelectedUser] = useState(null);
 const [extraFields, setExtraFields] = useState([{ key: "", value: "" }]);
-const [isLoading, setIsLoading] = useState(false);
 const [getIdDate,setGetIdDate] = useState(null)
 const [reportDate,setReportDate] = useState(null)
 const [companyName,setCompanyName] = useState('')
@@ -186,9 +185,9 @@ const handleCreateReport = async () => {
     return;
   }
 
-  setIsLoading(true); 
+ 
   await AddReport(selectedUser.id, newReport, newReportFile, newReportImages,extraFields);
-  setIsLoading(false);  
+  
 
   handleCloseAddReportModal();
   setShowAddReportModal(false);
@@ -457,11 +456,6 @@ const deleteReport = async (reportId) => {
 {showAddReportModal && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto p-4">
     <div className="relative max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6">
-    {isLoading && (
-    <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-50">
-      <div className="w-12 h-12 border-4 border-blue-600 border-dashed rounded-full animate-spin"></div>
-    </div>
-  )}
       <button
     type="button"
     onClick={() => handleCloseAddReportModal()}
