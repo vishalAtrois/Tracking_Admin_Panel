@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Subsidebar from './Subsidebar';
 
-const SubAdminPreferences = () => {
+const SendNotificationToSubadmin = () => {
  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [usersData, setUsersData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -10,17 +10,10 @@ const SubAdminPreferences = () => {
   const [limit] = useState(20);
   const [userCount, setUserCount] = useState(0);
   const [token, setToken] = useState('');
-  const [permissionModal, setPermissionModal] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState(null);
-  const [permissions, setPermissions] = useState({
-    trackHistory: true,
-    adminRole: false,
-    createAddress: true,
-    createReports: false,
-    viewContacts: true,
-    createGroups: true,
-    createNotes: true
-  });
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [title, setTitle] = useState('');
+   const [message, setMessage] = useState('');
+   const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
@@ -79,56 +72,53 @@ const SubAdminPreferences = () => {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
-const handleSetPermissionClick = (userId) => {
-  setSelectedUserId(userId);
-  setPermissionModal(true);
-
-  // Load existing permissions from localStorage using the correct key
-  const storedPermissions = localStorage.getItem(`adminpermissions-${userId}`);
-  if (storedPermissions) {
-    setPermissions(JSON.parse(storedPermissions));
-  } else {
-    // Reset to default if none saved
-    setPermissions({
-      trackHistory: true,
-      adminRole: false,
-      createAddress: true,
-      createReports: false,
-      viewContacts: true,
-      createGroups: true,
-      createNotes: true
-    });
-  }
-};
 
 
-  const confirmSetPermissions = () => {
-    if (!selectedUserId) return;
+ const sendNotification = async () => {
+    if (!title.trim() || !message.trim()) {
+      alert("Title and message are required");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    const storedUser = JSON.parse(localStorage.getItem("user"));
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", `Bearer ${token}`);
 
     const raw = JSON.stringify({
-      userId: selectedUserId,
-      permissions
+      senderId: storedUser.id,
+      receiverId: selectedUser.id,
+      senderUserType: "subAdmin",
+      receiverUserType: "subAdmin",
+      title,
+      message,
+      notificationType: "chat",
     });
 
     const requestOptions = {
-      method: "PUT",
+      method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: "follow"
+      redirect: "follow",
     };
 
-    fetch("https://tracking-backend-admin.vercel.app/v1/subAdmin/setAdminPermission", requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        localStorage.setItem(`adminpermissions-${selectedUserId}`, JSON.stringify(permissions)); // Save to localStorage
-        setPermissionModal(false);
-        setSelectedUserId(null);
-      })
-      .catch((error) => console.error("Permission error:", error));
+    try {
+      const response = await fetch("https://tracking-backend-admin.vercel.app/v1/common/sendNotificationAdmin", requestOptions);
+      const result = await response.json();
+      if (result.success) {
+        alert("Notification sent successfully");
+        setShowPrompt(false);
+        setTitle("");
+        setMessage("");
+      } else {
+        alert("Failed to send notification: " + result.message);
+      }
+    } catch (error) {
+      console.error("Error sending notification:", error);
+      alert("An error occurred while sending the notification.");
+    }
   };
 
   const npage = Math.ceil(userCount / limit);
@@ -215,7 +205,7 @@ const handleSetPermissionClick = (userId) => {
           </thead>
           <tbody>
             {usersData.map((item, index) => (
-              <tr key={item.id} className="bg-white-">
+              <tr key={item.id} className="bg-white">
                 <td className="border-b py-2 border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
                 <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
                 <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
@@ -224,12 +214,15 @@ const handleSetPermissionClick = (userId) => {
                 <td className="border-b border-gray-700 text-center">
                   <div className="flex justify-center gap-4">
                     <button
-                      onClick={() => handleSetPermissionClick(item.id)}
-                      className="text-green-500 hover:text-green-800"
-                      title="Set Permissions"
-                    >
-                      <i className="fa fa-cogs text-lg"></i>
-                    </button>
+                        onClick={() => {
+                          setSelectedUser(item);
+                          setShowPrompt(true);
+                        }}
+                        className="p-2 rounded-full hover:bg-green-100 text-green-500 hover:text-green-800 transition"
+                        title="Send Notification"
+                      >
+                        <i className="fa fa-paper-plane text-lg"></i>
+                      </button>
                   </div>
                 </td>
               </tr>
@@ -277,42 +270,68 @@ const handleSetPermissionClick = (userId) => {
         </div>
 
         {/* Permission Modal */}
-        {permissionModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white text-black p-6 rounded-lg shadow-xl w-96">
-              <h3 className="text-lg font-semibold mb-4">Set Permissions</h3>
-              <div className="space-y-3 mb-4">
-                {Object.keys(permissions).map((key) => (
-                  <div key={key} className="flex justify-between items-center">
-                    <label className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</label>
-                    <input
-                      type="checkbox"
-                      checked={permissions[key]}
-                      onChange={() => setPermissions(prev => ({ ...prev, [key]: !prev[key] }))}
-                    />
-                  </div>
-                ))} 
+       
+          {showPrompt && selectedUser && (
+        <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-95 text-white p-6 overflow-y-auto">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">📢 Notify {selectedUser.fullName}</h2>
+              <button
+                onClick={() => {
+                  setShowPrompt(false);
+                  setTitle('');
+                  setMessage('');
+                }}
+                className="text-white hover:text-red-400"
+              >
+                <i className="bi bi-x-lg text-2xl"></i>
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300">Title</label>
+                <input
+                  type="text"
+                  className="mt-1 w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter notification title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
               </div>
-              <div className="flex justify-end gap-4">
-                <button
-                  onClick={() => setPermissionModal(false)}
-                  className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={confirmSetPermissions}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Confirm
-                </button>
+              <div>
+                <label className="block text-sm font-medium text-gray-300">Message</label>
+                <textarea
+                  rows={5}
+                  className="mt-1 w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-white resize-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                ></textarea>
               </div>
             </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={() => setShowPrompt(false)}
+                className="px-5 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={sendNotification}
+                className="px-5 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Send Notification
+              </button>
+            </div>
           </div>
-        )}
+        </div>
+      )}
+    
       </div>
     </div>
   );
 };
 
-export default SubAdminPreferences;
+export default SendNotificationToSubadmin;

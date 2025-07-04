@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Mail, Phone, Building2, BadgeCheck } from 'lucide-react';
 import Subsidebar from './Subsidebar';
 
@@ -6,42 +6,36 @@ const SubProfile = () => {
   const [profile, setProfile] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [subadminPreference, setSubadminPreference] = useState(null);
+  const sidebarRef = useRef(null);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    
 
     const fetchProfile = async () => {
       try {
         const response = await fetch(
-          `https://tracking-backend-admin.vercel.app/v1/subAdmin/getSubAdminById?subAdminId=${storedUser.id}`,
-          { method: 'GET', redirect: 'follow' }
+          `https://tracking-backend-admin.vercel.app/v1/subAdmin/getSubAdminById?subAdminId=${storedUser.id}`
         );
         const result = await response.json();
         if (result.success) {
           setProfile(result.details);
-        } else {
-          console.error('Profile fetch failed');
         }
       } catch (error) {
-        console.error('API Error:', error);
+        console.error('Profile API Error:', error);
       }
     };
 
     const fetchSubadminPreference = async () => {
-      const requestOptions = {
-        method: "GET",
-        redirect: "follow"
-      };
-
       try {
-        const response = await fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getMyPermissions?userId=${storedUser.id}`, requestOptions);
+        const response = await fetch(
+          `https://tracking-backend-admin.vercel.app/v1/subAdmin/getMyPermissions?userId=${storedUser.id}`
+        );
         const result = await response.json();
         if (result.success) {
           setSubadminPreference(result.permissions.permissions);
         }
       } catch (error) {
-        console.log('check subadmin api error ', error);
+        console.log('Permissions API Error:', error);
       }
     };
 
@@ -49,88 +43,124 @@ const SubProfile = () => {
     fetchSubadminPreference();
   }, []);
 
+  // Close sidebar on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        !event.target.closest('button')
+      ) {
+        setSidebarOpen(false);
+      }
+    };
+    if (sidebarOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarOpen]);
+
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-tr from-purple-100 via-blue-100 to-green-100">
-      <div className="md:hidden p-4 bg-gray-800 shadow-md flex items-center justify-between sticky top-0 z-50">
-        <button onClick={() => setSidebarOpen(true)} className="text-white text-2xl">
-          ☰
+    <div className="bg-gradient-to-tr from-purple-100 via-blue-100 to-green-100 min-h-screen overflow-x-hidden">
+      {/* Sidebar toggle button for mobile */}
+      <div className="md:hidden flex justify-start p-4 sticky top-0 z-50 bg-gray-900">
+        <button onClick={() => setSidebarOpen(true)} className="text-white text-3xl">
+          <i className="bi bi-list"></i>
         </button>
-        <h2 className="text-white text-xl font-semibold">Tracking App</h2>
       </div>
 
+      {/* Overlay for mobile sidebar */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden" onClick={() => setSidebarOpen(false)}></div>
+        <div
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
       )}
 
-      <div className={`fixed md:relative z-50 transform top-0 left-0 h-full w-64 transition-transform duration-300 ease-in-out bg-gray-800 shadow-lg ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-        <Subsidebar />
-      </div>
+      {/* Main layout */}
+      <div className="flex flex-col md:flex-row">
+        {/* Sidebar */}
+        <div
+          ref={sidebarRef}
+          className={`fixed md:relative z-50 top-0 left-0 h-full w-64 transform transition-transform duration-300 bg-gray-900 text-white shadow-lg ${
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+          }`}
+        >
+          <Subsidebar />
+        </div>
 
-      <div className="flex-1 p-0 md:p-6">
-        <div className="bg-gray-800 h-full w-full min-h-screen shadow-2xl p-11">
-          {profile ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 px-4">
-              <div className="flex items-center gap-3">
-                <BadgeCheck className="text-white w-6 h-6" />
-                <div>
-                  <p className="text-xs text-white">Full Name</p>
-                  <p className="text-lg font-semibold text-white">{profile.fullName}</p>
+        {/* Right content */}
+        <div className="flex-1 p-4 mt-2 md:mt-6">
+          <div className="bg-white shadow rounded-xl p-6 md:p-8">
+            {profile ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="rounded-xl border border-gray-300 shadow-md p-5">
+                  <ProfileInfo icon={<BadgeCheck />} label="Full Name" value={profile.fullName} />
+                  <ProfileInfo icon={<Mail />} label="Email" value={profile.email} />
+                  <ProfileInfo icon={<Phone />} label="Phone Number" value={profile.phoneNumber} />
+                  <ProfileInfo icon={<Building2 />} label="Company Name" value={profile.companyName} />
+                  <ProfileInfo icon={<BadgeCheck />} label="Role" value={profile.role} />
                 </div>
-              </div>
 
-              <div className="flex items-center gap-3">
-                <Mail className="text-white w-6 h-6" />
-                <div>
-                  <p className="text-xs text-white">Email</p>
-                  <p className="text-lg font-semibold text-white">{profile.email}</p>
-                </div>
-              </div>
+          {subadminPreference && (
+  <div className="bg-gray-50 rounded-xl border border-gray-200 p-5 shadow-sm">
+    <h3 className="text-lg font-semibold mb-4 text-gray-800">Permissions</h3>
+    <div className="space-y-3">
+      {Object.entries(subadminPreference).map(([key, value]) => (
+        <div
+          key={key}
+          className="flex justify-between items-center border-b pb-2"
+        >
+          <span className="capitalize text-gray-700 text-sm">
+            {key.replace(/([A-Z])/g, ' $1')}
+          </span>
 
-              <div className="flex items-center gap-3">
-                <Phone className="text-white w-6 h-6" />
-                <div>
-                  <p className="text-xs text-white">Phone Number</p>
-                  <p className="text-lg font-semibold text-white">{profile.phoneNumber}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <Building2 className="text-white w-6 h-6" />
-                <div>
-                  <p className="text-xs text-white">Company Name</p>
-                  <p className="text-lg font-semibold text-white">{profile.companyName}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 sm:col-span-2">
-                <BadgeCheck className="text-white w-6 h-6" />
-                <div>
-                  <p className="text-xs text-white">Role</p>
-                  <p className="text-lg font-semibold text-white capitalize">{profile.role}</p>
-                </div>
-              </div>
-
-              {subadminPreference && (
-                <div className="sm:col-span-2 bg-gray-800 p-4 rounded-lg">
-                  <h3 className="text-white text-md font-bold mb-3">Your Preferences -</h3>
-                  <div className="space-y-2">
-                    {Object.entries(subadminPreference).map(([key, value]) => (
-                      <div key={key} className="flex justify-between text-white border-b border-gray-500 pb-1">
-                        <span className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
-                        <span className={value ? 'text-green-400' : 'text-red-400'}>{value ? 'Enabled' : 'Disabled'}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+          {/* Toggle Switch */}
+          <label className="relative inline-flex items-center cursor-not-allowed">
+            <input
+              type="checkbox"
+              checked={value}
+              disabled
+              className="sr-only peer"
+            />
+            <div
+              className={`w-11 h-6 rounded-full transition-colors duration-300 ${
+                value ? 'bg-green-500' : 'bg-gray-300'
+              } peer-disabled:opacity-100 relative`}
+            >
+              <div
+                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-300 ${
+                  value ? 'translate-x-full' : ''
+                }`}
+              ></div>
             </div>
-          ) : (
-            <div className="text-center text-white py-12">Loading profile...</div>
-          )}
+          </label>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+              </div>
+            ) : (
+              <div className="text-center text-gray-600 py-12">Loading profile...</div>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
+const ProfileInfo = ({ icon, label, value }) => (
+  <div className="flex items-start gap-3 mb-4">
+    <div className="mt-1 text-indigo-600 w-6 h-6">{icon}</div>
+    <div>
+      <p className="text-sm font-medium text-gray-500">{label}</p>
+      <p className="text-base text-gray-800 font-semibold">{value}</p>
+    </div>
+  </div>
+);
 
 export default SubProfile;

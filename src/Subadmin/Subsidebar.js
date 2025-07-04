@@ -1,18 +1,21 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Subsidebar.css';
-import { FaCog } from 'react-icons/fa';
+import { FaCog, FaBell } from 'react-icons/fa';
 
 const Subsidebar = () => {
-  const [showDropdown, setShowDropdown] = useState(false);
+  
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [myData, setMyData] = useState(null);
   const [token, setToken] = useState('');
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
-   const [userId, setUserId] = useState(null)
-   const [tokennn, setTokennn] =useState(null)
-   const [readNotification, setReadNotification] = useState(null)
+  const [userId, setUserId] = useState(null)
+  const [tokennn, setTokennn] =useState(null)
+  const [readNotification, setReadNotification] = useState(null)
+  const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [showSendNotificationDropdown, setShowSendNotificationDropdown] = useState(false)
 
   const getUserInfo = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -61,18 +64,6 @@ setReadNotification(unreadCount)
     setToken(storedToken);
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   function Logout() {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -119,14 +110,103 @@ setReadNotification(unreadCount)
 
       {/* Nav Links */}
       <ul className="nav-list">
-        <li><NavLink to="/Subdashboard" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-tachometer text-lg"></i> Dashboard</NavLink></li>
-        <li><NavLink to="/VoiceTasks" className={({ isActive }) => isActive ? "active-link" : ""}><i className="bi bi-list-task text-lg"></i> Voice Tasks</NavLink></li>
-        <li><NavLink to="/Subreports" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-clipboard text-lg"></i> Daily Reports</NavLink></li>
-        <li><NavLink to="/Subcheckin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-sticky-note text-lg"></i> Work Hours</NavLink></li>
-        <li><NavLink to="/Subemployees" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-user text-lg"></i> Employees</NavLink></li>
-       <li><NavLink to="/SubNotificationUser" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-bell text-lg"></i>Send Notifications </NavLink></li>
+       <li><NavLink to="/Subdashboard" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}><i className="fa fa-tachometer text-lg"></i><span>Dashboard</span></NavLink></li>
+        <li><NavLink to="/VoiceTasks" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}><i className="bi bi-list-task text-lg"></i> Voice Tasks</NavLink></li>
+        <li><NavLink to="/Subreports" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}><i className="fa fa-clipboard text-lg"></i> Daily Reports</NavLink></li>
+        <li><NavLink to="/Subcheckin" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}><i className="fa fa-sticky-note text-lg"></i> Work Hours</NavLink></li>
+        <li><NavLink to="/SendLocation" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}><i className="fa fa-map-marker text-lg"></i>Set Location</NavLink></li>
+       {/* User Management Dropdown */}
+ <li className="relative" ref={dropdownRef}>
+  <div
+    onClick={() => {
+      setShowUserDropdown(prev => !prev);
+      setShowSettingsDropdown(false); // close other dropdown
+      setShowSendNotificationDropdown(false);
+    }}
+    className="flex items-center justify-between w-full px-3 py-2 text-white hover:bg-gray-600 rounded-xl cursor-pointer text-base"
+  >
+    <div className="flex items-center gap-2">
+      <i className="fa fa-users text-lg" />
+      <span>User Management</span>
+    </div>
+    <i className={`fa ${showUserDropdown ? "fa-chevron-up" : "fa-chevron-down"}`}></i>
+  </div>
+
+  {showUserDropdown && (
+    <div className="absolute left-0 top-full mt-2 w-full bg-black rounded-lg shadow-lg z-40">
+      <ul className="py-1 text-white">
+        <li
+          className="px-4 py-2 hover:bg-gray-700 text-white cursor-pointer rounded-xl"
+          onClick={() => {
+            setShowUserDropdown(false);
+            navigate('/Subemployees');
+          }}
+        >
+          <i className="fa fa-user mr-2" />
+          Employees
+        </li>
+        <li
+          className="px-4 py-2 hover:bg-gray-700 text-white cursor-pointer rounded-xl"
+          onClick={() => {
+            setShowUserDropdown(false);
+            navigate('/SubPreferenceAdmin');
+          }}
+        >
+          <i className="fa fa-user mr-2" />
+          Subadmins
+        </li>
+      </ul>
+    </div>
+  )}
+</li>
+
+
+
+      <li className="relative" ref={dropdownRef}>
+  <div
+    onClick={() => {
+      setShowSendNotificationDropdown(prev => !prev);
+      setShowUserDropdown(false); // close other dropdown
+      setShowSettingsDropdown(false)
+    }}
+    className="flex items-center justify-between w-full px-3 py-2 text-white hover:bg-gray-600 rounded-xl cursor-pointer text-base"
+  >
+    <div className="flex items-center gap-2">
+      <FaBell className="text-lg" />
+      <span>Send Notification</span>
+    </div>
+    <i className={`fa ${showSendNotificationDropdown ? "fa-chevron-up" : "fa-chevron-down"}`}></i>
+  </div>
+
+  {showSendNotificationDropdown && (
+    <div className="absolute left-0 top-full mt-2 w-full bg-black rounded-xl shadow-lg z-40">
+      <ul className="py-1 text-white">
+        <li
+          className="px-4 py-2 hover:bg-gray-700 text-white cursor-pointer rounded-xl"
+          onClick={() => {
+            setShowSendNotificationDropdown(false);
+            navigate('/SubNotificationUser');
+          }}
+        >
+          <i className="fa fa-user mr-2" />
+          Employees
+        </li>
+        <li
+          className="px-4 py-2 hover:bg-gray-800 text-white cursor-pointer rounded-xl"
+          onClick={() => {
+            setShowSendNotificationDropdown(false);
+            navigate('/SendNotificationToSubadmin');
+          }}
+        >
+          <i className="fa fa-user mr-2" />
+          Sub-admins
+        </li>
+      </ul>
+    </div>
+  )}
+</li>
 <li>
-  <NavLink to="/Subnotification" className={({ isActive }) => isActive ? "active-link" : ""}>
+  <NavLink to="/Subnotification" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}>
     <i className="fa fa-bell text-lg"></i>
     Notifications
     {readNotification > 0 && (
@@ -136,43 +216,49 @@ setReadNotification(unreadCount)
     )}
   </NavLink>
 </li>
-        <li><NavLink to="/Subprefrences" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-cogs text-lg"></i> Preferences </NavLink></li>
-        <li><NavLink to="/SubPreferenceAdmin" className={({ isActive }) => isActive ? "active-link" : ""}><i className="fa fa-cogs text-lg"></i> Subadmins </NavLink></li>
         {/* Settings Dropdown */}
-        <li className="relative" ref={dropdownRef}>
-          <div
-            onClick={() => setShowDropdown(prev => !prev)}
-            className="flex items-center w-full px-1  text-white hover:bg-gray-700 cursor-pointer  text-xl"
-          >
-            <FaCog className="mr-2" />
-            <span>Settings</span>
-          </div>
+       <li className="relative" ref={dropdownRef}>
+  <div
+    onClick={() => {
+      setShowSettingsDropdown(prev => !prev);
+      setShowUserDropdown(false); // close other dropdown
+      setShowSendNotificationDropdown(false);
+    }}
+    className="flex items-center justify-between w-full px-3 py-2 text-white hover:bg-gray-600 rounded-xl cursor-pointer text-base"
+  >
+    <div className="flex items-center gap-2">
+      <FaCog className="text-lg" />
+      <span>Settings</span>
+    </div>
+    <i className={`fa ${showSettingsDropdown ? "fa-chevron-up" : "fa-chevron-down"}`}></i>
+  </div>
 
-          {showDropdown && (
-            <div className="absolute left-0 top-full mt-2 w-full bg-white rounded-md shadow-lg z-40">
-              <ul className="py-1 text-gray-700">
-                <li
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    setShowDropdown(false);
-                    navigate('/SubProfile');
-                  }}
-                >
-                  Profile
-                </li>
-                <li
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    setShowDropdown(false);
-                    setShowLogoutModal(true);
-                  }}
-                >
-                  Logout
-                </li>
-              </ul>
-            </div>
-          )}
+  {showSettingsDropdown && (
+    <div className="absolute left-0 top-full mt-2 w-full bg-black rounded-xl shadow-lg z-40">
+      <ul className="py-1 text-white">
+        <li
+          className="px-4 py-2 hover:bg-gray-700 text-white cursor-pointer rounded-xl"
+          onClick={() => {
+            setShowSettingsDropdown(false);
+            navigate('/SubProfile');
+          }}
+        >
+          Profile
         </li>
+        <li
+          className="px-4 py-2 hover:bg-gray-800 text-white cursor-pointer rounded-xl"
+          onClick={() => {
+            setShowSettingsDropdown(false);
+            setShowLogoutModal(true);
+          }}
+        >
+          Logout
+        </li>
+      </ul>
+    </div>
+  )}
+</li>
+
       </ul>
 
       {/* Logout Modal */}

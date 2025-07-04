@@ -26,6 +26,8 @@ export const  Subcheckin = () => {
   const [selectedCheckoutTime, setSelectedCheckoutTime] = useState("");
 const [showSummaryModal, setShowSummaryModal] = useState(false);
 const [summaryData, setSummaryData] = useState('');
+const [polygonCoordinates, setPolygonCoordinates] = useState([]);
+
 
 
 const [pin, setPin] = useState(['', '', '', '', '', '']);
@@ -113,18 +115,22 @@ const fetchWorkSummary = (activityId) => {
       if (!success || !List?.logs) return;
 
       // ✅ Flatten logs by date → all timing entries
-      const logs = Object.entries(List.logs).flatMap(([date, { timing = [], locations = [] }]) =>
-        timing.map((entry) => ({
-          _id: entry._id, // employeeActivityId
-          date,
-          checkInTime: entry.checkInTime,
-          checkOutTime: entry.checkOutTime,
-          alarmLogs: entry.alarmLogs || [],
-          location: locations.length > 0 ? locations : null,
-        }))
-      );
+      const logs = Object.entries(List.logs).flatMap(([date, { timing = [], locations = [], polygon = null }]) =>
+  timing.map((entry) => ({
+    _id: entry._id, // employeeActivityId
+    date,
+    checkInTime: entry.checkInTime,
+    checkOutTime: entry.checkOutTime,
+    alarmLogs: entry.alarmLogs || [],
+    location: locations.length > 0 ? locations : null,
+    polygonCoordinates: polygon?.coordinates?.[0] || [], // 👉 This extracts [ [lat, lng], [lat, lng], ... ]
+  }))
+);
 
-      console.log("Mapped logs with activity IDs:", logs);
+    logs.forEach(log => {
+  console.log("Log polygon coordinates:", log.polygonCoordinates);
+});
+
 
      if (logs.length > 0) {
   console.log("Logs available:", logs.length);
@@ -248,7 +254,7 @@ const setTime = async () => {
     
   return (
     
-   <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900 overflow-x-hidden">       
+   <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900  overflow-x-hidden">       
           {/* side bar button */}
         <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
       <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
@@ -280,17 +286,17 @@ const setTime = async () => {
             value={searchQuery}
             onChange={handleSearchChange}
           />
-          <button
+          {/* <button
             title="Search"
             className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto mt-1"
             onClick={fetchUsers}
           >
             Search
-          </button>
+          </button> */}
         </div>
     
        {/* Table Section */}
-   <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 max-w-full">
+   <div className="rounded-xl overflow-x-auto shadow-2xl border border-black max-w-full">
           {loading ? (
             <div className="flex flex-col justify-center items-center py-20">
               <div className="relative">
@@ -300,11 +306,11 @@ const setTime = async () => {
               <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading Employees...</p>
             </div>
           ) : (
-         <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
+         <table className="min-w-full table-auto bg-white text-black text-sm">
               <thead className="bg-gray-700">
                 <tr>
                   {['Sr.no', 'Name', 'Email',  'Company Name', 'Open Logs'].map((heading) => (
-                    <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
+                    <th key={heading} className="py-1 text-center text-white font-semibold border-b-2 border-r-2 border-black font-serif sticky top-0 bg-gray-700 z-20">
                   {heading}
                 </th>
                   ))}
@@ -312,9 +318,21 @@ const setTime = async () => {
               </thead>
               <tbody>
                 {usersData.map((item, index) => (
-                  <tr key={item.id} className="bg-gray-800  ">
+                  <tr key={item.id} className="bg-white   ">
                     <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
-                    <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
+        <td className="border-b border-r border-gray-700 text-center">
+  <div className="flex items-center justify-center sm:justify-start gap-2 py-2 flex-wrap sm:flex-nowrap text-left">
+    <img
+      src={item.image || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+      className="w-10 h-10 object-cover rounded-full"
+      alt=""
+    />
+    <span className="text-sm font-medium break-words max-w-[100px] sm:max-w-none">
+      {item.fullName}
+    </span>
+  </div>
+</td>
+
                     <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                     <td className="border-b border-gray-700 text-center">
@@ -427,6 +445,7 @@ const setTime = async () => {
                       <button
                         onClick={() => {
                           setSelectedLocation(log.location);
+                          setPolygonCoordinates(log.polygonCoordinates || []);
                           setShowLogsModal(false);
                           setShowMapModal(true);
                         }}
@@ -484,42 +503,68 @@ const setTime = async () => {
         </button>
       </div>
         <GoogleMap
-          mapContainerStyle={mapContainerStyle} // keep your existing style here
-          center={{
-            lat: selectedLocation[0]?.latitude || 0,
-            lng: selectedLocation[0]?.longitude || 0
-          }}
-          zoom={15}
-        >
-          {selectedLocation.map((loc, idx) => (
-            <Marker
-              key={idx}
-              position={{ lat: loc.latitude, lng: loc.longitude }}
-              icon={{
-                url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P4//8/AwAI/AL+YRm3VwAAAABJRU5ErkJggg==",
-                scaledSize: new window.google.maps.Size(1, 1)
-              }}
-            />
-          ))}
-          <Polygon
-            paths={selectedLocation.map((loc) => ({
-              lat: loc.latitude,
-              lng: loc.longitude
-            }))}
-            options={{
-              fillColor: "#FF0000",
-              fillOpacity: 0.2,
-              strokeColor: "#FF0000",
-              strokeOpacity: 0.8,
-              strokeWeight: 2,
-              clickable: false,
-              draggable: false,
-              editable: false,
-              geodesic: false,
-              zIndex: 1
-            }}
-          />
-        </GoogleMap>
+  mapContainerStyle={mapContainerStyle}
+  center={{
+    lat: selectedLocation[0]?.latitude || 0,
+    lng: selectedLocation[0]?.longitude || 0
+  }}
+  zoom={15}
+>
+  {/* Red markers from location */}
+  {selectedLocation.map((loc, idx) => (
+    <Marker
+      key={idx}
+      position={{ lat: loc.latitude, lng: loc.longitude }}
+      icon={{
+        url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P4//8/AwAI/AL+YRm3VwAAAABJRU5ErkJggg==",
+        scaledSize: new window.google.maps.Size(1, 1)
+      }}
+    />
+  ))}
+
+  {/* Red polygon from location */}
+  <Polygon
+    paths={selectedLocation.map((loc) => ({
+      lat: loc.latitude,
+      lng: loc.longitude
+    }))}
+    options={{
+      fillColor: "#FF0000",
+      fillOpacity: 0.2,
+      strokeColor: "#FF0000",
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      clickable: false,
+      draggable: false,
+      editable: false,
+      geodesic: false,
+      zIndex: 1
+    }}
+  />
+
+  {/*  green polygon from API polygonCoordinates */}
+ {polygonCoordinates.length > 0 && (
+  <Polygon
+    paths={polygonCoordinates.map(([lng, lat]) => ({
+      lat,
+      lng,
+    }))}
+    options={{
+      fillColor: "#00FF00", // green color
+      fillOpacity: 0.3,
+      strokeColor: '#00FF00',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      clickable: false,
+      draggable: false,
+      editable: false,
+      geodesic: false,
+      zIndex: 2,
+    }}
+  />
+)}
+
+</GoogleMap>
     </div>
   </div>
 )}

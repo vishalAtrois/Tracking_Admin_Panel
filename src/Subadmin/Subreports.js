@@ -383,16 +383,16 @@ const deleteReport = async (reportId) => {
          value={searchQuery}
          onChange={handleSearchChange}
        />
-       <button
+       {/* <button
          title="Search"
          className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto mt-1"
          onClick={fetchUsers}
        >
          Search
-       </button>
+       </button> */}
      </div>
     {/* Table Section */}
- <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 max-w-full">
+ <div className="rounded-xl overflow-x-auto shadow-2xl border border-black max-w-full">
        {loading ? (
          <div className="flex flex-col justify-center items-center py-20">
            <div className="relative">
@@ -402,11 +402,11 @@ const deleteReport = async (reportId) => {
            <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading Employees...</p>
          </div>
        ) : (
-        <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
+        <table className="min-w-full table-auto bg-white text-black text-sm">
            <thead className="bg-gray-700">
              <tr>
                {['Sr.no', 'Name', 'Email', 'Company Name', 'Open Reports'].map((heading) => (
-               <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
+               <th key={heading} className="py-1 text-center text-white font-semibold border-b-2 border-r-2 border-black font-serif sticky top-0 bg-gray-700 z-20">
                   {heading}
                 </th>
                ))}
@@ -414,9 +414,21 @@ const deleteReport = async (reportId) => {
            </thead>
            <tbody>
              {usersData.map((item, index) => (
-               <tr key={item.id} className="bg-gray-800  ">
+               <tr key={item.id} className="bg-white ">
                  <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
-                 <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
+         <td className="border-b border-r border-gray-700 text-center">
+  <div className="flex items-center justify-center sm:justify-start gap-2 py-2 flex-wrap sm:flex-nowrap text-left">
+    <img
+      src={item.image || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+      className="w-10 h-10 object-cover rounded-full"
+      alt=""
+    />
+    <span className="text-sm font-medium break-words max-w-[100px] sm:max-w-none">
+      {item.fullName}
+    </span>
+  </div>
+</td>
+
                  <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
                  <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                  <td className="border-b border-gray-700 text-center">

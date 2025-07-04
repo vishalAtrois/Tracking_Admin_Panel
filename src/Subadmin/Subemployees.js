@@ -21,6 +21,17 @@ const limit = 20;
     const [showPassword, setShowPassword] = useState(false);
     const [passwordError, setPasswordError] = useState('');
     const [checkPermission, setCheckPermission] = useState('')
+    const [showPermissionModal, setShowPermissionModal] = useState(false);
+      const [selectedUserId, setSelectedUserId] = useState(null);
+      const [permissions, setPermissions] = useState({
+        trackHistory: true,
+        adminRole: false,
+        createAddress: true,
+        createReports: false,
+        viewContacts: true,
+        createGroups: true,
+        createNotes: false
+      });
 
 const passReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
 
@@ -173,10 +184,12 @@ const handlePasswordChange = (e) => {
         .then((result) => {
           if (result.success === true) {
             if (searchQuery) {
+              console.log('search',result)
               setUsersData(result.searchedUSer.data); // <-- correct field for search
               setUserCount(result.searchedUSer.totalResults);
               setLoading(false)
             } else {
+              console.log('employee ',result)
               setUsersData(result.UserList.results); // <-- correct field for paginated list
               setUserCount(result.UserList.totalResults);
               setLoading(false)
@@ -284,17 +297,17 @@ const handlePasswordChange = (e) => {
             value={searchQuery}
             onChange={handleSearchChange}
           />
-          <button
+          {/* <button
             title="Search"
             className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto mt-1"
             onClick={fetchUsers}
           >
             Search
-          </button>
-        </div>
+          </button> */}
+        </div>  
 
        {/* Table Section */}
-   <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 max-w-full">
+   <div className="rounded-xl overflow-x-auto shadow-2xl border border-black max-w-full">
           {loading ? (
             <div className="flex flex-col justify-center items-center py-20">
               <div className="relative">
@@ -304,12 +317,12 @@ const handlePasswordChange = (e) => {
               <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading Employees...</p>
             </div>
           ) : (
-            <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
+            <table className="min-w-full table-auto bg-white text-black text-sm">
 
               <thead className="bg-gray-700">
                 <tr>
                   {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Actions'].map((heading) => (
-                   <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
+                   <th key={heading} className="py-1 text-center text-white font-semibold border-b-2 border-r-2 border-black font-serif sticky top-0 bg-gray-700 z-20">
                   {heading}
                 </th>
                   ))}
@@ -317,13 +330,26 @@ const handlePasswordChange = (e) => {
               </thead>
               <tbody>
                 {usersData.map((item, index) => (
-                  <tr key={item.id} className="bg-gray-800  ">
+                  <tr key={item.id} className="bg-white  ">
                     <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
-                    <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
+     <td className="border-b border-r border-gray-700 text-center">
+  <div className="flex items-center justify-center sm:justify-start gap-2 py-2 flex-wrap sm:flex-nowrap text-left">
+    <img
+      src={item.image || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+      className="w-10 h-10 object-cover rounded-full"
+      alt=""
+    />
+    <span className="text-sm font-medium break-words max-w-[100px] sm:max-w-none">
+      {item.fullName}
+    </span>
+  </div>
+</td>
+
+
                     <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.phoneNumber}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
-                    <td className="border-b border-gray-700 text-center">
+                    <td className="border-b border-r border-gray-700 text-center">
                       <div className="flex justify-center gap-4">
                         {/* report section */}
                         <button
@@ -346,11 +372,35 @@ const handlePasswordChange = (e) => {
     handlePromoteClick();
     setEmail(item.email)
   }}
-  className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
+  className="p-2 rounded-full hover:bg-blue-100 text-purple-500 hover:text-purple-800 transition"
   title="Promote User"
 >
   <i className="bi bi-person-up text-lg"></i>
 </button>
+<button
+                          onClick={() => {
+                            setSelectedUserId(item.id);
+                            const storedPermissions = JSON.parse(localStorage.getItem("userPermissions")) || {};
+                            if (storedPermissions[item.id]) {
+                              setPermissions(storedPermissions[item.id]);
+                            } else {
+                              setPermissions({
+                                trackHistory: true,
+                                adminRole: false,
+                                createAddress: true,
+                                createReports: false,
+                                viewContacts: true,
+                                createGroups: true,
+                                createNotes: false
+                              });
+                            }
+                            setShowPermissionModal(true);
+                          }}
+                          className="p-2 rounded-full hover:bg-green-100 text-green-500 hover:text-green-800 transition"
+                          title="Set Permissions"
+                        >
+                          <i className="fa fa-cogs text-lg"></i>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -359,6 +409,71 @@ const handlePasswordChange = (e) => {
             </table>
           )}
         </div>
+
+{/* set employee prefernce  */}
+        {showPermissionModal && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div className="bg-white text-black p-6 rounded-xl shadow-lg w-full max-w-md">
+              <h2 className="text-xl font-semibold mb-4">Set Permissions</h2>
+              <div className="space-y-3">
+                {Object.keys(permissions).map((key) => (
+                  <div key={key} className="flex justify-between items-center">
+                    <label className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</label>
+                    <input
+                      type="checkbox"
+                      checked={permissions[key]}
+                      onChange={() => {
+                        setPermissions(prev => ({ ...prev, [key]: !prev[key] }));
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-end mt-6 space-x-2">
+                <button onClick={() => setShowPermissionModal(false)} className="px-4 py-2 bg-gray-300 rounded">
+                  Cancel
+                </button>
+               <button
+  onClick={async () => {
+    try {
+      // Save to localStorage
+      const allPermissions = JSON.parse(localStorage.getItem("userPermissions")) || {};
+      allPermissions[selectedUserId] = permissions;
+      localStorage.setItem("userPermissions", JSON.stringify(allPermissions));
+
+      // Send to backend
+      const response = await fetch(
+        `https://tracking-backend-admin.vercel.app/v1/subAdmin/setPermission?userId=${selectedUserId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ permissions }),
+        }
+      );
+
+      const result = await response.json();
+      if (result.success) {
+        console.log("Permissions updated on server:", result);
+        setShowPermissionModal(false);
+      } else {
+        console.error("Server error:", result.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Failed to update permissions:", error);
+    }
+  }}
+  className="px-4 py-2 bg-blue-600 text-white rounded"
+>
+  Save
+</button>
+
+              </div>
+            </div>
+          </div>
+        )}
 
 {/* promote user  */}
      {showPrompt && (
