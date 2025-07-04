@@ -504,6 +504,16 @@ const setTime = async () => {
           &times;
         </button>
       </div>
+      <div className="mb-4 text-sm font-medium text-gray-800 bg-gray-100 p-2 rounded-md flex gap-6 items-center justify-center">
+  <div className="flex items-center gap-2">
+    <span className="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+    <span>Admin Location</span>
+  </div>
+  <div className="flex items-center gap-2">
+    <span className="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+    <span>User Location</span>
+  </div>
+</div>
         <GoogleMap
   mapContainerStyle={mapContainerStyle}
   center={{
