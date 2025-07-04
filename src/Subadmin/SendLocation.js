@@ -70,8 +70,10 @@ useEffect(() => {
     })
     .then((data) => {
       console.log("Success:", data);
+      if(data.success == true){
+        alert("Location for user updated successfully")
       setShowMapModal(false);
-      setPolygonPoints([]);
+      setPolygonPoints([]);}
     })
     .catch((err) => {
       console.error("API Error:", err);

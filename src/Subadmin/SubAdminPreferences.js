@@ -125,6 +125,7 @@ const handleSetPermissionClick = (userId) => {
       .then((response) => response.text())
       .then((result) => {
         localStorage.setItem(`adminpermissions-${selectedUserId}`, JSON.stringify(permissions)); // Save to localStorage
+        alert("Permission updated successfully")
         setPermissionModal(false);
         setSelectedUserId(null);
       })

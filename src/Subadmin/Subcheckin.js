@@ -209,12 +209,14 @@ const setTime = async () => {
       );
 
       const result = await response.json();
+      if(result.success == true){
+        alert('Time and passcode sent to user successfully')
       setShowModal(false); // Close modal after API call
           setSelectedDate("");
     setSelectedTime("");
      setSelectedCheckoutTime(""); 
     setSelectedUser(null);
-    setPin(['', '', '', '', '', ''])
+    setPin(['', '', '', '', '', ''])}
     } catch (error) {
       console.error("Error setting check-in time:", error);
     }
