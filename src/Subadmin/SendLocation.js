@@ -297,17 +297,8 @@ useEffect(() => {
      {showMapModal && isLoaded && (
   <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-60 flex justify-center items-center">
     <div className="bg-white p-4 rounded-xl w-full max-w-3xl h-[600px] flex flex-col">
-      <div className="flex justify-between items-center mb-2">
-        <h2 className="text-lg font-semibold">Select Area on Map (Click on map to draw/select the area for user.) </h2>
-        <button
-          className="text-red-600 font-bold text-xl"
-          onClick={() => {
-            setShowMapModal(false);
-            setPolygonPoints([]);
-          }}
-        >
-          ×
-        </button>
+      <div className="flex justify-center items-center mb-2">
+        <h2 className="text-lg items-center text-red-700 font-semibold">(Click on map to draw/select the area for user.) </h2>
       </div>
 
       <div className="flex-1 w-full rounded-lg overflow-hidden">
