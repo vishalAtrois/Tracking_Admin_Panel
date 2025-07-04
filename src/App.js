@@ -20,7 +20,6 @@ import SubVerifyOtp from './Subadmin/SubVerifyOtp';
 import SubResetPassword from './Subadmin/SubResetPassword';
 import SubProfile from './Subadmin/SubProfile';
 import VoiceTasks from './Subadmin/VoiceTasks';
-import SubPrefrences from './Subadmin/SubPrefrences';
 import SubNotificationUser from './Subadmin/SubNotificationUser';
 import AdminNotification from './pages/AdminNotification';
 import SubProtected from './Subadmin/SubProtedted';
@@ -61,7 +60,6 @@ function App() {
             <Route path='/ResetPassword' element={  <SubResetPassword /> } />
             <Route path='/SubProfile' element={<SubProtected> <SubProfile /></SubProtected>} />
             <Route path='/VoiceTasks' element={<SubProtected> <VoiceTasks /></SubProtected>} />
-            <Route path='/SubPrefrences' element={<SubProtected> <SubPrefrences /></SubProtected>} />
             <Route path='/SubNotificationUser' element={<SubProtected> <SubNotificationUser /></SubProtected>} />
             <Route path='/SubPreferenceAdmin' element={<SubProtected> <SubAdminPreferences /></SubProtected>} />
             <Route path='/SendNotificationToSubadmin' element={<SubProtected> <SendNotificationToSubadmin /></SubProtected>} />

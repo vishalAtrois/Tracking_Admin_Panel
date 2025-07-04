@@ -455,8 +455,8 @@ const handlePasswordChange = (e) => {
       );
 
       const result = await response.json();
-      if (result.success) {
-        console.log("Permissions updated on server:", result);
+      if (result.success == true) {
+       alert("Permissions updated successfully")
         setShowPermissionModal(false);
       } else {
         console.error("Server error:", result.message || "Unknown error");
