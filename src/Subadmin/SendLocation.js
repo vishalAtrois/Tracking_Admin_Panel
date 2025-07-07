@@ -48,7 +48,7 @@ useEffect(() => {
   if (dropdownVisibleId && dropdownRefs.current[dropdownVisibleId]) {
     const buttonRect = dropdownRefs.current[dropdownVisibleId].getBoundingClientRect();
     const spaceBelow = window.innerHeight - buttonRect.bottom;
-    const requiredHeight = 120; // approximate dropdown height
+    const requiredHeight = 200; // approximate dropdown height
     setDropdownDirection(spaceBelow < requiredHeight ? 'up' : 'down');
   }
 }, [dropdownVisibleId]);
@@ -325,7 +325,7 @@ const SetLocation = () => {
   {dropdownVisibleId === item.id && (
     <div
       className={`absolute z-50 w-52 bg-black border border-gray-200 rounded-lg shadow-xl
-              ${dropdownDirection === 'up' ? 'bottom-full mb-2' : 'mt-2'}
+              ${dropdownDirection === 'up' ? 'bottom-full mb-0' : 'mt-0'}
               right-0 sm:right-0 sm:left-auto left-0 sm:w-52 w-11/12 mx-auto sm:mx-0`}
     >
       {/* View Assigned Area Option */}
@@ -351,7 +351,7 @@ const SetLocation = () => {
 
       {/* Set New Area Option */}
       <button
-        onClick={() => {
+        onClick={() => {    
           setPolygonPoints([]);
           setAreaId(null);
           setEmployeeId(item.id);
