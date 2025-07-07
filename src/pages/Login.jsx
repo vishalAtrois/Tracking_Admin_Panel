@@ -86,9 +86,9 @@ function Login() {
     userType: values.userType,
   };
 
-  if (values.userType === 'subAdmin') {
-    loginData.fcmToken = token;
-  }
+  // if (values.userType === 'subAdmin') {
+  //   loginData.fcmToken = token;
+  // }
 
   const body = JSON.stringify(loginData);
       const loginUrl =
