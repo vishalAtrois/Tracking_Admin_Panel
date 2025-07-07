@@ -211,7 +211,6 @@ function Login() {
 
               <button
                 type="submit"
-                disabled={!FCMToken || loading}
                 className="w-full py-2 rounded-full bg-gray-900 text-white font-semibold transition duration-300 hover:opacity-90 disabled:opacity-50"
               >
                 LOGIN
