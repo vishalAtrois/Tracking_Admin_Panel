@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Subsidebar from './Subsidebar';
 import { GoogleMap, Polygon, useJsApiLoader } from "@react-google-maps/api";
  
@@ -17,6 +17,31 @@ const limit = 20;
   const [employeeId, setEmployeeId] = useState(null)
   const [showMapModal, setShowMapModal] = useState(false);
   const [polygonPoints, setPolygonPoints] = useState([]);
+  const [areaId, setAreaId] = useState(null)
+  const [dropdownVisibleId, setDropdownVisibleId] = useState(null);
+
+const dropdownRefs = useRef({});
+
+
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (
+      dropdownVisibleId !== null &&
+      dropdownRefs.current[dropdownVisibleId] &&
+      !dropdownRefs.current[dropdownVisibleId].contains(event.target)
+    ) {
+      setTimeout(() => {
+        setDropdownVisibleId(null);
+      }, 100); // Delay to let dropdown option clicks complete
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [dropdownVisibleId]);
+
 
   const mapContainerStyle = {
   width: '100%',
@@ -37,7 +62,35 @@ useEffect(() => {
  const { isLoaded } = useJsApiLoader({
   googleMapsApiKey: 'AIzaSyC3z5JZ7eoEF7i_Xh9KnUu2sIdDyndPtwE'
 });
-    const GetLocation = () => {
+
+ 
+
+const saveMap = () => {
+  SetLocation(); // always set the location (POST), regardless of existing areaId
+};
+
+
+ const getLocation = (item) => {
+  const requestOptions = {
+  method: "GET",
+  redirect: "follow"
+};
+ 
+fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getAssignAreaToUser?locationId=${item.assignedAreaId}`, requestOptions)
+  .then((response) => response.json())
+  .then((result) => {
+    console.log("getting the location ",result)
+  const coords = result?.location?.polygon?.coordinates?.[0]
+  if (Array.isArray(coords)) {
+    setPolygonPoints(coords);
+    const mid = Math.floor(coords.length / 2);
+    setMapCenter({ lat: coords[mid][1], lng: coords[mid][0] });
+  }
+})
+  .catch((error) => console.error(error));
+}
+
+const SetLocation = () => { 
   if (!polygonPoints.length) {
     alert("Please select a valid area");
     return;
@@ -72,14 +125,17 @@ useEffect(() => {
       console.log("Success:", data);
       if(data.success == true){
         alert("Location for user updated successfully")
+        console.log('locationsetsuccessfully',data)
       setShowMapModal(false);
       setPolygonPoints([]);}
+      fetchUsers()
     })
     .catch((err) => {
       console.error("API Error:", err);
       alert("Something went wrong. Please check the console.");
     });
 };
+
   //  fetching data 
     useEffect(() => {
       fetchUsers();
@@ -106,12 +162,14 @@ useEffect(() => {
         .then((result) => {
           if (result.success === true) {
             if (searchQuery) {
+              console.log('searchuserlist',result)
               setUsersData(result.searchedUSer.data); // <-- correct field for search
               setUserCount(result.searchedUSer.totalResults);
               setLoading(false)
             } else {
+              console.log("fetchuserlist",result)
               setUsersData(result.UserList.results); // <-- correct field for paginated list
-              setUserCount(result.UserList.totalResults);
+              setUserCount(result.UserList.totalResults)
               setLoading(false)
             }
           }
@@ -236,17 +294,64 @@ useEffect(() => {
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                     <td className="border-b border-r border-gray-700 text-center">
                       <div className="flex justify-center gap-4">
-                        {/* report section */}
-                        <button
-                          onClick={() => {setEmployeeId(item.id)
-                            setShowMapModal(true)
-                          }
-                          }
-                          className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
-                          title="Set location"
-                        >
-                          <i className="fa fa-map-marker text-lg"></i>
-                        </button>
+                      
+                       <div className="relative"   ref={(el) => {
+    if (el) dropdownRefs.current[item.id] = el;
+  }}>
+  <button
+    onClick={() => {
+      setDropdownVisibleId(dropdownVisibleId === item.id ? null : item.id);
+    }}
+    className="p-2 rounded-full hover:bg-blue-100 text-blue-500 hover:text-blue-800 transition"
+    title="Set location"
+  >
+    <i className="bi bi-list-task text-lg"></i>
+  </button>
+
+  {/* Dropdown */}
+ {dropdownVisibleId === item.id && (
+    <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
+      {/* View Assigned Area Option */}
+      {item.assignedAreaId && (
+        <button
+          onClick={() => {
+            if (!item.assignedAreaId) {
+              alert("Please set the location first.");
+              return;
+            }
+            getLocation(item);
+            setAreaId(item.assignedAreaId);
+            setEmployeeId(item.id);
+            setShowMapModal(true);
+            setDropdownVisibleId(null);
+          }}
+          className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition"
+        >
+          {/* ✅ Added icon to "View Assigned Area" */}
+          <i className="bi bi-eye-fill mr-2 text-blue-500"></i>
+          View Assigned Area
+        </button>
+      )}
+
+      {/* Set New Area Option */}
+      <button
+        onClick={() => {
+          setPolygonPoints([]);
+          setAreaId(null);
+          setEmployeeId(item.id);
+          setShowMapModal(true);
+          setDropdownVisibleId(null);
+        }}
+        className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 transition"
+      >
+        {/* ✅ Added icon to "Set New Area" */}
+        <i className="fa fa-map-marker mr-2 text-green-600"></i>
+        Set New Area
+      </button>
+    </div>
+  )}
+</div>
+
                       </div>
                     </td>
                   </tr>
@@ -298,9 +403,10 @@ useEffect(() => {
   <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-60 flex justify-center items-center">
     <div className="bg-white p-4 rounded-xl w-full max-w-3xl h-[600px] flex flex-col">
       <div className="flex justify-center items-center mb-2">
-        <h2 className="text-lg items-center text-red-700 font-semibold">(Click on map to draw/select the area for user.) </h2>
+      <h2 className="text-lg items-center text-red-700 font-semibold">
+  ({areaId ? 'View Assigned Area' : 'Click on map to draw/select the area for user.'})
+</h2>
       </div>
-
       <div className="flex-1 w-full rounded-lg overflow-hidden">
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
@@ -329,7 +435,7 @@ useEffect(() => {
 
       <div className="mt-4 flex justify-end gap-2">
         <button
-          onClick={GetLocation}
+          onClick={saveMap}
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
         >
           Save
