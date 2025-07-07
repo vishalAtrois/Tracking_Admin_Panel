@@ -479,7 +479,8 @@ const SetLocation = () => {
 
 
      {showMapModal && isLoaded && (
-  <div className="fixed inset-0 z-30 bg-gray-900 bg-opacity-60 flex justify-center items-center">
+  <div  className="fixed inset-0 z-30 bg-gray-900 bg-opacity-60 flex justify-center items-center"
+    style={{ willChange: 'transform' }}>
     <div className="bg-white p-4 rounded-xl w-full max-w-3xl h-[600px] flex flex-col">
       <div className="flex justify-center items-center mb-2">
       <h2 className="text-lg items-center text-red-700 font-semibold">
