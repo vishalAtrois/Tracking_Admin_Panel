@@ -342,7 +342,7 @@ const SetLocation = () => {
             setShowMapModal(true);
             setDropdownVisibleId(null);
           }}
-          className="w-full flex items-center px-4 py-2 text-sm text-white hover:bg-blue-50 transition"
+          className="w-full flex items-center px-4 py-2 text-sm text-white hover:bg-gray-500 transition"
         >
           <i className="bi bi-eye-fill mr-2 text-blue-500"></i>
           View Assigned Area
@@ -358,7 +358,7 @@ const SetLocation = () => {
           setShowMapModal(true);
           setDropdownVisibleId(null);
         }}
-        className="w-full flex items-center px-4 py-2 text-sm text-white hover:bg-green-50 transition"
+        className="w-full flex items-center px-4 py-2 text-sm text-white hover:bg-gray-500 transition"
       >
         <i className="fa fa-map-marker mr-2 text-green-600"></i>
         Set New Area
