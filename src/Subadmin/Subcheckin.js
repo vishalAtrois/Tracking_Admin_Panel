@@ -136,7 +136,7 @@ const fetchWorkSummary = (activityId) => {
   console.log("Logs available:", logs.length);
 }
 
-
+console.log(logs)
       setLogsData(logs);
       setShowLogsModal(true);
       setSelectedLocation(null);

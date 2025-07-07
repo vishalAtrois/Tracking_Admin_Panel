@@ -316,9 +316,9 @@ useEffect(() => {
               <Polygon
                 paths={[...polygonPoints.map(([lng, lat]) => ({ lat, lng })), { lat: polygonPoints[0][1], lng: polygonPoints[0][0] }]}
                 options={{
-                  fillColor: "#FF0000",
+                  fillColor: "#00FF00",
                   fillOpacity: 0.2,
-                  strokeColor: "#FF0000",
+                  strokeColor: "#00FF00",
                   strokeOpacity: 0.8,
                   strokeWeight: 2,
                 }}
