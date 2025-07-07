@@ -130,7 +130,7 @@ function Login() {
   });
 
   const LoaderPrompt = () => (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-30 flex items-center justify-center bg-gray-900 bg-opacity-40 backdrop-blur-sm">
       <div className="flex flex-col items-center space-y-3">
         <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
         <p className="text-2xl text-white">Logging in...</p>

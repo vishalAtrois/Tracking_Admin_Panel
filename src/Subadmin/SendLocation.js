@@ -276,7 +276,7 @@ const SetLocation = () => {
   return (
 <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900 overflow-x-hidden">
           {/* side bar button */}
-        <div className="md:hidden p-4 bg-gray-800 shadow-md z-50 flex items-center justify-start gap-4 sticky top-0.5">
+        <div className="md:hidden p-4 bg-gray-800 shadow-md z-30 flex items-center justify-start gap-4 sticky top-0.5">
       <button onClick={() => setSidebarOpen(true)} className="text-white focus:outline-none">
         <i className="bi bi-list text-3xl"></i>
       </button>
@@ -291,7 +291,7 @@ const SetLocation = () => {
         )}
         {/* Sidebar */}
         <div
-          className={`fixed md:relative z-50 transform top-0 left-0 h-full w-64 transition-transform duration-300 ease-in-out bg-gray-800 shadow-lg ${
+          className={`fixed md:relative z-30 transform top-0 left-0 h-full w-64 transition-transform duration-300 ease-in-out bg-gray-800 shadow-lg ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
           }`}
         >
@@ -378,7 +378,7 @@ const SetLocation = () => {
    
   {dropdownVisibleId === item.id && (
     <div
-      className={`absolute z-50 w-52 bg-black border border-gray-200 rounded-lg shadow-xl
+      className={`absolute z-30 w-52 bg-black border border-gray-200 rounded-lg shadow-xl
               ${dropdownDirection === 'up' ? 'bottom-full mb-0' : 'mt-0'}
               right-0 sm:right-0 sm:left-auto left-0 sm:w-52 w-11/12 mx-auto sm:mx-0`}
     >
