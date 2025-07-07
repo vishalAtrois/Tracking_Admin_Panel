@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Subsidebar from './Subsidebar';
-import { GoogleMap, Polygon, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, Marker, Polygon, useJsApiLoader } from "@react-google-maps/api";
  
 
 export const SendLocation = () => {
@@ -19,9 +19,63 @@ const limit = 20;
   const [polygonPoints, setPolygonPoints] = useState([]);
   const [areaId, setAreaId] = useState(null)
   const [dropdownVisibleId, setDropdownVisibleId] = useState(null);
+const [showOutsideMapModal, setShowOutsideMapModal] = useState(false);
+const [outsidePoints, setOutsidePoints] = useState([]);
 
-const [dropdownDirection, setDropdownDirection] = useState('down'); // default direction
-const dropdownRefs = useRef({}); // already assumed to exist
+const [dropdownDirection, setDropdownDirection] = useState('down');  
+const dropdownRefs = useRef({});  
+
+const fetchUserOutsidePoints = (user) => {
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${token}`);
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getUserOutsideAreaHistory?userId=${user.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      const points = result?.location?.outsideLogs?.['2025-07-07'] || [];
+      setOutsidePoints(points);
+
+      // Also fetch the assigned area
+      const assignedAreaId = user.assignedAreaId
+     if (assignedAreaId) {
+  fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getAssignAreaToUser?locationId=${assignedAreaId}`, requestOptions)
+    .then((res) => res.json())
+    .then((areaResult) => {
+      const coords = areaResult?.location?.polygon?.coordinates?.[0];
+      if (Array.isArray(coords)) {
+        setPolygonPoints(coords);
+
+        // Wait for polygonPoints to set, then open modal
+        setTimeout(() => {
+          setShowOutsideMapModal(true);
+        }, 300); // 300ms delay is enough
+      }
+    })
+    .catch((err) => console.error("Error fetching assigned area polygon:", err));
+} else {
+  // If no assigned area, just show modal with points
+  setShowOutsideMapModal(true);
+}
+
+
+      if (points.length > 0) {
+        setMapCenter({ lat: points[0].latitude, lng: points[0].longitude });
+      }
+      setShowOutsideMapModal(true);
+    })
+    .catch((error) => {
+      console.error("Error fetching outside points:", error);
+      alert("Failed to load outside points.");
+    });
+};
+
+
 
 
 
@@ -34,7 +88,7 @@ useEffect(() => {
     ) {
       setTimeout(() => {
         setDropdownVisibleId(null);
-      }, 100); // Delay to let dropdown option clicks complete
+      }, 100);  
     }
   };
 
@@ -48,7 +102,7 @@ useEffect(() => {
   if (dropdownVisibleId && dropdownRefs.current[dropdownVisibleId]) {
     const buttonRect = dropdownRefs.current[dropdownVisibleId].getBoundingClientRect();
     const spaceBelow = window.innerHeight - buttonRect.bottom;
-    const requiredHeight = 200; // approximate dropdown height
+    const requiredHeight = 200; 
     setDropdownDirection(spaceBelow < requiredHeight ? 'up' : 'down');
   }
 }, [dropdownVisibleId]);
@@ -77,7 +131,7 @@ useEffect(() => {
  
 
 const saveMap = () => {
-  SetLocation(); // always set the location (POST), regardless of existing areaId
+  SetLocation();  
 };
 
 
@@ -107,19 +161,19 @@ const SetLocation = () => {
     return;
   }
 
-  console.log("polygonPoints being used in payload:", polygonPoints); // add this line
+  console.log("polygonPoints being used in payload:", polygonPoints);  
 
   const payload = {
     subAdminId: selecteduser?.id,
     userId: employeeId,
     location: {
       type: "Polygon",
-      coordinates: [[...polygonPoints, polygonPoints[0]]], // close the polygon
+      coordinates: [[...polygonPoints, polygonPoints[0]]], 
     },
   };
 
-  console.log("Payload being sent:", payload); // already added
- // for debugging
+  console.log("Payload being sent:", payload);  
+  
 
   fetch("https://tracking-backend-admin.vercel.app/v1/subAdmin/assignAreaToUser", {
     method: "POST",
@@ -143,7 +197,7 @@ const SetLocation = () => {
     })
     .catch((err) => {
       console.error("API Error:", err);
-      alert("Something went wrong. Please check the console.");
+      alert("Something went wrong.");
     });
 };
 
@@ -174,12 +228,12 @@ const SetLocation = () => {
           if (result.success === true) {
             if (searchQuery) {
               console.log('searchuserlist',result)
-              setUsersData(result.searchedUSer.data); // <-- correct field for search
+              setUsersData(result.searchedUSer.data); 
               setUserCount(result.searchedUSer.totalResults);
               setLoading(false)
             } else {
               console.log("fetchuserlist",result)
-              setUsersData(result.UserList.results); // <-- correct field for paginated list
+              setUsersData(result.UserList.results);  
               setUserCount(result.UserList.totalResults)
               setLoading(false)
             }
@@ -321,14 +375,14 @@ const SetLocation = () => {
     <i className="bi bi-list-task text-lg"></i>
   </button>
 
-  {/* Responsive Dropdown */}
+   
   {dropdownVisibleId === item.id && (
     <div
       className={`absolute z-50 w-52 bg-black border border-gray-200 rounded-lg shadow-xl
               ${dropdownDirection === 'up' ? 'bottom-full mb-0' : 'mt-0'}
               right-0 sm:right-0 sm:left-auto left-0 sm:w-52 w-11/12 mx-auto sm:mx-0`}
     >
-      {/* View Assigned Area Option */}
+       
       {item.assignedAreaId && (
         <button
           onClick={() => {
@@ -349,7 +403,7 @@ const SetLocation = () => {
         </button>
       )}
 
-      {/* Set New Area Option */}
+     
       <button
         onClick={() => {    
           setPolygonPoints([]);
@@ -363,6 +417,17 @@ const SetLocation = () => {
         <i className="fa fa-map-marker mr-2 text-green-600"></i>
         Set New Area
       </button>
+      <button
+  onClick={() => {
+    fetchUserOutsidePoints(item);
+    setDropdownVisibleId(null);
+  }}
+  className="w-full flex items-center px-4 py-2 text-sm text-white hover:bg-gray-500 transition"
+>
+  <i className="fa fa-map-marker mr-2 text-red-500"></i>
+  View Outside Points
+</button>
+
     </div>
   )}
 </div>
@@ -432,18 +497,22 @@ const SetLocation = () => {
               setPolygonPoints((prev) => [...prev, [lng, lat]]);
             }}
           >
-            {polygonPoints.length > 0 && (
-              <Polygon
-                paths={[...polygonPoints.map(([lng, lat]) => ({ lat, lng })), { lat: polygonPoints[0][1], lng: polygonPoints[0][0] }]}
-                options={{
-                  fillColor: "#00FF00",
-                  fillOpacity: 0.2,
-                  strokeColor: "#00FF00",
-                  strokeOpacity: 0.8,
-                  strokeWeight: 2,
-                }}
-              />
-            )}
+           {/* Assigned Area Polygon */}
+{polygonPoints.length > 0 && (
+  <Polygon
+    paths={[
+      ...polygonPoints.map(([lng, lat]) => ({ lat, lng })),
+      { lat: polygonPoints[0][1], lng: polygonPoints[0][0] }
+    ]}
+    options={{
+      fillColor: "#00FF00",
+      fillOpacity: 0.2,
+      strokeColor: "#00FF00",
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+    }}
+  />
+)}
           </GoogleMap>
       </div>
 
@@ -467,6 +536,72 @@ const SetLocation = () => {
     </div>
   </div>
 )}
+{showOutsideMapModal && isLoaded && mapCenter &&  (
+  <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-60 flex justify-center items-center">
+    <div className="bg-white p-4 rounded-xl w-full max-w-3xl h-[600px] flex flex-col">
+      <div className="flex justify-center mb-2">
+        <h2 className="text-lg text-red-700 font-semibold">User Outside Area History</h2>
+      </div>
+      <div className="flex-1 w-full rounded-lg overflow-hidden">
+      <GoogleMap
+  mapContainerStyle={{ width: '100%', height: '400px' }}
+  center={mapCenter}
+  zoom={15}
+>
+  {/* Assigned Area Polygon (Green) */}
+  {polygonPoints.length > 0 && (
+    <Polygon
+      paths={[
+        ...polygonPoints.map(([lng, lat]) => ({ lat, lng })),
+        { lat: polygonPoints[0][1], lng: polygonPoints[0][0] } // closing the polygon
+      ]}
+      options={{
+        fillColor: "#00FF00",
+        fillOpacity: 0.2,
+        strokeColor: "#00FF00",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+      }}
+    />
+  )}
+
+  {/* Outside Area Points (Red X Markers) */}
+  {outsidePoints.map((point, index) => (
+   <Marker
+  key={index}
+  position={{ lat: point.latitude, lng: point.longitude }}
+  icon={{
+    url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+     scaledSize: new window.google.maps.Size(32, 32),
+    labelOrigin: new window.google.maps.Point(16, 40), 
+    // standard red pin
+  }}
+  label={{
+    text: new Date(point.timestamp).toLocaleTimeString(),
+    color: "black",
+    fontSize: "10px",
+    fontWeight: "bold",
+  }}
+/>
+  ))}
+</GoogleMap>
+      </div>
+      <div className="mt-4 flex justify-end gap-2">
+        <button
+          onClick={() => {
+            setShowOutsideMapModal(false);
+            setOutsidePoints([]);
+          }}
+          className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </div>
       </div>
   )
