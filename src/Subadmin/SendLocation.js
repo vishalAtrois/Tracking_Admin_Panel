@@ -20,7 +20,9 @@ const limit = 20;
   const [areaId, setAreaId] = useState(null)
   const [dropdownVisibleId, setDropdownVisibleId] = useState(null);
 
-const dropdownRefs = useRef({});
+const [dropdownDirection, setDropdownDirection] = useState('down'); // default direction
+const dropdownRefs = useRef({}); // already assumed to exist
+
 
 
 useEffect(() => {
@@ -40,6 +42,15 @@ useEffect(() => {
   return () => {
     document.removeEventListener('mousedown', handleClickOutside);
   };
+}, [dropdownVisibleId]);
+
+useEffect(() => {
+  if (dropdownVisibleId && dropdownRefs.current[dropdownVisibleId]) {
+    const buttonRect = dropdownRefs.current[dropdownVisibleId].getBoundingClientRect();
+    const spaceBelow = window.innerHeight - buttonRect.bottom;
+    const requiredHeight = 120; // approximate dropdown height
+    setDropdownDirection(spaceBelow < requiredHeight ? 'up' : 'down');
+  }
 }, [dropdownVisibleId]);
 
 
@@ -294,10 +305,12 @@ const SetLocation = () => {
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                     <td className="border-b border-r border-gray-700 text-center">
                       <div className="flex justify-center gap-4">
-                      
-                       <div className="relative"   ref={(el) => {
+                <div
+  className="relative"
+  ref={(el) => {
     if (el) dropdownRefs.current[item.id] = el;
-  }}>
+  }}
+>
   <button
     onClick={() => {
       setDropdownVisibleId(dropdownVisibleId === item.id ? null : item.id);
@@ -308,9 +321,13 @@ const SetLocation = () => {
     <i className="bi bi-list-task text-lg"></i>
   </button>
 
-  {/* Dropdown */}
- {dropdownVisibleId === item.id && (
-    <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
+  {/* Responsive Dropdown */}
+  {dropdownVisibleId === item.id && (
+    <div
+      className={`absolute z-50 w-52 bg-black border border-gray-200 rounded-lg shadow-xl
+              ${dropdownDirection === 'up' ? 'bottom-full mb-2' : 'mt-2'}
+              right-0 sm:right-0 sm:left-auto left-0 sm:w-52 w-11/12 mx-auto sm:mx-0`}
+    >
       {/* View Assigned Area Option */}
       {item.assignedAreaId && (
         <button
@@ -325,9 +342,8 @@ const SetLocation = () => {
             setShowMapModal(true);
             setDropdownVisibleId(null);
           }}
-          className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition"
+          className="w-full flex items-center px-4 py-2 text-sm text-white hover:bg-blue-50 transition"
         >
-          {/* ✅ Added icon to "View Assigned Area" */}
           <i className="bi bi-eye-fill mr-2 text-blue-500"></i>
           View Assigned Area
         </button>
@@ -342,16 +358,14 @@ const SetLocation = () => {
           setShowMapModal(true);
           setDropdownVisibleId(null);
         }}
-        className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 transition"
+        className="w-full flex items-center px-4 py-2 text-sm text-white hover:bg-green-50 transition"
       >
-        {/* ✅ Added icon to "Set New Area" */}
         <i className="fa fa-map-marker mr-2 text-green-600"></i>
         Set New Area
       </button>
     </div>
   )}
 </div>
-
                       </div>
                     </td>
                   </tr>
