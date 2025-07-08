@@ -80,9 +80,9 @@ function Login() {
    
   };
 
-  if (values.userType === 'subAdmin') {
-    loginData.fcmToken = FCMToken;
-  }
+  // if (values.userType === 'subAdmin') {
+  //   loginData.fcmToken = FCMToken;
+  // }
 
   const body = JSON.stringify(loginData);
       const loginUrl =
