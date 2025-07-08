@@ -72,18 +72,12 @@ function Login() {
     }),
     onSubmit: async (values) => {
       setLoading(true);
-
-      let token = FCMToken;
-      if (!token) {
-        token = await requestForToken();
-        setFCMToken(token);
-      }
-
       
   const loginData = {
     email: values.email,
     password: values.password,
     userType: values.userType,
+    fcmToken: FCMToken,
   };
 
   // if (values.userType === 'subAdmin') {
