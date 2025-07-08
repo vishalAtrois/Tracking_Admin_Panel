@@ -77,7 +77,7 @@ function Login() {
     email: values.email,
     password: values.password,
     userType: values.userType,
-    fcmToken: FCMToken,
+   
   };
 
   // if (values.userType === 'subAdmin') {
