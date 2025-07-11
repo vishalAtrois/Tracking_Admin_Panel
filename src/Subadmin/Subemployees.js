@@ -23,6 +23,7 @@ const limit = 20;
     const [checkPermission, setCheckPermission] = useState('')
     const [showPermissionModal, setShowPermissionModal] = useState(false);
       const [selectedUserId, setSelectedUserId] = useState(null);
+      const [checkContacts,setCheckContacts] = useState()
       const [permissions, setPermissions] = useState({
         trackHistory: true,
         adminRole: false,
@@ -32,8 +33,48 @@ const limit = 20;
         createGroups: true,
         createNotes: false
       });
+     const [userContacts, setUserContacts] = useState([]);
+const [showContactsModal, setShowContactsModal] = useState(false);
 
+ 
 const passReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
+
+const getUserContacts = (Id) => {
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${token}`);
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow"
+  };
+
+  fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getUserContact?employeeId=${Id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log("get contacts ", result);
+      if (result.success) {
+        setCheckContacts(result.contactList);
+
+        if (result.contactList && Array.isArray(result.contactList.contactDetails)) {
+          setUserContacts(result.contactList.contactDetails);
+        } else {
+          setUserContacts([]); // Set empty if no contacts
+        }
+
+        setShowContactsModal(true);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      alert("Failed to fetch contacts.");
+    });
+};
+
+
+
+
+
 
 const handlePasswordChange = (e) => {
   const value = e.target.value;
@@ -401,6 +442,15 @@ const handlePasswordChange = (e) => {
                         >
                           <i className="fa fa-cogs text-lg"></i>
                         </button>
+                             <button
+  onClick={() => {
+         getUserContacts(item.id)
+  }}
+  className="p-2 rounded-full hover:bg-blue-100 text-purple-500 hover:text-purple-800 transition"
+  title="Check contacts"
+>
+  <i className="fa fa-phone text-lg"></i>
+</button>
                       </div>
                     </td>
                   </tr>
@@ -697,6 +747,66 @@ const handlePasswordChange = (e) => {
           </ul>
         </nav>
       </div>
+
+{showContactsModal && (
+  <div className="fixed inset-0 bg-gray-900 bg-opacity-60 z-50 flex items-center justify-center px-4">
+    <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative">
+      {/* Close Button */}
+      <button
+        className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition"
+        onClick={() => setShowContactsModal(false)}
+      >
+        <i className="bi bi-x-lg text-lg"></i>
+      </button>
+
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <i className="bi bi-person-lines-fill text-2xl text-blue-600"></i>
+        <h2 className="text-xl font-semibold text-gray-800">User Contacts</h2>
+      </div>
+
+      {/* Content */}
+      <div className="max-h-96 overflow-y-auto space-y-4">
+        {checkContacts == null ? (
+          <div className="text-center text-gray-500 py-10">
+            <i className="bi bi-emoji-frown text-4xl mb-2"></i>
+            <p className="text-lg">No contacts found for this user.</p>
+          </div>
+        ) : (
+          userContacts.map((contact, index) => (
+            <div
+              key={contact._id || index}
+              className="border border-gray-300 rounded-lg p-4 shadow-sm hover:shadow-md transition bg-gray-50"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-800">
+                <p><span className="font-semibold"> Name:</span> {contact.contactName}</p>
+                <p><span className="font-semibold"> Number:</span> {contact.contactNumber}</p>
+                <p><span className="font-semibold"> Email:</span> {contact.contactEmail || "N/A"}</p>
+                <p><span className="font-semibold"> Profile:</span> {contact.contactProfile}</p>
+                <p className="sm:col-span-2"><span className="font-semibold"> Note:</span> {contact.contactNote || "—"}</p>
+                <p className="sm:col-span-2"><span className="font-semibold"> Purpose:</span> {contact.purpose}</p>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="mt-6 flex justify-end">
+        <button
+          onClick={() => setShowContactsModal(false)}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
     </div>
       </div>
   )

@@ -29,6 +29,7 @@ import SubAdminPreferences from './Subadmin/SubAdminPreferences';
 import  Login  from './pages/Login'
 import SendNotificationToSubadmin from './Subadmin/SendNotificationToSubadmin';
 import { SendLocation } from './Subadmin/SendLocation';
+import SubContacts from './Subadmin/SubContacts';
  
  
  
@@ -64,6 +65,7 @@ function App() {
             <Route path='/SubPreferenceAdmin' element={<SubProtected> <SubAdminPreferences /></SubProtected>} />
             <Route path='/SendNotificationToSubadmin' element={<SubProtected> <SendNotificationToSubadmin /></SubProtected>} />
              <Route path='/SendLocation' element={<SubProtected> <SendLocation /></SubProtected>} />
+             <Route path='/SubContacts' element={<SubProtected> <SubContacts /></SubProtected>} />
           </Routes>
     </Router>
   );
