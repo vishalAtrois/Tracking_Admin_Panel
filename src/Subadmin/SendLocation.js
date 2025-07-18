@@ -21,6 +21,7 @@ const limit = 20;
   const [dropdownVisibleId, setDropdownVisibleId] = useState(null);
 const [showOutsideMapModal, setShowOutsideMapModal] = useState(false);
 const [outsidePoints, setOutsidePoints] = useState([]);
+const today = new Date().toISOString().split('T')[0]; 
 
 const [dropdownDirection, setDropdownDirection] = useState('down');  
 const dropdownRefs = useRef({});  
@@ -38,8 +39,10 @@ const fetchUserOutsidePoints = (user) => {
   fetch(`https://tracking-backend-admin.vercel.app/v1/subAdmin/getUserOutsideAreaHistory?userId=${user.id}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      const points = result?.location?.outsideLogs?.['2025-07-07'] || [];
+      console.log('outside result',result)
+      const points = result?.location?.outsideLogs?.[today] || [];
       setOutsidePoints(points);
+      console.log('outside points ', points )
 
       // Also fetch the assigned area
       const assignedAreaId = user.assignedAreaId
