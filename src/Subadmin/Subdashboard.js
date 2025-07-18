@@ -203,7 +203,7 @@ useEffect(()=>{fetchTask()
           {/* Users Card */}
           <div
             onClick={() => navigate('/Subemployees')}
-            className="bg-gradient-to-br from-purple-700 to-purple-900 hover:from-purple-800 hover:to-purple-950 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+            className="bg-gradient-to-br from-red-700 to-red-900 hover:from-red-800 hover:to-red-950 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
           >
             <div className="flex justify-between items-center">
               <div>
@@ -218,7 +218,7 @@ useEffect(()=>{fetchTask()
           {/* Companies Card */}
           <div
             onClick={() => navigate('/VoiceTasks')}
-            className="bg-gradient-to-br from-indigo-600 to-indigo-900 hover:from-indigo-700 hover:to-indigo-950 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+            className="bg-gradient-to-br from-yellow-400 to-yellow-700 hover:from-yellow-500 hover:to-yellow-750 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
           >
             <div className="flex justify-between items-center">
               <div>
@@ -233,7 +233,7 @@ useEffect(()=>{fetchTask()
 
             <div
             onClick={() => navigate('/Subnotification')}
-            className="bg-gradient-to-br from-purple-700 to-purple-900 hover:from-purple-800 hover:to-purple-950 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+            className="bg-gradient-to-br from-gray-400 to-gray-700 hover:from-gray-500 hover:to-gray-750 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
           >
             <div className="flex justify-between items-center">
               <div>
