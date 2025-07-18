@@ -203,7 +203,7 @@ useEffect(()=>{fetchTask()
           {/* Users Card */}
           <div
             onClick={() => navigate('/Subemployees')}
-            className="bg-gradient-to-br from-red-700 to-red-900 hover:from-red-800 hover:to-red-950 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+            className="bg-gradient-to-br from-red-200 to-red-400 hover:from-red-300 hover:to-red-450 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
           >
             <div className="flex justify-between items-center">
               <div>
@@ -218,7 +218,7 @@ useEffect(()=>{fetchTask()
           {/* Companies Card */}
           <div
             onClick={() => navigate('/VoiceTasks')}
-            className="bg-gradient-to-br from-yellow-400 to-yellow-700 hover:from-yellow-500 hover:to-yellow-750 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+            className="bg-gradient-to-br from-yellow-200 to-yellow-400 hover:from-yellow-300 hover:to-yellow-450 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
           >
             <div className="flex justify-between items-center">
               <div>
@@ -227,7 +227,7 @@ useEffect(()=>{fetchTask()
                   {loading ? '...' : totalTasks}
                 </p>
               </div>
-              <i className="fa fa-building text-4xl sm:text-5xl opacity-80" />
+              <i className="fa fa-tasks text-4xl sm:text-5xl opacity-80" />
             </div>
           </div>
 
