@@ -302,7 +302,7 @@ useEffect(()=>{fetchcontacts()},[])
             <option value="client">client</option>
             <option value="vendor">colleague</option>
           </select>
-          {formData.contactProfile === "client" && (
+      {formData.contactProfile === "client" && (
   <select
     value={formData.clientPurpose}
     onChange={(e) =>
@@ -317,6 +317,18 @@ useEffect(()=>{fetchcontacts()},[])
     <option value="clarafication for a transaction">Clarification for a transaction</option>
   </select>
 )}
+
+{formData.contactProfile === "partner" && (
+  <input
+    placeholder="Select their industry"
+    value={formData.partnerPurpose}
+    onChange={(e) =>
+      setFormData({ ...formData, partnerPurpose: e.target.value })
+    }
+    className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
+  />
+)}
+
           <textarea
             placeholder="Contact Note"
             value={formData.contactNote}
