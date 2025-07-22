@@ -403,7 +403,7 @@ const deleteReport = async (reportId) => {
        ) : (
         <table className="min-w-full table-auto bg-white text-black text-sm">
            <thead className="bg-gray-700">
-             <tr>
+             <tr className='bg-gradient-to-r from-gray-700 to-gray-800 text-white text-sm uppercase tracking-wider'>
                {['Sr.no', 'Name', 'Email', 'Company Name', 'Open Reports'].map((heading) => (
                <th key={heading} className="py-1 text-center text-white font-semibold border-b-2 border-r-2 border-black font-serif sticky top-0 bg-gray-700 z-20">
                   {heading}

@@ -195,7 +195,7 @@ const SendNotificationToSubadmin = () => {
       ) : (
         <table className="min-w-full table-auto bg-white text-black text-sm">
           <thead className="bg-white">
-            <tr>
+            <tr className='bg-gradient-to-r from-gray-700 to-gray-800 text-white text-sm uppercase tracking-wider'>
               {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Set Preferences'].map((heading) => (
                 <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 text-white z-20">
                   {heading}
