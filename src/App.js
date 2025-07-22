@@ -30,6 +30,8 @@ import  Login  from './pages/Login'
 import SendNotificationToSubadmin from './Subadmin/SendNotificationToSubadmin';
 import { SendLocation } from './Subadmin/SendLocation';
 import SubContacts from './Subadmin/SubContacts';
+import SubadminList from './pages/SubadminList';
+import { AdminSetLocation } from './pages/AdminSetLocation';
  
  
  
@@ -43,6 +45,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<AdminProtected><Dashboard /></AdminProtected>} />
             <Route path="/users" element={<Users />} />
+            <Route path="/subAdminList" element={<SubadminList />} />
+            <Route path="/AdminSetLocation" element={<AdminSetLocation />} />
             <Route path="/companies" element={<Companies />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/about" element={<AboutUs />} />

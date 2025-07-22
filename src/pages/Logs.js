@@ -22,7 +22,7 @@ const [logsData, setLogsData] = useState([]);
   
   
   const fetchWorkSummary = (activityId) => {
-    const token = localStorage.getItem("Admintoken");
+    // const token = localStorage.getItem("Admintoken");
     if (!token ) {
       console.error("Missing token ");
       return;
@@ -65,27 +65,29 @@ function GetReports(item) {
     redirect: "follow"
   })
     .then(res => res.json())
-    .then((response) => { 
+    .then((response) => {
       const { success, List } = response;
+
       if (!success || !List?.logs) return;
 
-      const logs = Object.entries(List.logs).flatMap(([date, { timing = [], locations = [] }]) =>
-        (timing || []).map(entry => ({
-            _id: entry._id,
+      const logs = Object.entries(List.logs).flatMap(([date, logData]) =>
+        (logData.timing || []).map(entry => ({
+          _id: entry._id,
           date,
           checkInTime: entry.checkInTime,
           checkOutTime: entry.checkOutTime,
           alarmLogs: entry.alarmLogs || [],
-          location: locations.length > 0 ? locations : null,
+          location: logData.locations?.length ? logData.locations : null,
         }))
       );
 
-      setLogsData(logs);
+      setLogsData(logs); 
       setShowLogsModal(true);
       setSelectedLocation(null);
     })
     .catch(err => console.error("Error fetching reports", err));
 }
+
 
 
    const mapContainerStyle = {
@@ -205,17 +207,17 @@ function GetReports(item) {
       value={searchQuery}
       onChange={handleSearchChange}
     />
-    <button
+    {/* <button
       title="Search"
       className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto mt-1"
       onClick={fetchUsers}
     >
       Search
-    </button>
+    </button> */}
   </div>
 
   {/* Scrollable Table Container */}
-    <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 max-w-full">
+    <div className="rounded-xl overflow-x-auto shadow-lg border border-black max-w-full">
           {loading ? (
             <div className="flex flex-col justify-center items-center py-20">
               <div className="relative">
@@ -225,11 +227,11 @@ function GetReports(item) {
               <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading user...</p>
             </div>
           ) : (
-           <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
+           <table className="min-w-full table-auto bg-white text-black text-sm">
               <thead className="bg-gray-700">
                 <tr>
                   {['Sr.no', 'Name', 'Email', 'Company Name', 'Open Logs'].map((heading) => (
-                    <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
+                    <th key={heading} className="py-1 text-center text-white font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
                   {heading}
                 </th>
                   ))}
@@ -237,9 +239,20 @@ function GetReports(item) {
               </thead>
               <tbody>
                 {usersData.map((item, index) => (
-                  <tr key={item.id} className="bg-gray-800  ">
+                  <tr key={item.id} className="bg-white">
                     <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
-                    <td className="border-b border-r border-gray-700 text-center">{item.fullName}</td>
+                          <td className="border-b border-r border-gray-700 text-center">
+  <div className="flex items-center justify-center sm:justify-start gap-2 py-2 pl-6 flex-wrap sm:flex-nowrap text-left">
+    <img
+      src={item.image || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+      className="w-10 h-10 object-cover rounded-full"
+      alt=""
+    />
+    <span className="text-sm font-medium break-words max-w-[100px] sm:max-w-none">
+      {item.fullName}
+    </span>
+  </div>
+</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
                     <td className="border-b border-gray-700 text-center">

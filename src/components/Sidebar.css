@@ -46,14 +46,14 @@
     color: #9ca3af;
   }
   
-  .nav-list {
+    .nav-list {
     list-style: none;
     padding: 0;
     flex-grow: 1;
   }
   
   .nav-list li {
-    padding: 12px 0;
+    padding: 3px 0;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -61,9 +61,8 @@
   }
   
   .nav-list li:hover {
-    color: #60a5fa;
+    color: rgba(255, 255, 255, 0.1);
   }
-  
   .logout-section {
     margin-top: auto;
     margin-bottom:30px;
@@ -83,19 +82,45 @@
   .logout-button:hover {
     background-color: #dc2626;
   }
-  .nav-list li a {
-    font-size: 18px; 
+   .nav-list li a {
+    font-size: 18px; /* Increase font size */
     display: flex;
     align-items: center;
     gap: 10px;
   }
   
   .nav-list li a i {
-    font-size: 20px;  
+    font-size: 20px; /* Increase icon size */
   }
   
   .active-link {
     color: orange;
     font-weight: bold;
   }
+.nav-item-box {
+  display: flex;
+  flex-direction: row;        /* Change to row */
+  align-items: center;
+  justify-content: flex-start; /* Align content to the left */
+  padding: 10px;
+  gap: 8px;                   /* Space between icon and text */
+  color: #f3f5f8;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.nav-item-box:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* subtle hover box */
+  color: white;
+  border-radius: 15px;
+} 
+
+.nav-item-box.active-link {
+  background-color: rgba(255, 255, 255, 0.1); /* blue-ish active background */
+  color: white;
+  font-weight: bold;
+  border-radius: 15px;
+}
   

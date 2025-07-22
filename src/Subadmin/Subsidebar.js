@@ -115,7 +115,7 @@ setReadNotification(unreadCount)
         <li><NavLink to="/Subreports" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}><i className="fa fa-clipboard text-lg"></i> Daily Reports</NavLink></li>
         <li><NavLink to="/Subcheckin" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}><i className="fa fa-sticky-note text-lg"></i> Work Hours</NavLink></li>
         <li><NavLink to="/SendLocation" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}><i className="fa fa-map-marker text-lg"></i>Set Location</NavLink></li>
-             <li><NavLink to="/SubContacts" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}><i className="fa fa-phone text-lg"></i>Save Contacts</NavLink></li>
+        <li><NavLink to="/SubContacts" className={({ isActive }) =>`nav-item-box ${isActive ? "active-link" : ""}`}><i className="fa fa-phone text-lg"></i>Save Contacts</NavLink></li>
        {/* User Management Dropdown */}
  <li className="relative" ref={dropdownRef}>
   <div

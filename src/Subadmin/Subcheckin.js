@@ -184,6 +184,11 @@ console.log(logs)
     }
    
 const setTime = async () => {
+
+ if (selectedCheckoutTime < selectedTime) {
+    alert("Please enter a valid Check-In and Check-Out time.\nCheck-Out time must be after Check-In time.");
+    return; 
+  }
     const token = localStorage.getItem('token');
     const headers = new Headers();
     headers.append("Content-Type", "application/json");

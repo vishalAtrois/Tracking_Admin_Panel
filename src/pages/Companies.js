@@ -248,13 +248,13 @@ const Companies = () => {
         value={searchQuery}
         onChange={handleSearchChange}
       />
-      <button
+      {/* <button
         title="Search"
         className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto mt-1"
         onClick={fetchCompany}
       >
         Search
-      </button>
+      </button> */}
                      <button
   onClick={() => setShowAddModal(true)}
   className="bg-green-600 hover:bg-green-700 transition px-4 py-2 rounded-md text-white w-full sm:w-auto mt-1"
@@ -265,7 +265,7 @@ const Companies = () => {
     </div>
 
   {/* Company Data Table */}
- <div className="rounded-xl overflow-x-auto shadow-lg border border-gray-700 max-w-full">
+ <div className="rounded-xl overflow-x-auto shadow-lg border  border-black max-w-full">
       {loading ? (
         <div className="flex flex-col justify-center items-center py-20">
           <div className="relative">
@@ -275,11 +275,11 @@ const Companies = () => {
           <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading Company...</p>
         </div>
       ) : (
-        <table className="min-w-full table-auto bg-gray-900 text-white text-sm">
+        <table className="min-w-full table-auto bg-white text-black text-sm">
           <thead className="bg-gray-700">
             <tr>
               {['Sr.no', 'Name', 'Address','Industry', 'Total Employees', 'Actions'].map((heading) => (
-                <th key={heading} className="py-1 text-center font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
+                <th key={heading} className="py-1 text-center text-white font-semibold border-b border-r border-gray-600 font-serif sticky top-0 bg-gray-700 z-20">
                   {heading}
                 </th>
               ))}
@@ -287,7 +287,7 @@ const Companies = () => {
           </thead>
           <tbody>
             {data.map((item, index) => (
-              <tr key={item.id} className="bg-gray-800  ">
+              <tr key={item.id} className="bg-white">
                 <td className="  border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
                 <td className="  border-b border-r border-gray-700 text-center">{item.name}</td>
                 <td className="  border-b border-r border-gray-700 text-center">{item.address}</td>

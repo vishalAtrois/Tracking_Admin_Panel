@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [userCount, setUserCount] = useState(0);
   const [companyCount, setCompanyCount] = useState(0);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [subAdminCount,setSubAdminCount] = useState(0)
   const navigate = useNavigate();
 
   function fetchUsers (){
@@ -36,6 +37,43 @@ const Dashboard = () => {
       .catch((error) => console.error(error));
   }
 
+ function fetchSubadminList() {
+    const token = localStorage.getItem('Admintoken');
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
+    const url  = "https://tracking-backend-admin.vercel.app/v1/admin/fetchSubAdminList?page=1&limit=20&sortBy=created%3Adesc";
+
+    setLoading(true);
+
+    fetch(url, requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((result) => {
+        if (result.success === true) {
+           console.log("fetch subadminresult ", result)
+           setSubAdminCount(result.UserList.totalResults)
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+        setLoading(false);
+      });
+  }
+
+
+
   function fetchCompany(){
     const token = localStorage.getItem('Admintoken')
     const myHeaders = new Headers();
@@ -60,7 +98,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchUsers();
-    fetchCompany()
+    fetchCompany();
+    fetchSubadminList();
   }, []);
 
   return (
@@ -102,7 +141,7 @@ const Dashboard = () => {
           {/* Users Card */}
           <div
             onClick={() => navigate('/users')}
-            className="bg-gradient-to-br from-purple-700 to-purple-900 hover:from-purple-800 hover:to-purple-950 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+            className="bg-gradient-to-br from-red-200 to-red-400 hover:from-red-300 hover:to-red-450 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
           >
             <div className="flex justify-between items-center">
               <div>
@@ -118,13 +157,27 @@ const Dashboard = () => {
           {/* Companies Card */}
           <div
             onClick={() => navigate('/companies')}
-            className="bg-gradient-to-br from-indigo-600 to-indigo-900 hover:from-indigo-700 hover:to-indigo-950 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+            className="bg-gradient-to-br from-yellow-200 to-yellow-400 hover:from-yellow-300 hover:to-yellow-450 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
           >
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="text-lg sm:text-xl font-semibold mb-2">Total Companies</h3>
                 <p className="text-3xl sm:text-4xl font-bold">
                   {loading ? '...' : companyCount}
+                </p>
+              </div>
+              <i className="fa fa-building text-4xl sm:text-5xl opacity-80" />
+            </div>
+          </div>
+          <div
+            onClick={() => navigate('/subAdminList')}
+            className="bg-gradient-to-br from-gray-200 to-gray-400 hover:from-gray-300 hover:to-gray-450 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">Total Sub Admins</h3>
+                <p className="text-3xl sm:text-4xl font-bold">
+                  {loading ? '...' : subAdminCount}
                 </p>
               </div>
               <i className="fa fa-building text-4xl sm:text-5xl opacity-80" />
