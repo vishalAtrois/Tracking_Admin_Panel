@@ -240,7 +240,7 @@ useEffect(()=>{fetchTask()
           {/* Users Card */}
           <div
             onClick={() => navigate('/Subemployees')}
-            className="bg-gradient-to-br from-red-200 to-red-400 hover:from-red-300 hover:to-red-450 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+            className="bg-gradient-to-br from-red-400 to-red-600 hover:from-red-500 hover:to-red-650 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
           >
             <div className="flex justify-between items-center">
               <div>
