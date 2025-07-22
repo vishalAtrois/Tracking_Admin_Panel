@@ -15,8 +15,44 @@ const Subdashboard = () => {
       const [tokennn, setTokennn] =useState(null)
       const [readNotification, setReadNotification] = useState(null)
       const [totalNotification, setTotalNotification] = useState(null)
+      const [subAdminCount, setSubAdminCount] = useState(0)
 
-  
+  function fetchSubadminList() {
+    const token = localStorage.getItem('token');
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
+    const url  = "https://tracking-backend-admin.vercel.app/v1/subAdmin/fetchSubAdminList?page=1&limit=20&sortBy=created%3Adesc";
+
+    setLoading(true);
+
+    fetch(url, requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((result) => {
+        if (result.success === true) {
+           console.log("fetch subadminresult ", result)
+           setSubAdminCount(result.UserList.totalResults)
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+        setLoading(false);
+      });
+  }
+
+
   const getUserInfo = () => {
    const user = JSON.parse(localStorage.getItem('user'));
    const tokenn = localStorage.getItem('token');
@@ -110,6 +146,7 @@ const fetchSubadminPreference = async () => {
 
 useEffect(()=>{fetchTask()
   fetchSubadminPreference()
+  fetchSubadminList()
 },[])
 
   function fetchUsers (){
@@ -249,6 +286,20 @@ useEffect(()=>{fetchTask()
                 </p>
               </div>
               <i className="fa fa-bell text-4xl sm:text-5xl opacity-80" />
+            </div>
+          </div>
+          <div
+            onClick={() => navigate('/SubPreferenceAdmin')}
+            className="bg-gradient-to-br from-gray-200 to-gray-400 hover:from-gray-300 hover:to-gray-450 transition-colors duration-300 p-6 rounded-xl text-white shadow-lg cursor-pointer"
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">Total Sub Admins</h3>
+                <p className="text-3xl sm:text-4xl font-bold">
+                  {loading ? '...' : subAdminCount}
+                </p>
+              </div>
+              <i className="fa fa-building text-4xl sm:text-5xl opacity-80" />
             </div>
           </div>
         </div>

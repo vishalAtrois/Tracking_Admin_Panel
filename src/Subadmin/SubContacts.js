@@ -327,7 +327,7 @@ useEffect(()=>{fetchcontacts()},[])
     }
     className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
   />
-)}
+)}  
 
           <textarea
             placeholder="Contact Note"
