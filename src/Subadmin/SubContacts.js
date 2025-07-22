@@ -6,17 +6,40 @@ const SubContacts = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [token, setToken] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+const [editingContactId, setEditingContactId] = useState(null);
+
   const [formData, setFormData] = useState({
     contactName: "",
     contactNumber: "",
     contactNote: "",
     contactEmail: "",
-    purpose: "",
     contactProfile: "",
     contactCompanyName: "",
+    clientPurpose: "",
+    partnerPurpose: "",
   });
 
-  useEffect(() => {
+  const handleEditContact = (contact) => {
+    console.log('contact id ',contact._id)
+  setIsEditMode(true);
+  setEditingContactId(contact._id); 
+  setFormData({
+    contactName: contact.contactName || "",
+    contactNumber: contact.contactNumber || "",
+    contactNote: contact.contactNote || "",
+    contactEmail: contact.contactEmail || "",
+    purpose: contact.purpose || "",
+    contactProfile: contact.contactProfile || "",
+    contactCompanyName: contact.contactCompanyName || "",
+  });
+  setShowModal(true);
+};
+
+
+useEffect(()=>{fetchcontacts()},[])
+
+  const fetchcontacts = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const tokenn = localStorage.getItem("token");
 
@@ -43,6 +66,7 @@ const SubContacts = () => {
             Array.isArray(result?.contactList?.contactDetails)
           ) {
             setUserContacts(result.contactList.contactDetails);
+            console.log("first result", result);
           } else {
             setUserContacts([]);
           }
@@ -52,46 +76,79 @@ const SubContacts = () => {
           alert("Failed to fetch contacts.");
         });
     }
-  }, []);
-
-  const saveContacts = () => {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", `Bearer ${token}`);
-    const raw = JSON.stringify(formData);
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(
-      "https://tracking-backend-admin.vercel.app/v1/subAdmin/saveContactAfterCall",
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.success === true) {
-          alert("Contact saved successfully!");
-          setShowModal(false);
-          setFormData({
-            contactName: "",
-            contactNumber: "",
-            contactNote: "",
-            contactEmail: "",
-            purpose: "",
-            contactProfile: "",
-            contactCompanyName: "",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Error saving contact.");
-      });
   };
+ 
+
+
+ const saveContacts = () => {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", `Bearer ${token}`);
+
+  // 🔥 Set the correct "purpose" based on contactProfile
+  const purpose =
+    formData.contactProfile === "client"
+      ? formData.clientPurpose
+      : formData.partnerPurpose;
+
+  // 🔥 Build payload
+  const payload = {
+    contactName: formData.contactName,
+    contactNumber: formData.contactNumber,
+    contactNote: formData.contactNote,
+    contactEmail: formData.contactEmail,
+    contactProfile: formData.contactProfile,
+    contactCompanyName: formData.contactCompanyName,
+    purpose: purpose,
+  };
+
+  // 🔥 Include contactId only if updating
+  if (isEditMode) {
+    payload.contactId = editingContactId;
+  }
+
+  const requestOptions = {
+    method: isEditMode ? "PUT" : "POST",
+    headers: myHeaders,
+    body: JSON.stringify(payload),
+    redirect: "follow",
+  };
+
+  fetch(
+    isEditMode
+      ? "https://tracking-backend-admin.vercel.app/v1/subAdmin/updateContactAfterCall"
+      : "https://tracking-backend-admin.vercel.app/v1/subAdmin/saveContactAfterCall",
+    requestOptions
+  )
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.success === true) {
+        alert(isEditMode ? "Contact updated successfully!" : "Contact added successfully!");
+        
+        setShowModal(false);
+        setIsEditMode(false);
+        setEditingContactId(null);
+        setFormData({
+          contactName: "",
+          contactNumber: "",
+          contactNote: "",
+          contactEmail: "",
+          contactProfile: "",
+          contactCompanyName: "",
+          clientPurpose: "",
+          partnerPurpose: "",
+        });
+  fetchcontacts(); 
+      } else {
+        alert("Failed to save contact.");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      alert("Error saving contact.");
+    });
+};
+
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-800 text-white">
@@ -125,9 +182,23 @@ const SubContacts = () => {
     {/* Sticky Add Button */}
     <div className="sticky top-0 z-30 bg-gray-800 pt-4 pb-2 flex justify-end">
       <button
-        onClick={() => setShowModal(true)}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
+       onClick={() => {
+    setFormData({
+      contactName: "",
+      contactNumber: "",
+      contactNote: "",
+      contactEmail: "",
+      contactProfile: "",
+      contactCompanyName: "",
+      clientPurpose: "",
+      partnerPurpose: "",
+    });
+    setIsEditMode(false);
+    setEditingContactId(null);
+    setShowModal(true);
+  }}
+  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+>
         Add New Contact
       </button>
     </div>
@@ -140,27 +211,50 @@ const SubContacts = () => {
       </div>
     ) : (
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-        {userContacts.map((contact, index) => (
-          <div
-            key={contact._id || index}
-            className="bg-gray-700 border border-gray-600 rounded-lg p-4 shadow-md"
-          >
-            <h3 className="font-bold text-lg mb-1">{contact.contactName}</h3>
-            <p className="text-sm text-gray-300">Phone: {contact.contactNumber}</p>
-            <p className="text-sm text-gray-300">Email: {contact.contactEmail}</p>
-            <p className="text-sm text-gray-300">Company: {contact.contactCompanyName}</p>
-            <p className="text-sm text-gray-300">Purpose: {contact.purpose}</p>
-            <p className="text-sm text-gray-300">Note: {contact.contactNote}</p>
-            <p className="text-sm text-gray-300">Profile: {contact.contactProfile}</p>
-          </div>
-        ))}
-      </div>
+  {userContacts.map((contact, index) => (
+    <div
+      key={contact._id || index}
+      className="bg-gray-700 border border-gray-600 rounded-lg p-4 shadow-md relative w-full break-words"
+    >
+      <h3 className="font-bold text-lg mb-1 break-words">{contact.contactName}</h3>
+      <p className="text-sm text-gray-300 break-words">
+        Phone: {contact.contactNumber}
+      </p>
+      <p className="text-sm text-gray-300 break-words">
+        Email: {contact.contactEmail}
+      </p>
+      <p className="text-sm text-gray-300 break-words">
+        Company: {contact.contactCompanyName}
+      </p>
+      <p className="text-sm text-gray-300 break-words">
+        Purpose: {contact.purpose}
+      </p>
+      <p className="text-sm text-gray-300 break-words">
+        Note: {contact.contactNote}
+      </p>
+      <p className="text-sm text-gray-300 break-words">
+        Profile: {contact.contactProfile}
+      </p>
+
+      <button
+        className="absolute top-2 right-2 px-2 py-1 bg-yellow-500 text-black text-xs rounded hover:bg-yellow-600"
+        onClick={() => {
+          console.log("contact id", contact._id);
+          handleEditContact(contact);
+        }}
+        title="edit this contact"
+      >
+        Edit contact
+      </button>
+    </div>
+  ))}
+</div>
     )}
   </main>
 
   {/* Modal */}
   {showModal && (
-    <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center px-2 sm:px-4 overflow-auto">
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-60 z-50 flex items-center justify-center px-2 sm:px-4 overflow-auto">
       <div className="bg-gray-900 text-white rounded-xl shadow-2xl w-full max-w-2xl p-6 relative mt-10 mb-10">
         <button
           className="absolute top-3 right-3 text-gray-400 hover:text-red-500"
@@ -196,12 +290,6 @@ const SubContacts = () => {
             onChange={(e) => setFormData({ ...formData, contactCompanyName: e.target.value })}
             className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
           />
-          <input
-            placeholder="Purpose"
-            value={formData.purpose}
-            onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
-            className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
-          />
           <select
             value={formData.contactProfile}
             onChange={(e) => setFormData({ ...formData, contactProfile: e.target.value })}
@@ -214,6 +302,21 @@ const SubContacts = () => {
             <option value="client">client</option>
             <option value="vendor">colleague</option>
           </select>
+          {formData.contactProfile === "client" && (
+  <select
+    value={formData.clientPurpose}
+    onChange={(e) =>
+      setFormData({ ...formData, clientPurpose: e.target.value })
+    }
+    className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
+  >
+    <option value="" disabled>
+      Select client Purpose
+    </option>
+    <option value="New Enquiry">New Enquiry</option>
+    <option value="clarafication for a transaction">Clarification for a transaction</option>
+  </select>
+)}
           <textarea
             placeholder="Contact Note"
             value={formData.contactNote}
