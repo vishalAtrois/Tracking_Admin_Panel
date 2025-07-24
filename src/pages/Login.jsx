@@ -108,9 +108,9 @@ if (values.userType === 'subAdmin' && FCMToken) {
           localStorage.setItem("rtoken", result.token.refresh.token);
           localStorage.setItem("user", JSON.stringify(result.user));
           if (values.userType === "subAdmin") {
-            navigate("/Subdashboard");
+            navigate("/Subdashboard", { replace: true });
           } else {
-            navigate("/dashboard");
+            navigate("/dashboard", { replace: true });
           }
         } else {
           alert("Login failed: Incorrect credentials");
