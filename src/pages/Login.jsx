@@ -109,7 +109,7 @@ if (values.userType === 'subAdmin' && FCMToken) {
           localStorage.setItem("user", JSON.stringify(result.user));
           if (values.userType === "subAdmin") {
             navigate("/Subdashboard", { replace: true });
-          } else {
+          } else if (values.userType === "admin") {
             navigate("/dashboard", { replace: true });
           }
         } else {
