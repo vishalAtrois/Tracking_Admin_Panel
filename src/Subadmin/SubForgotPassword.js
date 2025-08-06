@@ -42,7 +42,7 @@ const SubForgotPassword = () => {
 } catch (error) {
   setMessage('Something went wrong. Please try again.');
   console.error(error);
-} finally {
+} finally { 
   setLoading(false);
 }
   };

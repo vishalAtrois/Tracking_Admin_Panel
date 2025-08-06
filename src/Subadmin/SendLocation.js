@@ -341,7 +341,17 @@ const SetLocation = () => {
                 </tr>
               </thead>
               <tbody>
-                {usersData.map((item, index) => (
+                {usersData.length === 0 ? (
+    <tr>
+      <td
+        colSpan={6}
+        className="text-center text-gray-500 py-8 font-semibold"
+      >
+        No Employees found
+      </td>
+    </tr>
+  ) : (
+                usersData.map((item, index) => (
                   <tr key={item.id} className="bg-white  ">
                     <td className="border-b border-r border-gray-700 text-center">{(currentpage - 1) * limit + index + 1}</td>
       <td className="border-b border-r border-gray-700 text-center">
@@ -437,7 +447,8 @@ const SetLocation = () => {
                       </div>
                     </td>
                   </tr>
-                ))}
+                ))
+              )}
               </tbody>
             </table>
           )}
