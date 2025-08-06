@@ -35,9 +35,81 @@ const limit = 20;
       });
      const [userContacts, setUserContacts] = useState([]);
 const [showContactsModal, setShowContactsModal] = useState(false);
-
- 
+const [showAddContactModal, setShowAddContactModal] = useState(false)
 const passReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
+ const [formData, setFormData] = useState({
+    contactName: "",
+    contactNumber: "",
+    contactNote: "",
+    contactEmail: "",
+    contactProfile: "",
+    contactCompanyName: "",
+    clientPurpose: "",
+    partnerPurpose: "",
+  });
+
+
+const saveContactForUser = () => {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", `Bearer ${token}`);
+
+  const purpose =
+    formData.contactProfile === "client"
+      ? formData.clientPurpose
+      : formData.partnerPurpose;
+
+  
+  const payload = {
+    contactName: formData.contactName,
+    contactNumber: formData.contactNumber,
+    contactNote: formData.contactNote,
+    contactEmail: formData.contactEmail,
+    contactProfile: formData.contactProfile,
+    contactCompanyName: formData.contactCompanyName,
+    purpose: purpose,
+  };
+
+  
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify(payload),
+    redirect: "follow",
+  };
+
+  fetch(
+    `https://tracking-backend-admin.vercel.app/v1/subAdmin/saveContactAfterCallForUser?userId=${userId}`,
+    requestOptions
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((result) => {
+      if (result.success === true) {
+      setShowAddContactModal(false)
+       setFormData({
+          contactName: "",
+          contactNumber: "",
+          contactNote: "",
+          contactEmail: "",
+          contactProfile: "",
+          contactCompanyName: "",
+          clientPurpose: "",
+          partnerPurpose: "",
+        });
+      alert('Contact added successfully')
+      }
+    })
+    .catch((error) => {
+      console.error("❌ Error saving contact:", error);
+    });
+};
+
+
 
 const getUserContacts = (Id) => {
   const myHeaders = new Headers();
@@ -150,13 +222,6 @@ const handlePasswordChange = (e) => {
       fetchUsers();
     },[currentpage,searchQuery]);
 
-// get reports of user 
-// const hanndleReportClick=(item)=>{
-// setReportId(item.id)
-
-// }
-
-
   const handlePromoteClick = () => {
       if (checkPermission.adminRole === true) {
     setShowPrompt(true);
@@ -200,9 +265,6 @@ const handlePasswordChange = (e) => {
         alert("Something went wrong.");
       });
   };
-
-
-
 
     function fetchUsers() {
       const token = localStorage.getItem('token');
@@ -301,9 +363,7 @@ const handlePasswordChange = (e) => {
       setShowDeleteModal(true)
       setSi(item.id)
   }
-  
-  
-  
+   
     
   return (
 <div className="flex flex-col md:flex-row h-screen w-screen bg-gray-900 overflow-x-hidden">
@@ -456,6 +516,7 @@ const handlePasswordChange = (e) => {
                              <button
   onClick={() => {
          getUserContacts(item.id)
+         setUserId(item.id)
   }}
   className="p-2 rounded-full hover:bg-blue-100 text-purple-500 hover:text-purple-800 transition"
   title="Check contacts"
@@ -763,12 +824,14 @@ const handlePasswordChange = (e) => {
 {showContactsModal && (
   <div className="fixed inset-0 bg-gray-900 bg-opacity-60 z-50 flex items-center justify-center px-4">
     <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative">
-      {/* Close Button */}
+      
       <button
-        className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition"
-        onClick={() => setShowContactsModal(false)}
+        className="absolute top-3 right-3 border-none rounded-xl p-2 bg-green-600 hover:bg-green-700 transition"
+        onClick={() => {setShowContactsModal(false)
+setShowAddContactModal(true)
+        }}
       >
-        <i className="bi bi-x-lg text-lg"></i>
+        <i className="bi bi-plus-circle"></i> Add Contact
       </button>
 
       {/* Header */}
@@ -794,7 +857,6 @@ const handlePasswordChange = (e) => {
                 <p><span className="font-semibold"> Name:</span> {contact.contactName}</p>
                 <p><span className="font-semibold"> Number:</span> {contact.contactNumber}</p>
                 <p><span className="font-semibold"> Email:</span> {contact.contactEmail || "N/A"}</p>
-                <p><span className="font-semibold"> Profile:</span> {contact.contactProfile}</p>
                 <p className="sm:col-span-2"><span className="font-semibold"> Note:</span> {contact.contactNote || "—"}</p>
                 <p className="sm:col-span-2"><span className="font-semibold"> Purpose:</span> {contact.purpose}</p>
               </div>
@@ -816,7 +878,107 @@ const handlePasswordChange = (e) => {
   </div>
 )}
 
+ {showAddContactModal && (
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-60 z-50 flex items-center justify-center px-2 sm:px-4 overflow-auto">
+      <div className="bg-gray-900 text-white rounded-xl shadow-2xl w-full max-w-2xl p-6 relative mt-10 mb-10">
+        <button
+          className="absolute top-3 right-3 text-gray-400 hover:text-red-500"
+          onClick={() => setShowAddContactModal(false)}
+        >
+          <i className="bi bi-x-lg text-lg"></i>
+        </button>
 
+        <h2 className="text-xl font-semibold mb-4">Save Contact</h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          <input
+            placeholder="Contact Name"
+            value={formData.contactName}
+            onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
+            className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
+          />
+          <input
+            placeholder="Contact Number"
+            value={formData.contactNumber}
+            onChange={(e) => setFormData({ ...formData, contactNumber: e.target.value })}
+            className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
+          />
+          <input
+            placeholder="Contact Email"
+            value={formData.contactEmail}
+            onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
+            className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
+          />
+          <input
+            placeholder="Company Name"
+            value={formData.contactCompanyName}
+            onChange={(e) => setFormData({ ...formData, contactCompanyName: e.target.value })}
+            className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
+          />
+          <select
+            value={formData.contactProfile}
+            onChange={(e) => setFormData({ ...formData, contactProfile: e.target.value })}
+            className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
+          >
+            <option value="" disabled>
+              Select Profile
+            </option>
+            <option value="partner">partner</option>
+            <option value="client">client</option>
+            <option value="vendor">colleague</option>
+          </select>
+      {formData.contactProfile === "client" && (
+  <select
+    value={formData.clientPurpose}
+    onChange={(e) =>
+      setFormData({ ...formData, clientPurpose: e.target.value })
+    }
+    className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
+  >
+    <option value="" disabled>
+      Select client Purpose
+    </option>
+    <option value="New Enquiry">New Enquiry</option>
+    <option value="clarafication for a transaction">Clarification for a transaction</option>
+  </select>
+)}
+
+{formData.contactProfile === "partner" && (
+  <input
+    placeholder="Select their industry"
+    value={formData.partnerPurpose}
+    onChange={(e) =>
+      setFormData({ ...formData, partnerPurpose: e.target.value })
+    }
+    className="p-2 bg-gray-800 border border-gray-600 rounded w-full text-white"
+  />
+)}  
+
+          <textarea
+            placeholder="Contact Note"
+            value={formData.contactNote}
+            onChange={(e) => setFormData({ ...formData, contactNote: e.target.value })}
+            className="col-span-1 sm:col-span-2 p-2 bg-gray-800 border border-gray-600 rounded h-24 w-full text-white"
+          ></textarea>
+        </div>
+
+        <div className="flex justify-end mt-6 space-x-3">
+          <button
+            onClick={() => setShowAddContactModal(false)}
+            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={saveContactForUser}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  )}
 
 
     </div>

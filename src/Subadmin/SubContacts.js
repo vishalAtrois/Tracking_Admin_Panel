@@ -78,20 +78,18 @@ useEffect(()=>{fetchcontacts()},[])
     }
   };
  
-
+ 
 
  const saveContacts = () => {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", `Bearer ${token}`);
 
-  // 🔥 Set the correct "purpose" based on contactProfile
   const purpose =
     formData.contactProfile === "client"
       ? formData.clientPurpose
       : formData.partnerPurpose;
 
-  // 🔥 Build payload
   const payload = {
     contactName: formData.contactName,
     contactNumber: formData.contactNumber,
@@ -102,7 +100,6 @@ useEffect(()=>{fetchcontacts()},[])
     purpose: purpose,
   };
 
-  // 🔥 Include contactId only if updating
   if (isEditMode) {
     payload.contactId = editingContactId;
   }
