@@ -319,7 +319,7 @@ const SetLocation = () => {
         </div>  
 
        {/* Table Section */}
-   <div className="rounded-xl overflow-x-auto shadow-2xl border border-black max-w-full">
+   <div className="rounded-xl h-screen overflow-x-auto shadow-2xl border border-black max-w-full">
           {loading ? (
             <div className="flex flex-col justify-center items-center py-20">
               <div className="relative">
@@ -329,8 +329,8 @@ const SetLocation = () => {
               <p className="mt-4 text-blue-400 text-lg animate-pulse">Loading Employees...</p>
             </div>
           ) : (
-            <table className="min-w-full table-auto bg-white text-black text-sm">
-
+             
+            <table className="min-w-full table-auto  bg-white text-black text-sm ">
               <thead className="bg-gray-700">
                 <tr className='bg-gradient-to-r from-gray-700 to-gray-800 text-white text-sm uppercase tracking-wider'>
                   {['Sr.no', 'Name', 'Email', 'Mobile Number', 'Company Name', 'Actions'].map((heading) => (
@@ -370,7 +370,7 @@ const SetLocation = () => {
                     <td className="border-b border-r border-gray-700 text-center">{item.email}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.phoneNumber}</td>
                     <td className="border-b border-r border-gray-700 text-center">{item.companyName}</td>
-                    <td className="border-b border-r border-gray-700 text-center">
+                   <td className="border-b border-r border-gray-700 text-center ">
                       <div className="flex justify-center gap-4">
                 <div
   className="relative"
@@ -390,11 +390,13 @@ const SetLocation = () => {
 
    
   {dropdownVisibleId === item.id && (
-    <div
-      className={`absolute z-30 w-52 bg-black border border-gray-200 rounded-lg shadow-xl
-              ${dropdownDirection === 'up' ? 'bottom-full mb-0' : 'mt-0'}
-              right-0 sm:right-0 sm:left-auto left-0 sm:w-52 w-11/12 mx-auto sm:mx-0`}
-    >
+<div
+  className={`absolute z-30 bg-black border border-gray-200 rounded-lg shadow-xl
+    ${dropdownDirection === 'up' ? 'bottom-full mb-0' : 'top-full mt-0'}
+    right-0 sm:left-auto sm:right-0 w-48 sm:w-52 max-w-[calc(100vw-4rem)]`}
+>
+
+
        
       {item.assignedAreaId && (
         <button
@@ -452,6 +454,7 @@ const SetLocation = () => {
               </tbody>
             </table>
           )}
+           
         </div>
 
        {/* Pagination UI */}
