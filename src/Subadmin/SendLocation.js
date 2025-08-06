@@ -394,10 +394,7 @@ const SetLocation = () => {
   className={`absolute z-30 bg-black border border-gray-200 rounded-lg shadow-xl
     ${dropdownDirection === 'up' ? 'bottom-full mb-0' : 'top-full mt-0'}
     right-0 sm:left-auto sm:right-0 w-48 sm:w-52 max-w-[calc(100vw-4rem)]`}
->
-
-
-       
+> 
       {item.assignedAreaId && (
         <button
           onClick={() => {
